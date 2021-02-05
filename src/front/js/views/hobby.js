@@ -98,7 +98,7 @@ export class Hobby extends React.Component {
 											date: actions.todaysDate(),
 											completed: false
 										};
-										actions.addHobby(todo);
+										actions.addNewTask(todo);
 										this.resetTextArea();
 									}}>
 									SUBMIT

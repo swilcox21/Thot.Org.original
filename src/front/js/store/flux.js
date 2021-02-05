@@ -17,6 +17,26 @@ const getState = ({ getStore, getActions, setStore }) => {
 					.then(tasks => setStore({ hobby: tasks }));
 			},
 
+			addNewTask: hobby => {
+				fetch("https://3001-gold-planarian-jqy4lbsg.ws-us03.gitpod.io/api/task", {
+					method: "POST",
+					body: JSON.stringify({
+						label: hobby.label,
+						date: hobby.date,
+						completed: hobby.completed
+					}),
+					headers: {
+						"Content=Type": "application/json"
+					}
+				})
+					.then(res => res.json())
+					.then(task => {
+						setStore({
+							hobby: task
+						});
+					});
+			},
+
 			todaysDate: () => {
 				var d = new Date();
 				let month = "" + (d.getMonth() + 1);
