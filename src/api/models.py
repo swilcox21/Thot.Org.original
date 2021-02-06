@@ -23,6 +23,8 @@ class Task(db.Model):
     label = db.Column(db.String(120), unique=False, nullable=False)
     date = db.Column(db.Date(), unique=False, nullable=False)
     completed = db.Column(db.Boolean(), unique=False, nullable=False)
+    priority = db.Column(db.Integer, unique=False, default=0, nullable=False)
+
 
     def __repr__(self):
         return f'<Task {self.label}>'

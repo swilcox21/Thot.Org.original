@@ -19,5 +19,7 @@ def handle_hello():
         new_task = Task(label= body['label'], date= body['date'], completed= body['completed'])
         db.session.add(new_task)
         db.session.commit()
-        return jsonify(new_task.serialize()), 201
+        all_tasks = Task.query.all()
+        all_tasks = list(map(lambda t: t.serialize(), all_tasks))
+        return jsonify(all_tasks), 201
     return "invalid request method", 404

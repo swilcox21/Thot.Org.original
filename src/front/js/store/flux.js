@@ -16,9 +16,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 					.then(response => response.json())
 					.then(tasks => setStore({ hobby: tasks }));
 			},
-
 			addNewTask: hobby => {
-				fetch("https://3001-gold-planarian-jqy4lbsg.ws-us03.gitpod.io/api/task", {
+				console.log("HIYA", process.env.BACKEND_URL);
+				fetch(process.env.BACKEND_URL + "/api/task", {
 					method: "POST",
 					body: JSON.stringify({
 						label: hobby.label,
@@ -26,7 +26,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						completed: hobby.completed
 					}),
 					headers: {
-						"Content=Type": "application/json"
+						"Content-Type": "application/json"
 					}
 				})
 					.then(res => res.json())
@@ -34,6 +34,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 						setStore({
 							hobby: task
 						});
+					})
+					.catch(error => {
+						setStore({ errors: error });
+						console.error("Error:", error);
+						return true;
 					});
 			},
 
