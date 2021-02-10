@@ -31,6 +31,7 @@ class Task(db.Model):
 
     def serialize(self):
         return {
+            "id": self.id,
             "label": self.label,
             "date": self.date,
             "completed": self.completed

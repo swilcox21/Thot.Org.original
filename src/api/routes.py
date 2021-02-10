@@ -23,3 +23,23 @@ def handle_hello():
         all_tasks = list(map(lambda t: t.serialize(), all_tasks))
         return jsonify(all_tasks), 201
     return "invalid request method", 404
+
+
+@api.route('/task/<int:task_id>', methods=['PUT', 'GET', 'DELETE'])
+def get_single_task(task_id):
+    body = request.get_json() 
+    current_task = Task.query.get(task_id)
+    if request.method == 'PUT':
+        current_task.label = body['label']
+        current_task.completed = body['completed']
+        current_task.date = body['date']
+        db.session.commit()
+        return jsonify(current_task.serialize()), 200
+    if request.method == 'GET':
+        return jsonify(current_task.serialize()), 200
+    if request.method == 'DELETE':
+        db.session.delete(current_task)
+        db.session.commit()
+        return "task removed", 201
+
+    return "Invalid Method", 404

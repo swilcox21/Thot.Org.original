@@ -42,6 +42,53 @@ const getState = ({ getStore, getActions, setStore }) => {
 					});
 			},
 
+			deleteHobby: task_id => {
+				fetch(process.env.BACKEND_URL + "/api/task/" + task_id, {
+					method: "DELETE"
+				})
+					.then(() => {
+						getActions().getAllTasks();
+					})
+					.catch(error => {
+						setStore({ errors: error });
+						console.error("Error:", error);
+						return true;
+					});
+			},
+
+			handleChangeHobby: (todo, hobby) => {
+				fetch(process.env.BACKEND_URL + "/api/task/" + todo, {
+					method: "PUT",
+					body: JSON.stringify({
+						label: hobby.label,
+						date: hobby.date,
+						completed: hobby.completed
+					}),
+					headers: {
+						"Content-Type": "application/json"
+					}
+				})
+					.then(() => {
+						getActions().getAllTasks();
+					})
+					.catch(error => {
+						setStore({ errors: error });
+						console.error("Error:", error);
+						return true;
+					});
+			},
+
+			// handleChangeHobby: (e, i) => {
+			// 	let tempStore = getStore();
+			// 	const newTodos = tempStore.hobby.map((t, ind) => {
+			// 		if (ind === i) {
+			// 			t.name = e.target.value;
+			// 		}
+			// 		return t;
+			// 	});
+			// 	setStore({ hobby: newTodos });
+			// },
+
 			todaysDate: () => {
 				var d = new Date();
 				let month = "" + (d.getMonth() + 1);
@@ -152,17 +199,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 				});
 			},
 
-			handleChangeHobby: (e, i) => {
-				let tempStore = getStore();
-				const newTodos = tempStore.hobby.map((t, ind) => {
-					if (ind === i) {
-						t.name = e.target.value;
-					}
-					return t;
-				});
-				setStore({ hobby: newTodos });
-			},
-
 			hobbySetComplete: (hobby, i) => {
 				let tempStore = getStore();
 				tempStore.hobby.map((hobby, ind) => {
@@ -230,10 +266,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 				setStore({ workyearly: tempStore.workyearly.filter((value, ind) => ind !== i) });
 			},
 
-			deleteHobby: i => {
-				let tempStore = getStore();
-				setStore({ hobby: tempStore.hobby.filter((value, ind) => ind !== i) });
-			},
+			// deleteHobby: i => {
+			// 	let tempStore = getStore();
+			// 	setStore({ hobby: tempStore.hobby.filter((value, ind) => ind !== i) });
+			// },
 
 			deleteExcersize: i => {
 				let tempStore = getStore();

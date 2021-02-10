@@ -12,7 +12,12 @@ export class Hobby extends React.Component {
 			showTodoIndex: false,
 			hobby: [],
 			todo: "",
-			color: "black"
+			color: "black",
+			task: {
+				completed: null,
+				date: null,
+				label: null
+			}
 		};
 	}
 
@@ -118,7 +123,16 @@ export class Hobby extends React.Component {
 												type="text"
 												value={todo.label}
 												placeholder="dont leave me blank!"
-												onChange={e => actions.handleChangeHobby(e, index)}
+												onChange={() => {
+													let todo = {
+														id: store.hobby[index].id,
+														label: this.state.todo,
+														date: actions.todaysDate(),
+														completed: false
+													};
+													actions.handleChangeHobby(todo.id, todo);
+													this.resetTextArea();
+												}}
 											/>
 										</div>
 										<div className="d-flex justify-content-around col-10 col-lg-6 mx-auto">
@@ -133,7 +147,7 @@ export class Hobby extends React.Component {
 												<i className="fas fa-info-circle" />
 											</span>
 											<span
-												onClick={() => actions.deleteHobby(index)}
+												onClick={() => actions.deleteHobby(todo.id)}
 												className="deleteX text-center mt-2 col-1">
 												<i className="fab fa-xing" />
 											</span>
