@@ -24,7 +24,7 @@ export const TodoInfoModal = props => {
 					{store.hobby &&
 						store.hobby.filter((todo, index) => index == props.show).map((todo, index) => (
 							<>
-								<div className="modal-header">
+								<div key={todo.id} className="modal-header">
 									<h3 className="modal-title">
 										Todo number: &nbsp;
 										{props.show + 1}
@@ -79,7 +79,7 @@ TodoInfoModal.propTypes = {
 	index: PropTypes.number,
 	todo: PropTypes.object,
 	onClose: PropTypes.func,
-	show: PropTypes.bool,
+	show: PropTypes.boolean,
 	id: PropTypes.string
 };
 

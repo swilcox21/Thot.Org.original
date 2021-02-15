@@ -17,7 +17,9 @@ button {
 }
 
 .calender {
-    margin-top: 10px;
+    // margin-top: 50px;
+    margin: auto;
+    margin-bottom: 50px;
 }
 
 .deleteX {
@@ -33,6 +35,26 @@ button {
 
 .done2 {
     color: grey;
+}
+
+.grey {
+    color: grey;
+}
+
+.blackkkk {
+    color: black;
+}
+
+.notes {
+    height: 300px;
+}
+
+.onfucus:focus {
+    height: 200px;
+}
+
+.react-calendar__tile {
+    height: 50px;
 }
 
 .sideBar {

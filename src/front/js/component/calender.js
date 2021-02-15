@@ -1,18 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { render } from "react-dom";
 import Calendar from "react-calendar";
+import { Context } from "../store/appContext";
 
 const ReactCalendar = () => {
-	const [date, setDate] = useState(new Date());
-
-	const onChange = date => {
-		setDate(date);
+	const [cDate, setcDate] = useState(new Date());
+	const { actions, store } = useContext(Context);
+	const onChange = cDate => {
+		setcDate(cDate);
 	};
 
 	return (
 		<div>
-			<Calendar onChange={onChange} value={date} />
-			{console.log(date)}
+			<Calendar onChange={onChange} value={cDate} />
+			{console.log(cDate)}
+			{/* {actions.addDate(date)} */}
 		</div>
 	);
 };

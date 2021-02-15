@@ -21,7 +21,7 @@ class User(db.Model):
 class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     label = db.Column(db.String(120), unique=False, nullable=False)
-    date = db.Column(db.Date(), unique=False, nullable=False)
+    date = db.Column(db.String(120), unique=False, nullable=False)
     completed = db.Column(db.Boolean(), unique=False, nullable=False)
     priority = db.Column(db.Integer, unique=False, default=0, nullable=False)
 

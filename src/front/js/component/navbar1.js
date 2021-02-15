@@ -9,19 +9,16 @@ export const Navbar1 = () => {
 					<i className="fas fa-home" />
 				</span>
 			</Link>
-			<Link to="/work">
+			<Link to="/calendar">
 				<span className="">
 					<i className="far fa-calendar-alt" />
 				</span>
 			</Link>
 			<Link to="/hobby">
-				<span className="">Hobby</span>
-			</Link>
-			<Link to="/excersize">
-				<span className="">Excersize</span>
+				<span className="" />
 			</Link>
 			<Link to="/goals">
-				<span className="">Goals</span>
+				<span className="" />
 			</Link>
 		</nav>
 	);

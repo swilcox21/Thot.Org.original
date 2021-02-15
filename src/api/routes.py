@@ -16,6 +16,7 @@ def handle_hello():
         return jsonify(all_tasks), 200
     if request.method == 'POST':
         body = request.get_json()
+        print("BODDYYY***", body)
         new_task = Task(label= body['label'], date= body['date'], completed= body['completed'])
         db.session.add(new_task)
         db.session.commit()
