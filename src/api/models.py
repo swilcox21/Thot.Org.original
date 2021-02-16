@@ -20,11 +20,10 @@ class User(db.Model):
 
 class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    label = db.Column(db.String(120), unique=False, nullable=False)
-    date = db.Column(db.String(120), unique=False, nullable=False)
+    label = db.Column(db.String(1200000), unique=False, nullable=False)
+    date = db.Column(db.Date(), unique=False, nullable=False)
     completed = db.Column(db.Boolean(), unique=False, nullable=False)
     priority = db.Column(db.Integer, unique=False, default=0, nullable=False)
-
 
     def __repr__(self):
         return f'<Task {self.label}>'
@@ -34,6 +33,21 @@ class Task(db.Model):
             "id": self.id,
             "label": self.label,
             "date": self.date,
-            "completed": self.completed
+            "completed": self.completed,
+            "priority": self.priority
+            # do not serialize the password, its a security breach
+        }
+
+class Notes(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    notes = db.Column(db.String(100000), unique=False, nullable=False)
+    
+    def __repr__(self):
+        return f'<Notes {self.notes}>'
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "notes": self.notes
             # do not serialize the password, its a security breach
         }

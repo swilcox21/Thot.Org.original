@@ -2,6 +2,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
 			hobby: [],
+			cNotes: "",
 			addDate: ""
 		},
 		actions: {
@@ -16,13 +17,19 @@ const getState = ({ getStore, getActions, setStore }) => {
 					.then(response => response.json())
 					.then(tasks => setStore({ hobby: tasks }));
 			},
+			getNotes: () => {
+				fetch(process.env.BACKEND_URL + "/api/notes")
+					.then(response => response.json())
+					.then(notes => setStore({ cNotes: notes }));
+			},
 			addNewTask: hobby => {
 				fetch(process.env.BACKEND_URL + "/api/task", {
 					method: "POST",
 					body: JSON.stringify({
 						label: hobby.label,
 						date: hobby.date,
-						completed: hobby.completed
+						completed: hobby.completed,
+						priority: hobby.priority
 					}),
 					headers: {
 						"Content-Type": "application/json"
@@ -62,7 +69,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 					body: JSON.stringify({
 						label: hobby.label,
 						date: hobby.date,
-						completed: hobby.completed
+						completed: hobby.completed,
+						priority: hobby.priority
 					}),
 					headers: {
 						"Content-Type": "application/json"
@@ -70,6 +78,26 @@ const getState = ({ getStore, getActions, setStore }) => {
 				})
 					.then(() => {
 						getActions().getAllTasks();
+					})
+					.catch(error => {
+						setStore({ errors: error });
+						console.error("Error:", error);
+						return true;
+					});
+			},
+
+			handleChangeNotes: notes => {
+				fetch(process.env.BACKEND_URL + "/api/notes/1", {
+					method: "PUT",
+					body: JSON.stringify({
+						notes: notes
+					}),
+					headers: {
+						"Content-Type": "application/json"
+					}
+				})
+					.then(() => {
+						getActions().getNotes();
 					})
 					.catch(error => {
 						setStore({ errors: error });

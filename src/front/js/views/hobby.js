@@ -12,19 +12,25 @@ export class Hobby extends React.Component {
 			showTodoIndex: false,
 			hobby: [],
 			todo: "",
-			notes: "",
 			color: "black",
+			priority: [1, 2, 3, 4],
 			task: {}
 		};
 	}
 
 	handleshowTodoIndex = index => this.setState({ showTodoIndex: index });
 
+	addToHobby = todo => {
+		this.setState({
+			hobby: [...this.state.hobby, todo]
+		});
+	};
+
 	componentDidMount() {
 		// let value = this.context;
-		// console.log(value);
 		// this.context.store.hobby && this.setState({ hobby: this.context.store.hobby });
 		this.context.actions.getAllTasks();
+		this.context.actions.getNotes();
 		this.context.store.hobby &&
 			this.context.store.hobby != this.state.hobby &&
 			this.setState({ hobby: this.context.store.hobby });
@@ -50,6 +56,10 @@ export class Hobby extends React.Component {
 
 	resetTextArea = () => {
 		this.setState({ todo: "" });
+	};
+
+	resetTask = () => {
+		this.setState({ task: {} });
 	};
 
 	// handleSetDone = (t, i) => {
@@ -89,7 +99,7 @@ export class Hobby extends React.Component {
 							/>
 						</div>
 						{store.hobby &&
-							store.hobby.map((todo, index) => (
+							store.hobby.sort((a, b) => a.priority - b.priority).map((todo, index) => (
 								// console.log(todo);
 								<div key={todo.id}>
 									<div className="d-flex justify-content-around mx-auto col-lg-6">
@@ -98,8 +108,9 @@ export class Hobby extends React.Component {
 												this.setState({
 													task: {
 														label: todo.label,
-														tDate: todo.tDate,
-														completed: !this.state.task.completed
+														date: todo.date,
+														completed: !this.state.task.completed,
+														priority: todo.priority
 													}
 												});
 												actions.handleChangeHobby(todo.id, this.state.task);
@@ -124,27 +135,52 @@ export class Hobby extends React.Component {
 											type="text"
 											defaultValue={todo.label}
 											placeholder="dont leave me blank!"
-											onBlur={() => actions.handleChangeHobby(todo.id, this.state.task)}
+											onBlur={() => {
+												actions.handleChangeHobby(todo.id, this.state.task);
+												this.resetTask();
+											}}
 											onChange={e => {
 												todo.id === todo.id
 													? this.setState({
 															task: {
 																label: e.target.value,
 																date: todo.date,
-																completed: todo.completed
+																completed: todo.completed,
+																priority: todo.priority
 															}
 													  })
 													: null;
 											}}
 										/>
+										<input
+											className="inputTypeNumber text-center"
+											type="number"
+											min="1"
+											max="4"
+											defaultValue={todo.priority}
+											onChange={e => {
+												this.setState({
+													task: {
+														label: todo.label,
+														date: todo.date,
+														completed: todo.completed,
+														priority: e.target.value
+													}
+												});
+											}}
+											onBlur={() => {
+												actions.handleChangeHobby(todo.id, this.state.task);
+												this.resetTask();
+											}}
+										/>
 										<span
 											onClick={() => this.handleshowTodoIndex(index)}
-											className="deleteX text-center mt-2 col-1">
+											className="deleteX text-center mt-3 col-1">
 											<i className="fas fa-info-circle" />
 										</span>
 										<span
 											onClick={() => actions.deleteHobby(todo.id)}
-											className="deleteX text-center mt-2 col-1">
+											className="deleteX text-center mt-3 col-1">
 											<i className="fab fa-xing" />
 										</span>
 									</div>
@@ -160,13 +196,14 @@ export class Hobby extends React.Component {
 						<div className="mb-3 mt-2">
 							<button
 								onClick={() => {
-									console.log(actions.todaysDate());
 									let todo = {
 										label: this.state.todo,
 										date: actions.todaysDate(),
-										completed: false
+										completed: false,
+										priority: 2
 									};
 									console.log("thisis todo:", todo);
+									this.addToHobby(todo);
 									actions.addNewTask(todo);
 									this.resetTextArea();
 								}}>
@@ -177,8 +214,10 @@ export class Hobby extends React.Component {
 							className="pt-2 pl-2 col-md-6 notes"
 							placeholder="NOTES"
 							type="text"
-							value={this.state.notes}
+							defaultValue={store.cNotes && store.cNotes[0].notes}
 							onChange={e => this.handleChangeNotes(e)}
+							onFocus={e => this.handleChangeNotes(e)}
+							onBlur={() => actions.handleChangeNotes(this.state.notes)}
 						/>
 					</div>
 				)}

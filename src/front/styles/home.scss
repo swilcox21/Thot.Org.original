@@ -10,6 +10,10 @@
     color: white;
 }
 
+.blackkkk {
+    color: black;
+}
+
 button {
     border-radius: 5px;
     background-color: #343a40;
@@ -41,8 +45,14 @@ button {
     color: grey;
 }
 
-.blackkkk {
-    color: black;
+.inputTypeNumber {
+    // direction: rtl;
+    z-index: 2;
+    border: none;
+    margin-top: 0px;
+    margin-left: 10px;
+    margin-right: -5px;
+    max-width: 30px;
 }
 
 .notes {
