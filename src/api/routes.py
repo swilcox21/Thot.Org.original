@@ -55,12 +55,16 @@ def handle_notes():
 
 @api.route('/notes/<int:notes_id>', methods=['PUT', 'GET'])
 def get_notes(notes_id):
-    body = request.get_json() 
-    current_notes = Notes.query.get(notes_id)
-    if request.method == 'PUT':
-        current_notes.notes = body['notes']
-        db.session.commit()
-        return jsonify(current_notes), 200
-    if request.method == 'GET':
-        return jsonify(current_notes), 200
-    return "Invalid Method", 404
+    try:
+        body = request.get_json() 
+        current_notes = Notes.query.get(notes_id)
+        if request.method == 'PUT':
+            current_notes.notes = body['notes']
+            db.session.commit()
+            # below creates a pretty error
+            return jsonify(current_notes.serialize()), 200
+        if request.method == 'GET':
+            return jsonify(current_notes.serialize()), 200
+        return "Invalid Method", 404
+    except Exception as error:
+        return jsonify({"message" : str(error) })

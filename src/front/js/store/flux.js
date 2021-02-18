@@ -2,7 +2,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
 			hobby: [],
-			cNotes: "",
+			notes: "",
 			addDate: ""
 		},
 		actions: {
@@ -20,10 +20,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 			getNotes: () => {
 				fetch(process.env.BACKEND_URL + "/api/notes")
 					.then(response => response.json())
-					.then(notes => setStore({ cNotes: notes }));
+					.then(notes => setStore({ notes: notes }));
 			},
-			addNewTask: hobby => {
-				fetch(process.env.BACKEND_URL + "/api/task", {
+			addNewTask: async hobby => {
+				const res = await fetch(process.env.BACKEND_URL + "/api/task", {
 					method: "POST",
 					body: JSON.stringify({
 						label: hobby.label,
@@ -34,18 +34,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 					headers: {
 						"Content-Type": "application/json"
 					}
-				})
-					.then(res => res.json())
-					.then(task => {
-						setStore({
-							hobby: task
-						});
-					})
-					.catch(error => {
-						setStore({ errors: error });
-						console.error("Error:", error);
-						return true;
-					});
+				});
+				const task = await res.json();
+				setStore({
+					hobby: task
+				});
+				return task;
 			},
 
 			deleteHobby: task_id => {

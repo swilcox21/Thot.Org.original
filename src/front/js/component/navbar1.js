@@ -5,12 +5,12 @@ export const Navbar1 = () => {
 	return (
 		<nav className="container navbar navbar-dark bg-dark py-4">
 			<Link to="/">
-				<span className="">
+				<span className="greyIcons">
 					<i className="fas fa-home" />
 				</span>
 			</Link>
 			<Link to="/calendar">
-				<span className="">
+				<span className="greyIcons">
 					<i className="far fa-calendar-alt" />
 				</span>
 			</Link>
