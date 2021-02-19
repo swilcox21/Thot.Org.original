@@ -36,8 +36,8 @@ export class Calendar extends React.Component {
 						<Transition
 							native
 							items={this.state.showWorkNavbar}
-							from={{ marginLeft: -900 }}
-							enter={{ marginLeft: -15 }}
+							from={{ marginTop: -900 }}
+							enter={{ marginTop: 0 }}
 							leave={{ marginLeft: -900 }}>
 							{show =>
 								show &&

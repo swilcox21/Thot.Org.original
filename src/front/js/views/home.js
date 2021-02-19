@@ -12,14 +12,8 @@ export class Home extends React.Component {
 	}
 	render() {
 		return (
-			<div className="container text-center">
-				<div className="text-center mt-3">Hello Sam</div>
-				<div className="text-center">Today: {new Date().toLocaleString("en-us", { weekday: "long" })}</div>
+			<div className="container">
 				<Hobby />
-				<div className="container text-center mt-3 clock">
-					{new Date().toLocaleString("en-us", { weekday: "long" })}
-					<Clock />
-				</div>
 			</div>
 		);
 	}

@@ -1,20 +1,26 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
+import Clock from "./clock";
 
-export const Navbar1 = () => {
+export const Navbar1 = props => {
 	return (
-		<nav className="container navbar navbar-dark bg-dark py-4">
+		<nav className="container-fluid navbar navbar-dark bg-dark py-4">
+			<Link to="/goals">
+				<span className="" />
+			</Link>
 			<Link to="/">
 				<span className="greyIcons">
 					<i className="fas fa-home" />
 				</span>
 			</Link>
-			<Link to="/calendar">
-				<span className="greyIcons">
-					<i className="far fa-calendar-alt" />
-				</span>
+			<Link to="/goals">
+				<span className="" />
 			</Link>
-			<Link to="/hobby">
+			<Link to="/goals">
+				<span className="" />
+			</Link>
+			<Link to="/goals">
 				<span className="" />
 			</Link>
 			<Link to="/goals">
@@ -22,4 +28,8 @@ export const Navbar1 = () => {
 			</Link>
 		</nav>
 	);
+};
+
+Navbar1.propTypes = {
+	toggle: PropTypes.func
 };

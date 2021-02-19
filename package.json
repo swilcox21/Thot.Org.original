@@ -73,9 +73,12 @@
 		"prop-types": "^15.6.1",
 		"react": "^16.8.4",
 		"react-calendar": "^3.3.1",
+		"react-datepicker": "^3.5.0",
 		"react-dom": "^16.8.4",
+		"react-dropdown-calendar": "^1.0.3",
 		"react-polyfills": "0.0.1",
 		"react-router-dom": "^5.2.0",
-		"react-spring": "^8.0.27"
+		"react-spring": "^8.0.27",
+		"react-textarea-autosize": "^8.3.1"
 	}
 }

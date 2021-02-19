@@ -40,6 +40,10 @@ button {
 
 }
 
+.datePickerr {
+    width: 20px;
+}
+
 .deleteX {
     font-size: 1.1rem;
     color: #004a99;
@@ -64,7 +68,6 @@ button {
 }
 
 .inputAndTextArea {
-    border-bottom: 1px dotted black;
 }
 
 .inputTypeNumber {
@@ -73,10 +76,17 @@ button {
     // margin-bottom: -10px;
     margin-left: -10px;
     max-width: 50px;
+    border-right: 1px dotted black;
+
+}
+
+.inputTypeNumber2 {
+    float: left;
 }
 
 .notes {
     height: 300px;
+    margin: auto;
 }
 
 .onfucus:focus {
@@ -85,23 +95,70 @@ button {
     resize: vertical;
 }
 
+
 .react-calendar__tile {
     height: 50px;
 }
 
+.react-calendar__month-view__weekdays {
+    background-color: white;
+    font-weight: bold;
+    text-decoration: none;
+}
+
 .sideBar {
     position: absolute;
-    z-index: 2;
-    // background-color: rgb(226, 226, 226);
-    // border-right: 1px solid black;
+    z-index: 10;
+    margin-top: 50px;
+    // margin-right: 73.5%;
+}
+
+.submitButton {
+    margin: auto;
 }
 
 .toggleButton {
-    position: left;
+    float: left;
 }
 
 .toggleOffButton {
-    float: right; 
+    float: right;
     border: none;
     background-color: rgba(255, 255, 255, 0);
+}
+
+
+
+// AUTO GROWING TEXT AREA 
+
+.grow-wrap {
+  /* easy way to plop the elements on top of each other and have them both sized based on the tallest one's height */
+  display: grid;
+}
+.grow-wrap::after {
+  /* Note the weird space! Needed to preventy jumpy behavior */
+  content: attr(data-replicated-value) " ";
+
+  /* This is how textarea text behaves */
+  white-space: pre-wrap;
+
+  /* Hidden from view, clicks, and screen readers */
+  visibility: hidden;
+}
+.grow-wrap > textarea {
+  /* You could leave this, but after a user resizes, then it ruins the auto sizing */
+  resize: none;
+
+  /* Firefox shows scrollbar on growth, you can hide like this. */
+  overflow: hidden;
+}
+.grow-wrap > textarea,
+.grow-wrap::after {
+  /* Identical styling required!! */
+  border: 1px solid black;
+  padding: 0.5rem;
+  font: inherit;
+
+  /* Place on top of each other */
+  grid-area: 1 / 1 / 2 / 2;
 }
