@@ -4,6 +4,10 @@ import React, { useState, setStore } from "react";
 // import Clock from "../component/clock";
 import { Context } from "../store/appContext";
 import { TodoInfoModal } from "../component/todoInfoModal";
+import Dropdown from "react-bootstrap/Dropdown";
+import DropdownButton from "react-bootstrap/Dropdown";
+import FormControl from "react-bootstrap/FormControl";
+import ReactDatePicker from "react-datepicker";
 
 export class Prio2 extends React.Component {
 	constructor() {
@@ -42,6 +46,40 @@ export class Prio2 extends React.Component {
 	resetTask = () => {
 		this.setState({ task: null });
 	};
+
+	CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
+		<a
+			href=""
+			ref={ref}
+			onClick={e => {
+				e.preventDefault();
+				onClick(e);
+			}}>
+			{children}
+			&#x25bc;
+		</a>
+	));
+
+	CustomMenu = React.forwardRef(({ children, style, className, "aria-labelledby": labeledBy }, ref) => {
+		const [value, setValue] = useState("");
+
+		return (
+			<div ref={ref} style={style} className={className} aria-labelledby={labeledBy}>
+				<FormControl
+					autoFocus
+					className="mx-3 my-2 w-auto"
+					placeholder="Type to filter..."
+					onChange={e => setValue(e.target.value)}
+					value={value}
+				/>
+				<ul className="list-unstyled">
+					{React.Children.toArray(children).filter(
+						child => !value || child.props.children.toLowerCase().startsWith(value)
+					)}
+				</ul>
+			</div>
+		);
+	});
 
 	render() {
 		return (
@@ -96,11 +134,25 @@ export class Prio2 extends React.Component {
 													this.resetTask();
 												}}
 											/>
-											<span
-												onClick={() => actions.deleteHobby(todo.id)}
-												className="deleteX mt-3 text-center">
-												<i className="fab fa-xing" />
-											</span>
+											<Dropdown className="mt-4 ml-3">
+												<Dropdown.Toggle as={this.CustomToggle} id="dropdown-custom-components">
+													<button className="dropdowntoggle">
+														<i className="fas fa-list" />
+													</button>
+												</Dropdown.Toggle>
+												<Dropdown.Menu className="mt-1">
+													<Dropdown.Item eventKey="1">Red</Dropdown.Item>
+													<Dropdown.Item eventKey="2">Blue</Dropdown.Item>
+													<Dropdown.Divider />
+													<Dropdown.Item eventKey="3">
+														<span
+															onClick={() => actions.deleteHobby(todo.id)}
+															className="deleteX text-center mt-3 col-1">
+															&nbsp; &nbsp; &nbsp; <i className="fab fa-xing" />
+														</span>
+													</Dropdown.Item>
+												</Dropdown.Menu>
+											</Dropdown>
 										</div>
 									)}
 								</div>

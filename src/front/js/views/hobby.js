@@ -154,9 +154,7 @@ export class Hobby extends React.Component {
 										onClick={() => {
 											let todo = {
 												label: this.state.todo,
-												date: this.state.selectedDate
-													? this.state.selectedDate
-													: actions.todaysDate(),
+												date: this.state.selectedDate ? this.state.selectedDate : new Date(),
 												completed: false,
 												priority: this.state.priority
 											};

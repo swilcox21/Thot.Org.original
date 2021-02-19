@@ -59,6 +59,12 @@ button {
     color: grey;
 }
 
+.dropdowntoggle {
+    position: absolute;
+    // margin-top: 25px;
+    z-index: 2;
+}
+
 .grey {
     color: grey;
 }
