@@ -5,12 +5,13 @@ import ReactCalendar from "../component/calender";
 
 export const WorkNavbar = props => {
 	return (
-		<nav className="container col-lg-2 col-12 sideBar">
-			<ReactCalendar />
+		<nav className="container col-sm-5 col-m-4 col-xl-2 col-12 sideBar">
+			<ReactCalendar onChange={props.onChange} />
 		</nav>
 	);
 };
 
 WorkNavbar.propTypes = {
-	toggle: PropTypes.func
+	toggle: PropTypes.func,
+	onChange: PropTypes.func
 };

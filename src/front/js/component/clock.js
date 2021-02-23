@@ -1,10 +1,11 @@
 import React from "react";
+import dayjs from "dayjs";
 
 class Clock extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			time: new Date().toLocaleString()
+			time: dayjs().format("h:mm:ss a")
 		};
 	}
 	componentDidMount() {
@@ -15,7 +16,7 @@ class Clock extends React.Component {
 	}
 	tick() {
 		this.setState({
-			time: new Date().toLocaleString()
+			time: dayjs().format("h:mm:ss a")
 		});
 	}
 	render() {

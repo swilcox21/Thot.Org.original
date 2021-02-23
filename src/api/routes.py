@@ -4,6 +4,7 @@ This module takes care of starting the API Server, Loading the DB and Adding the
 from flask import Flask, request, jsonify, url_for, Blueprint
 from api.models import db, User, Task, Notes
 from api.utils import generate_sitemap, APIException
+from datetime import datetime
 
 api = Blueprint('api', __name__)
 
@@ -11,7 +12,16 @@ api = Blueprint('api', __name__)
 @api.route('/task', methods=['GET', 'POST'])
 def handle_hello():
     if request.method == 'GET':
-        all_tasks = Task.query.all()
+        all_tasks = Task.query
+        _from = request.args.get('from', None)
+        _until = request.args.get('until', None)
+        if _from is not None : 
+            date_time_obj = datetime.strptime(_from, '%Y/%m/%d')
+            all_tasks = all_tasks.filter(Task.date >= _from)
+        if _until is not None : 
+            date_time_obj = datetime.strptime(_until, '%Y/%m/%d')
+            all_tasks = all_tasks.filter(Task.date <= _until)
+        all_tasks = all_tasks.all()
         all_tasks = list(map(lambda t: t.serialize(), all_tasks))
         return jsonify(all_tasks), 200
     if request.method == 'POST':

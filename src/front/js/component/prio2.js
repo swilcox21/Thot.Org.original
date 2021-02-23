@@ -1,13 +1,16 @@
-import "../../styles/home.scss";
 import React, { useState, setStore } from "react";
 // import { Link } from "react-router-dom";
 // import Clock from "../component/clock";
 import { Context } from "../store/appContext";
+import TextareaAutosize from "react-textarea-autosize";
 import { TodoInfoModal } from "../component/todoInfoModal";
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/Dropdown";
 import FormControl from "react-bootstrap/FormControl";
 import ReactDatePicker from "react-datepicker";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import NumericInput from "react-numeric-input";
+import dayjs from "dayjs";
 
 export class Prio2 extends React.Component {
 	constructor() {
@@ -20,6 +23,7 @@ export class Prio2 extends React.Component {
 				color: "success",
 				message: ""
 			},
+			selectedDate: dayjs(),
 			todo: "",
 			color: "black",
 			priority: 2,
@@ -85,7 +89,7 @@ export class Prio2 extends React.Component {
 		return (
 			<Context.Consumer>
 				{({ actions, store }) => (
-					<div className="container">
+					<div className="container text-center">
 						{Array.isArray(store.hobby) &&
 							store.hobby.sort((a, b) => a.priority - b.priority).map((todo, index) => (
 								<div key={todo.id}>
@@ -134,21 +138,70 @@ export class Prio2 extends React.Component {
 													this.resetTask();
 												}}
 											/>
-											<Dropdown className="mt-4 ml-3">
+											<Dropdown
+												onDoubleClick={() => actions.deleteHobby(todo.id)}
+												className="mt-4 ml-3">
 												<Dropdown.Toggle as={this.CustomToggle} id="dropdown-custom-components">
 													<button className="dropdowntoggle">
 														<i className="fas fa-list" />
 													</button>
 												</Dropdown.Toggle>
 												<Dropdown.Menu className="mt-1">
-													<Dropdown.Item eventKey="1">Red</Dropdown.Item>
-													<Dropdown.Item eventKey="2">Blue</Dropdown.Item>
+													<span>
+														<ReactDatePicker
+															selected={this.state.selectedDate.toDate()}
+															onChange={date => {
+																this.setState({ selectedDate: dayjs(date) });
+																this.setState({
+																	task: {
+																		label: todo.label,
+																		date: date,
+																		completed: todo.completed,
+																		priority: todo.priority
+																	}
+																});
+															}}
+															minDate={dayjs().toDate()}
+														/>
+													</span>
+													{this.state.task && (
+														<Dropdown.Item eventKey="1">
+															<button
+																className=""
+																onClick={() => {
+																	actions.handleChangeHobby(todo.id, this.state.task);
+																	this.resetTask();
+																}}>
+																CONFIRM DATE
+															</button>
+														</Dropdown.Item>
+													)}
+													<CopyToClipboard className="ml-4" text={todo.label}>
+														<button>Copy to clipboard</button>
+													</CopyToClipboard>
+													<Dropdown.Item
+														eventKey="2"
+														onClick={() => {
+															let task = {
+																label: todo.label,
+																date: todo.date,
+																completed: !todo.completed,
+																priority: todo.priority
+															};
+															actions.handleChangeHobby(todo.id, task);
+														}}>
+														MARK COMPLETE
+													</Dropdown.Item>
+													{/* <CopyToClipboard text={todo.label}>
+														COPY TO CLIPBOARD
+													</CopyToClipboard> */}
 													<Dropdown.Divider />
-													<Dropdown.Item eventKey="3">
+													<Dropdown.Item eventKey="4">
 														<span
 															onClick={() => actions.deleteHobby(todo.id)}
-															className="deleteX text-center mt-3 col-1">
-															&nbsp; &nbsp; &nbsp; <i className="fab fa-xing" />
+															className="deleteX text-center mt-3">
+															&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+															<i className="fab fa-xing" />
 														</span>
 													</Dropdown.Item>
 												</Dropdown.Menu>

@@ -2,26 +2,26 @@ const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
 			hobby: [],
-			notes: "",
+			notes: null,
 			addDate: ""
 		},
 		actions: {
-			// addDate: date => {
-			// 	let tempStore = getStore();
-			// 	tempStore.hobby.push(date);
-			// 	setStore({ tempStore });
-			// },
-
-			getAllTasks: () => {
-				fetch(process.env.BACKEND_URL + "/api/task")
+			getAllTasks: (from, until) => {
+				fetch(
+					process.env.BACKEND_URL +
+						`/api/task?from=${from.format("YYYY/MM/DD")}&until=${until.format("YYYY/MM/DD")}`
+				)
 					.then(response => response.json())
 					.then(tasks => setStore({ hobby: tasks }));
 			},
-			getNotes: () => {
-				fetch(process.env.BACKEND_URL + "/api/notes")
-					.then(response => response.json())
-					.then(notes => setStore({ notes: notes }));
+
+			getNotes: async () => {
+				const res = await fetch(process.env.BACKEND_URL + "/api/notes");
+				const notes = await res.json();
+				setStore({ notes: notes });
+				return notes;
 			},
+
 			addNewTask: async hobby => {
 				const res = await fetch(process.env.BACKEND_URL + "/api/task", {
 					method: "POST",
@@ -46,8 +46,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 				fetch(process.env.BACKEND_URL + "/api/task/" + task_id, {
 					method: "DELETE"
 				})
-					.then(() => {
-						getActions().getAllTasks();
+					.then(response => {
+						if (response.status >= 200 && response.status < 300) {
+							const store = getStore();
+							setStore({ hobby: store.hobby.filter(t => t.id != task_id) });
+						} else throw Error("there was a problem deleting the task");
 					})
 					.catch(error => {
 						setStore({ errors: error });
@@ -110,7 +113,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				return [month, day, year].join("-");
 			},
 
-			// SAVING BELOW JUST INCASE
+			// SAVING BELOW JUST INCASE // no relevant code beyond this point
 
 			// handleChangeHobby: (e, i) => {
 			// 	let tempStore = getStore();

@@ -10,6 +10,9 @@ import DropdownButton from "react-bootstrap/Dropdown";
 import FormControl from "react-bootstrap/FormControl";
 import ReactDatePicker from "react-datepicker";
 import { CopyToClipboard } from "react-copy-to-clipboard";
+import NumericInput from "react-numeric-input";
+import dayjs from "dayjs";
+import DropdownItem from "react-bootstrap/esm/DropdownItem";
 
 export class Prio1 extends React.Component {
 	constructor() {
@@ -22,11 +25,11 @@ export class Prio1 extends React.Component {
 				color: "success",
 				message: ""
 			},
-			selectedDate: new Date(),
+			selectedDate: dayjs(),
 			todo: "",
 			color: "black",
 			priority: 1,
-			task: null
+			taskDate: null
 		};
 	}
 
@@ -117,7 +120,7 @@ export class Prio1 extends React.Component {
 												}}
 											/>
 											<TextareaAutosize
-												className="pb-5 pl-3 pr-3 pt-3 col-12 mt-1 ml-1 activeTodo prio1"
+												className="pb-5 px-3 pt-3 col-12 mt-1 ml-1 activeTodo prio1"
 												type="text"
 												defaultValue={todo.label}
 												placeholder="dont leave me blank!"
@@ -132,7 +135,7 @@ export class Prio1 extends React.Component {
 													});
 												}}
 												onBlur={() => {
-													if (this.state.task)
+													this.state.task &&
 														actions.handleChangeHobby(todo.id, this.state.task);
 													this.resetTask();
 												}}
@@ -146,9 +149,9 @@ export class Prio1 extends React.Component {
 												<Dropdown.Menu className="mt-1">
 													<span>
 														<ReactDatePicker
-															selected={this.state.selectedDate}
+															selected={this.state.selectedDate.toDate()}
 															onChange={date => {
-																this.setState({ selectedDate: date });
+																this.setState({ selectedDate: dayjs(date) });
 																this.setState({
 																	task: {
 																		label: todo.label,
@@ -157,9 +160,8 @@ export class Prio1 extends React.Component {
 																		priority: todo.priority
 																	}
 																});
-																// actions.handleChangeHobby(todo.id, this.state.task);
 															}}
-															minDate={new Date()}
+															minDate={dayjs().toDate()}
 														/>
 													</span>
 													{this.state.task && (
@@ -174,6 +176,9 @@ export class Prio1 extends React.Component {
 															</button>
 														</Dropdown.Item>
 													)}
+													<CopyToClipboard className="ml-4" text={todo.label}>
+														<button>Copy to clipboard</button>
+													</CopyToClipboard>
 													<Dropdown.Item
 														eventKey="2"
 														onClick={() => {
@@ -185,7 +190,7 @@ export class Prio1 extends React.Component {
 															};
 															actions.handleChangeHobby(todo.id, task);
 														}}>
-														MARK COMPLETE
+														<button>MARK COMPLETE</button>
 													</Dropdown.Item>
 													{/* <CopyToClipboard text={todo.label}>
 														COPY TO CLIPBOARD
@@ -193,7 +198,9 @@ export class Prio1 extends React.Component {
 													<Dropdown.Divider />
 													<Dropdown.Item eventKey="4">
 														<span
-															onClick={() => actions.deleteHobby(todo.id)}
+															onClick={() => {
+																actions.deleteHobby(todo.id);
+															}}
 															className="deleteX text-center mt-3">
 															&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
 															<i className="fab fa-xing" />

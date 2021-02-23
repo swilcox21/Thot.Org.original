@@ -70,6 +70,7 @@
 	},
 	"dependencies": {
 		"bootstrap": "^4.6.0",
+		"dayjs": "^1.10.4",
 		"prop-types": "^15.6.1",
 		"react": "^16.8.4",
 		"react-bootstrap": "^1.5.0",
@@ -78,6 +79,7 @@
 		"react-datepicker": "^3.5.0",
 		"react-dom": "^16.8.4",
 		"react-dropdown-calendar": "^1.0.3",
+		"react-numeric-input": "^2.2.3",
 		"react-polyfills": "0.0.1",
 		"react-router-dom": "^5.2.0",
 		"react-spring": "^8.0.27",

@@ -15,6 +15,8 @@ import ReactDatePicker from "react-datepicker";
 import { WorkNavbar } from "../component/worknavbar";
 import { Spring, Transition, animated } from "react-spring/renderprops";
 import Clock from "../component/clock";
+import dayjs from "dayjs";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 
 export class Hobby extends React.Component {
 	constructor() {
@@ -29,9 +31,10 @@ export class Hobby extends React.Component {
 				message: ""
 			},
 			todo: "",
-			selectedDate: new Date(),
+			taskDate: dayjs(),
+			currentDate: dayjs(),
 			color: "black",
-			priority: 2,
+			priority: 3,
 			task: null
 		};
 	}
@@ -47,17 +50,17 @@ export class Hobby extends React.Component {
 	};
 
 	componentDidMount() {
-		this.context.actions.getAllTasks();
-		this.context.actions.getNotes();
-		// this.context.store.hobby &&
-		// 	this.context.store.hobby != this.state.hobby &&
-		// 	this.setState({ hobby: this.context.store.hobby });
+		this.context.actions.getAllTasks(this.state.currentDate, this.state.currentDate);
+		this.context.actions.getNotes().then(() => {
+			console.log(this.state.currentDate);
+			this.setState({ notes: this.context.store.notes[0].notes });
+		});
+		// this.context.store.notes != null && this.setState({ notes: "maybe this is wrong" });
+		// console.log("notes:", this.context.store.notes);
 	}
 
 	// componentDidUpdate() {
-	// 	this.context.store.hobby &&
-	// 		this.context.store.hobby != this.state.hobby &&
-	// 		this.setState({ hobby: this.context.store.hobby });
+	// 	this.context.actions.getAllTasks(this.state.currentDate, this.state.currentDate);
 	// }
 
 	handleChange = e => {
@@ -74,8 +77,8 @@ export class Hobby extends React.Component {
 
 	resetTextArea = () => {
 		this.setState({ todo: "" });
-		this.setState({ priority: 2 });
-		this.setState({ selectedDate: new Date() });
+		this.setState({ priority: 3 });
+		this.setState({ taskDate: dayjs() });
 	};
 
 	resetTask = () => {
@@ -95,7 +98,14 @@ export class Hobby extends React.Component {
 			<Context.Consumer>
 				{({ actions, store }) => (
 					<div className="container-fluid">
-						<button className="toggleButton mt-1" onClick={() => this.toggle()}>
+						<button
+							className="toggleButton mt-1"
+							onDoubleClick={() => {
+								this.setState({ currentDate: dayjs() });
+								this.setState({ taskDate: dayjs() });
+								actions.getAllTasks(dayjs(), dayjs());
+							}}
+							onClick={() => this.toggle()}>
 							<i className="far fa-calendar-alt" />
 						</button>
 						<Transition
@@ -108,25 +118,31 @@ export class Hobby extends React.Component {
 								show &&
 								(props => (
 									<animated.div style={props}>
-										<WorkNavbar toggle={this.toggle} />
+										<WorkNavbar
+											toggle={this.toggle}
+											onChange={date => {
+												this.setState({ currentDate: date });
+												this.setState({ taskDate: date });
+												actions.getAllTasks(date, date);
+												this.toggle();
+											}}
+										/>
 									</animated.div>
 								))
 							}
 						</Transition>
 						<div className="container text-left ml-5 mt-1 clock">
-							{new Date().toLocaleString("en-us", { weekday: "long" })}
+							{this.state.currentDate.format("dddd  M/DD/YYYY")}
 							<Clock />
 						</div>
 						<div className="text-center">
 							<Prio1 />
 						</div>
-						<ReactDatePicker
-							selected={this.state.selectedDate}
-							onChange={date => this.setState({ selectedDate: date })}
-							minDate={new Date()}
-						/>
 						<div className="row">
 							<div className="col-md-7">
+								<div className="todaysTasks my-2">Today:</div>
+								<Prio2 />
+								<Prio3 />
 								<textarea
 									className="pt-4 pl-2 mt-3 col-12 text-center"
 									placeholder="Stop being lazy and JUST DO IT!"
@@ -139,22 +155,24 @@ export class Hobby extends React.Component {
 										{this.state.status.message}
 									</div>
 								)}
-								<div className="mb-3 mt-2 col-11 text-center">
+								<div className="mb-3 mt-2 col-12 d-flex justify-content-between">
 									<input
 										value={this.state.priority}
 										onChange={e => {
 											this.setState({ priority: e.target.value });
 										}}
-										className="inputTypeNumber inputTypeNumber2 text-center mr-2"
+										className="inputTypeNumber text-center mr-2"
 										type="number"
 										min="1"
 										max="5"
 									/>
+									<div />
+									<div />
 									<button
 										onClick={() => {
 											let todo = {
 												label: this.state.todo,
-												date: this.state.selectedDate ? this.state.selectedDate : new Date(),
+												date: this.state.taskDate ? this.state.taskDate : dayjs(),
 												completed: false,
 												priority: this.state.priority
 											};
@@ -172,20 +190,28 @@ export class Hobby extends React.Component {
 										}}>
 										SUBMIT
 									</button>
+									<div className="newTaskDatePicker">
+										<ReactDatePicker
+											selected={this.state.taskDate.toDate()}
+											onChange={date => this.setState({ taskDate: dayjs(date) })}
+											minDate={dayjs().toDate()}
+										/>
+									</div>
 								</div>
-								<Prio2 />
-								<Prio3 />
-								<br />
+								<div className="todaysTasks mt-3 mb-2">Weekly:</div>
 								<Prio4 />
-								<br />
+								<div className="todaysTasks mt-3 mb-2">Long Term:</div>
 								<Prio5 />
 							</div>
 							<div className="col-md-5">
+								<CopyToClipboard text={this.state.notes}>
+									<button>Copy to clipboard</button>
+								</CopyToClipboard>
 								<textarea
 									className="p-2 mt-3 col-12 notes"
 									placeholder="NOTES"
 									type="text"
-									defaultValue={this.state.notes}
+									value={this.state.notes}
 									onChange={e => this.handleChangeNotes(e)}
 									onFocus={e => this.handleChangeNotes(e)}
 									onBlur={() => actions.handleChangeNotes(this.state.notes)}
