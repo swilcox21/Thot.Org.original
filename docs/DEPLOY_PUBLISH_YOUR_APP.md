@@ -31,7 +31,7 @@ $ heroku addons:create heroku-postgresql:hobby-dev
 # this command will also automatically add a DATABASE_URL env variable with the Postgress database url
 ```
 
-5. Other Enviroment Variables
+6. Other Enviroment Variables
 
 You cannot create a `.env` file on Heroku, instead you need to manually add all the variables using the command line or under your heroku hashboard project settings.
 
