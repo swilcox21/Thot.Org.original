@@ -1,9 +1,10 @@
+import "../../styles/home.scss";
 import React, { useState, setStore } from "react";
 // import { Link } from "react-router-dom";
 // import Clock from "../component/clock";
 import { Context } from "../store/appContext";
 import TextareaAutosize from "react-textarea-autosize";
-import { TodoInfoModal } from "../component/todoInfoModal";
+import { TodoInfoModal } from "./todoInfoModal";
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/Dropdown";
 import FormControl from "react-bootstrap/FormControl";
@@ -11,8 +12,10 @@ import ReactDatePicker from "react-datepicker";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import NumericInput from "react-numeric-input";
 import dayjs from "dayjs";
+import DropdownItem from "react-bootstrap/esm/DropdownItem";
+import PropTypes from "prop-types";
 
-export class Prio5 extends React.Component {
+export class Prio extends React.Component {
 	constructor() {
 		super();
 		this.state = {
@@ -26,8 +29,8 @@ export class Prio5 extends React.Component {
 			selectedDate: dayjs(),
 			todo: "",
 			color: "black",
-			priority: 5,
-			task: null
+			priority: 1,
+			taskDate: null
 		};
 	}
 
@@ -86,6 +89,10 @@ export class Prio5 extends React.Component {
 	});
 
 	render() {
+		const Tag =
+			this.props.priority === 1
+				? TextareaAutosize
+				: ({ children, ...props }) => <textarea {...props}>{children}</textarea>;
 		return (
 			<Context.Consumer>
 				{({ actions, store }) => (
@@ -93,8 +100,8 @@ export class Prio5 extends React.Component {
 						{Array.isArray(store.hobby) &&
 							store.hobby.sort((a, b) => a.priority - b.priority).map((todo, index) => (
 								<div key={todo.id}>
-									{todo.priority === 5 && (
-										<div className="d-flex justify-content-between">
+									{todo.priority === this.props.priority && (
+										<div className="d-flex justify-content-around mx-auto col-md-11 activeTodoDiv inputAndTextArea">
 											<input
 												className="inputTypeNumber text-center"
 												type="number"
@@ -117,8 +124,10 @@ export class Prio5 extends React.Component {
 													this.resetTask();
 												}}
 											/>
-											<textarea
-												className="pl-2 col-10 mt-1 ml-1 activeTodo onfucus"
+											<Tag
+												className={`pl-2 col-12 activeTodo ${
+													this.props.priority !== 1 ? "onfucus" : "pb-5"
+												}`}
 												type="text"
 												defaultValue={todo.label}
 												placeholder="dont leave me blank!"
@@ -133,14 +142,12 @@ export class Prio5 extends React.Component {
 													});
 												}}
 												onBlur={() => {
-													if (this.state.task)
+													this.state.task &&
 														actions.handleChangeHobby(todo.id, this.state.task);
 													this.resetTask();
 												}}
 											/>
-											<Dropdown
-												onDoubleClick={() => actions.deleteHobby(todo.id)}
-												className="mt-4 ml-3">
+											<Dropdown className="mt-2 ml-3">
 												<Dropdown.Toggle as={this.CustomToggle} id="dropdown-custom-components">
 													<button className="dropdowntoggle">
 														<i className="fas fa-list" />
@@ -190,7 +197,7 @@ export class Prio5 extends React.Component {
 															};
 															actions.handleChangeHobby(todo.id, task);
 														}}>
-														MARK COMPLETE
+														<button>MARK COMPLETE</button>
 													</Dropdown.Item>
 													{/* <CopyToClipboard text={todo.label}>
 														COPY TO CLIPBOARD
@@ -198,7 +205,9 @@ export class Prio5 extends React.Component {
 													<Dropdown.Divider />
 													<Dropdown.Item eventKey="4">
 														<span
-															onClick={() => actions.deleteHobby(todo.id)}
+															onClick={() => {
+																actions.deleteHobby(todo.id);
+															}}
 															className="deleteX text-center mt-3">
 															&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
 															<i className="fab fa-xing" />
@@ -217,4 +226,8 @@ export class Prio5 extends React.Component {
 	}
 }
 
-Prio5.contextType = Context;
+Prio.contextType = Context;
+
+Prio.propTypes = {
+	priority: PropTypes.number
+};

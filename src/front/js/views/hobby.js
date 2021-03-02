@@ -6,17 +6,20 @@ import { Context } from "../store/appContext";
 import { TodoInfoModal } from "../component/todoInfoModal";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { Prio1 } from "../component/prio1";
-import { Prio2 } from "../component/prio2";
-import { Prio3 } from "../component/prio3";
-import { Prio4 } from "../component/prio4";
-import { Prio5 } from "../component/prio5";
+import { Prio } from "../component/prio";
+import TextareaAutosize from "react-textarea-autosize";
 import ReactDatePicker from "react-datepicker";
 import { WorkNavbar } from "../component/worknavbar";
 import { Spring, Transition, animated } from "react-spring/renderprops";
 import Clock from "../component/clock";
 import dayjs from "dayjs";
 import { CopyToClipboard } from "react-copy-to-clipboard";
+import timeZone from "dayjs-ext/plugin/timeZone";
+import utc from "dayjs/plugin/utc";
+
+// dayjs.extend(utc);
+// dayjs.extend(timeZone);
+// dayjs.tz.setDefault("America/New_York");
 
 export class Hobby extends React.Component {
 	constructor() {
@@ -34,7 +37,7 @@ export class Hobby extends React.Component {
 			taskDate: dayjs(),
 			currentDate: dayjs(),
 			color: "black",
-			priority: 3,
+			priority: 2,
 			task: null
 		};
 	}
@@ -77,7 +80,7 @@ export class Hobby extends React.Component {
 
 	resetTextArea = () => {
 		this.setState({ todo: "" });
-		this.setState({ priority: 3 });
+		this.setState({ priority: 2 });
 		this.setState({ taskDate: dayjs() });
 	};
 
@@ -135,39 +138,36 @@ export class Hobby extends React.Component {
 							{this.state.currentDate.format("dddd  M/DD/YYYY")}
 							<Clock />
 						</div>
-						<div className="text-center">
-							<Prio1 />
+						<div className="text-center mb-5 col-10 mt-3 mx-auto">
+							<Prio priority={1} />
 						</div>
-						<div className="row">
-							<div className="col-md-7">
-								<div className="todaysTasks my-2">Today:</div>
-								<Prio2 />
-								<Prio3 />
-								<textarea
-									className="pt-4 pl-2 mt-3 col-12 text-center"
-									placeholder="Stop being lazy and JUST DO IT!"
-									type="text"
-									value={this.state.todo}
-									onChange={e => this.handleChange(e)}
-								/>
-								{this.state.status.message !== "" && (
-									<div className={`alert alert-${this.state.status.color}`}>
-										{this.state.status.message}
-									</div>
-								)}
-								<div className="mb-3 mt-2 col-12 d-flex justify-content-between">
+						<div className="d-flex flex-wrap mt-5">
+							<div className="col-md-6">
+								<div className="col-md-12 d-flex justify-content-between mb-3">
 									<input
 										value={this.state.priority}
 										onChange={e => {
 											this.setState({ priority: e.target.value });
 										}}
-										className="inputTypeNumber text-center mr-2"
+										className="inputTypeNumber2 inputTypeNumber text-center"
 										type="number"
 										min="1"
 										max="5"
 									/>
-									<div />
-									<div />
+									<TextareaAutosize
+										className="pl-2 col-11 activeTodo onfucus addNew py-3"
+										placeholder="Stop being lazy and JUST DO IT!"
+										type="text"
+										value={this.state.todo}
+										onChange={e => this.handleChange(e)}
+									/>
+								</div>
+								{this.state.status.message !== "" && (
+									<div className={`alert alert-${this.state.status.color}`}>
+										{this.state.status.message}
+									</div>
+								)}
+								<div className="d-flex justify-content-around col-md-12 text-center">
 									<button
 										onClick={() => {
 											let todo = {
@@ -198,25 +198,36 @@ export class Hobby extends React.Component {
 										/>
 									</div>
 								</div>
-								<div className="todaysTasks mt-3 mb-2">Weekly:</div>
-								<Prio4 />
-								<div className="todaysTasks mt-3 mb-2">Long Term:</div>
-								<Prio5 />
+								<div className="todaysTasks mt-3">Tasks:</div>
+								<Prio priority={2} />
 							</div>
-							<div className="col-md-5">
-								<CopyToClipboard text={this.state.notes}>
-									<button>Copy to clipboard</button>
-								</CopyToClipboard>
-								<textarea
-									className="p-2 mt-3 col-12 notes"
-									placeholder="NOTES"
-									type="text"
-									value={this.state.notes}
-									onChange={e => this.handleChangeNotes(e)}
-									onFocus={e => this.handleChangeNotes(e)}
-									onBlur={() => actions.handleChangeNotes(this.state.notes)}
-								/>
+							<div className="col-md-6">
+								<div className="todaysTasks mt-3">Meetings:</div>
+								<Prio priority={3} />
+								{/* </div> */}
+								{/* <div className="col-md-6"> */}
+								<div className="todaysTasks mt-3 ">ideas:</div>
+								<Prio priority={4} />
+								{/* </div> */}
+								{/* <div className="col-md-6"> */}
+								<div className="todaysTasks mt-3 ">issues:</div>
+								<Prio priority={5} />
 							</div>
+							{/* </div> */}
+						</div>
+						<div className="col-12">
+							<CopyToClipboard text={this.state.notes}>
+								<button>Copy to clipboard</button>
+							</CopyToClipboard>
+							<textarea
+								className="p-2 mt-3 col-12 notes"
+								placeholder="NOTES"
+								type="text"
+								value={this.state.notes}
+								onChange={e => this.handleChangeNotes(e)}
+								onFocus={e => this.handleChangeNotes(e)}
+								onBlur={() => actions.handleChangeNotes(this.state.notes)}
+							/>
 						</div>
 					</div>
 				)}

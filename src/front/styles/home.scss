@@ -12,9 +12,7 @@
 }
 
 .addNew {
-    background-color: #007bff;
-    border: none;
-    color: white;
+    border-bottom: 1px solid black;
 }
 
 .blackkkk {
@@ -80,21 +78,17 @@ button {
     color: #49f7ae;
 }
 
-.inputAndTextArea {
-}
-
 .inputTypeNumber {
-    direction: rtl;
+    // direction: rtl;
     border: none;
     // margin-bottom: -10px;
     margin-left: -10px;
     max-width: 50px;
     border-right: 1px dotted black;
-
 }
 
 .inputTypeNumber2 {
-    float: left;
+    border: none;
 }
 
 .notes {
