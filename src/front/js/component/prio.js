@@ -15,6 +15,8 @@ import dayjs from "dayjs";
 import DropdownItem from "react-bootstrap/esm/DropdownItem";
 import PropTypes from "prop-types";
 
+const Textarea = ({ children, ...props }) => <textarea {...props}>{children}</textarea>;
+
 export class Prio extends React.Component {
 	constructor() {
 		super();
@@ -89,10 +91,7 @@ export class Prio extends React.Component {
 	});
 
 	render() {
-		const Tag =
-			this.props.priority === 1
-				? TextareaAutosize
-				: ({ children, ...props }) => <textarea {...props}>{children}</textarea>;
+		const Tag = this.props.priority === 1 ? TextareaAutosize : Textarea;
 		return (
 			<Context.Consumer>
 				{({ actions, store }) => (
