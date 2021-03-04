@@ -68,8 +68,11 @@ def get_notes(notes_id):
     try:
         body = request.get_json() 
         current_notes = Notes.query.get(notes_id)
+        if current_notes is None:
+            current_notes = Notes()
         if request.method == 'PUT':
             current_notes.notes = body['notes']
+            db.session.add(current_notes)
             db.session.commit()
             # below creates a pretty error
             return jsonify(current_notes.serialize()), 200
