@@ -6,9 +6,61 @@ from api.models import db, User, Task, Notes
 from api.utils import generate_sitemap, APIException
 from datetime import datetime
 from sqlalchemy import or_
+from flask_jwt_extended import create_access_token
+from flask_jwt_extended import get_jwt_identity
+from flask_jwt_extended import jwt_required
+from flask_jwt_extended import JWTManager
 
 api = Blueprint('api', __name__)
 
+# api.config["JWT_SECRET_KEY"] = "super-secret"
+# jwt = JWTManager(api)
+
+@api.route('/user', methods=['GET'])
+def handle_user():
+    if request.method == 'GET':
+        all_users = User.query.all()
+        all_users = list(map(lambda t: t.serialize(), all_users))
+        return jsonify(all_users), 200
+    return "invalid request method", 404
+
+@api.route('/user', methods=['POST'])
+def post_user():
+    body = request.get_json()
+    new_user = User.query.filter_by(email=body['email']).first()
+    if new_user is not None:
+        raise APIException('this user is already registered', status_code = 404)
+    new_user = User(first_name = body['firstName'],
+                    last_name = body['lastName'],
+                    email = body['email'],
+                    password = body['password'])
+    db.session.add(new_user)
+    db.session.commit()
+    user = User.query.filter_by(email=body['email']).first()
+    print('UNSERIALIZED', user)
+    # user = list(map(lambda x: x.serialize(), user))
+    print('SERIALIZED', user)
+    return jsonify(user.serialize()), 201
+
+@api.route('/login', methods=['POST'])
+def login():
+    if not request.is_json:
+        return jsonify({"msg": "Missing JSON in request"}), 400
+
+    email = request.json.get('email', None)
+    password = request.json.get('password', None)
+    if not email:
+        return jsonify({"msg": "Missing email parameter"}), 400
+    if not password:
+        return jsonify({"msg": "Missing password parameter"}), 400
+
+    usercheck = User.query.filter_by(email=email).first()
+    if usercheck == None:
+        return jsonify({"msg": "Bad Email"}), 401
+
+    # Identity can be any data that is json serializable
+    access_token = create_access_token(identity=email)
+    return jsonify(access_token=access_token), 200
 
 @api.route('/task', methods=['GET', 'POST'])
 def handle_hello():

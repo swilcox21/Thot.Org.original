@@ -6,7 +6,7 @@ import Clock from "./clock";
 export const Navbar1 = props => {
 	return (
 		<nav className="container-fluid navbar navbar-dark bg-dark py-4">
-			<Link to="/goals">
+			<Link to="/">
 				<span className="" />
 			</Link>
 			<Link to="/">
@@ -23,8 +23,8 @@ export const Navbar1 = props => {
 			<Link to="/goals">
 				<span className="" />
 			</Link>
-			<Link to="/goals">
-				<span className="" />
+			<Link to="/login">
+				<span className="">Login</span>
 			</Link>
 		</nav>
 	);

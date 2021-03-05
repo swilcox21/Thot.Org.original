@@ -1,11 +1,40 @@
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
+			user: null,
 			hobby: [],
 			notes: null,
 			addDate: ""
 		},
 		actions: {
+			addUser: user => {
+				fetch(process.env.BACKEND_URL + "/api/user", {
+					method: "POST",
+					body: JSON.stringify({
+						firstName: user.firstName,
+						lastName: user.lastName,
+						email: user.email,
+						password: user.password
+					}), // data can be `string` or {object}!
+					headers: {
+						"Content-Type": "application/json"
+					}
+				})
+					.then(res => res.json())
+					.then(response => {
+						console.log("Success:", response);
+						setStore({
+							user: response
+						});
+					})
+					// sends error to user and to console log
+					.catch(error => {
+						setStore({ errors: error });
+						console.error("Error:", error);
+						return true;
+					});
+			},
+
 			getAllTasks: (from, until) => {
 				fetch(
 					process.env.BACKEND_URL +
