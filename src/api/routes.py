@@ -5,6 +5,7 @@ from flask import Flask, request, jsonify, url_for, Blueprint
 from api.models import db, User, Task, Notes
 from api.utils import generate_sitemap, APIException
 from datetime import datetime
+from sqlalchemy import or_
 
 api = Blueprint('api', __name__)
 
@@ -17,10 +18,10 @@ def handle_hello():
         _until = request.args.get('until', None)
         if _from is not None : 
             date_time_obj = datetime.strptime(_from, '%Y/%m/%d')
-            all_tasks = all_tasks.filter(Task.date >= _from)
+            all_tasks = all_tasks.filter(or_(Task.date >= _from, Task.date == None))
         if _until is not None : 
             date_time_obj = datetime.strptime(_until, '%Y/%m/%d')
-            all_tasks = all_tasks.filter(Task.date <= _until)
+            all_tasks = all_tasks.filter(or_(Task.date <= _until, Task.date == None))
         all_tasks = all_tasks.all()
         all_tasks = list(map(lambda t: t.serialize(), all_tasks))
         return jsonify(all_tasks), 200
@@ -68,16 +69,16 @@ def get_notes(notes_id):
     try:
         body = request.get_json() 
         current_notes = Notes.query.get(notes_id)
+        print("$@#$currentnotes:", current_notes)
         if current_notes is None:
             current_notes = Notes()
-        if request.method == 'PUT':
-            current_notes.notes = body['notes']
+            print("creating new notes")
             db.session.add(current_notes)
             db.session.commit()
+        if request.method == 'PUT':
+            current_notes.notes = body['notes']
+        db.session.commit()
             # below creates a pretty error
-            return jsonify(current_notes.serialize()), 200
-        if request.method == 'GET':
-            return jsonify(current_notes.serialize()), 200
-        return "Invalid Method", 404
+        return jsonify(current_notes.serialize()), 200
     except Exception as error:
         return jsonify({"message" : str(error) })

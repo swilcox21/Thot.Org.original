@@ -56,7 +56,8 @@ export class Hobby extends React.Component {
 		this.context.actions.getAllTasks(this.state.currentDate, this.state.currentDate);
 		this.context.actions.getNotes().then(() => {
 			console.log(this.state.currentDate);
-			this.setState({ notes: this.context.store.notes[0].notes });
+			if (Array.isArray(this.context.store.notes) && this.context.store.notes.length > 0)
+				this.setState({ notes: this.context.store.notes[0].notes });
 		});
 		// this.context.store.notes != null && this.setState({ notes: "maybe this is wrong" });
 		// console.log("notes:", this.context.store.notes);
@@ -106,6 +107,7 @@ export class Hobby extends React.Component {
 							onDoubleClick={() => {
 								this.setState({ currentDate: dayjs() });
 								this.setState({ taskDate: dayjs() });
+								this.setState({ priority: 2 });
 								actions.getAllTasks(dayjs(), dayjs());
 							}}
 							onClick={() => this.toggle()}>
@@ -126,6 +128,7 @@ export class Hobby extends React.Component {
 											onChange={date => {
 												this.setState({ currentDate: date });
 												this.setState({ taskDate: date });
+												this.setState({ priority: 2 });
 												actions.getAllTasks(date, date);
 												this.toggle();
 											}}
@@ -148,6 +151,11 @@ export class Hobby extends React.Component {
 										value={this.state.priority}
 										onChange={e => {
 											this.setState({ priority: e.target.value });
+											e.target.value == 2
+												? this.setState({ taskDate: this.state.currentDate })
+												: e.target.value == 3
+													? this.setState({ taskDate: this.state.currentDate })
+													: this.setState({ taskDate: null });
 										}}
 										className="inputTypeNumber2 inputTypeNumber text-center"
 										type="number"
@@ -172,7 +180,7 @@ export class Hobby extends React.Component {
 										onClick={() => {
 											let todo = {
 												label: this.state.todo,
-												date: this.state.taskDate ? this.state.taskDate : dayjs(),
+												date: this.state.taskDate ? this.state.taskDate : null,
 												completed: false,
 												priority: this.state.priority
 											};
@@ -192,7 +200,7 @@ export class Hobby extends React.Component {
 									</button>
 									<div className="newTaskDatePicker">
 										<ReactDatePicker
-											selected={this.state.taskDate.toDate()}
+											selected={this.state.taskDate ? this.state.taskDate.toDate() : null}
 											onChange={date => this.setState({ taskDate: dayjs(date) })}
 											minDate={dayjs().toDate()}
 										/>
@@ -204,12 +212,8 @@ export class Hobby extends React.Component {
 							<div className="col-md-6">
 								<div className="todaysTasks mt-3">Meetings:</div>
 								<Prio priority={3} />
-								{/* </div> */}
-								{/* <div className="col-md-6"> */}
 								<div className="todaysTasks mt-3 ">ideas:</div>
 								<Prio priority={4} />
-								{/* </div> */}
-								{/* <div className="col-md-6"> */}
 								<div className="todaysTasks mt-3 ">issues:</div>
 								<Prio priority={5} />
 							</div>
