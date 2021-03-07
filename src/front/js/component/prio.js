@@ -105,7 +105,7 @@ export class Prio extends React.Component {
 												className="inputTypeNumber text-center"
 												type="number"
 												min="1"
-												max="5"
+												max="7"
 												defaultValue={todo.priority}
 												onChange={e => {
 													this.setState({

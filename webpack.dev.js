@@ -6,7 +6,7 @@ const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const ErrorOverlayPlugin = require('error-overlay-webpack-plugin');
 
 module.exports = merge(common, {
-    mode: 'production',
+    mode: 'development',
     devtool: 'cheap-module-source-map',
     devServer: {
         contentBase:  './dist',

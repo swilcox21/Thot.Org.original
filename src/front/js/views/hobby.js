@@ -38,6 +38,11 @@ export class Hobby extends React.Component {
 			currentDate: dayjs(),
 			color: "black",
 			priority: 2,
+			ideas: false,
+			issues: false,
+			wow: false,
+			gThots: false,
+			archives: false,
 			task: null
 		};
 	}
@@ -82,7 +87,7 @@ export class Hobby extends React.Component {
 	resetTextArea = () => {
 		this.setState({ todo: "" });
 		this.setState({ priority: 2 });
-		this.setState({ taskDate: dayjs() });
+		this.setState({ taskDate: this.state.currentDate });
 	};
 
 	resetTask = () => {
@@ -95,6 +100,23 @@ export class Hobby extends React.Component {
 		} else {
 			return "pl-2 col-10 mt-1 activeTodo done done2";
 		}
+	};
+
+	// toggle noneDate thots from view
+	toggleIdeas = ideas => {
+		this.setState({ ideas: !ideas });
+	};
+	toggleIssues = issues => {
+		this.setState({ issues: !issues });
+	};
+	toggleWow = wow => {
+		this.setState({ wow: !wow });
+	};
+	togglegThots = gThots => {
+		this.setState({ gThots: !gThots });
+	};
+	toggleArchives = archives => {
+		this.setState({ archives: !archives });
 	};
 
 	render() {
@@ -160,7 +182,7 @@ export class Hobby extends React.Component {
 										className="inputTypeNumber2 inputTypeNumber text-center"
 										type="number"
 										min="1"
-										max="5"
+										max="8"
 									/>
 									<TextareaAutosize
 										className="pl-2 col-11 activeTodo onfucus addNew py-3"
@@ -209,19 +231,80 @@ export class Hobby extends React.Component {
 								<div className="todaysTasks mt-3">Tasks:</div>
 								<Prio priority={2} />
 							</div>
+							{/* PUT MAP FUNC HERE -- learn how to generate components like these dynamically so users can add more as they need to */}
 							<div className="col-md-6">
-								<div className="todaysTasks mt-3">Meetings:</div>
+								<div className="todaysTasks mt-3 ">Meetings:</div>
 								<Prio priority={3} />
-								<div className="todaysTasks mt-3 ">ideas:</div>
-								<Prio priority={4} />
-								<div className="todaysTasks mt-3 ">issues:</div>
-								<Prio priority={5} />
+								<div className="todaysTasks mt-3">
+									<button
+										className={this.state.ideas === false ? "toggleClosed" : "toggleOpen"}
+										onClick={() => this.toggleIdeas(this.state.ideas)}>
+										ideas:{" "}
+										{this.state.ideas === false ? (
+											<i className="fas fa-caret-left" />
+										) : (
+											<i className="fas fa-sort-down" />
+										)}
+									</button>
+								</div>
+								{this.state.ideas === true ? <Prio priority={4} /> : null}
+								<div className="todaysTasks mt-3">
+									<button
+										className={this.state.issues === false ? "toggleClosed" : "toggleOpen"}
+										onClick={() => this.toggleIssues(this.state.issues)}>
+										issues:{" "}
+										{this.state.issues === false ? (
+											<i className="fas fa-caret-left" />
+										) : (
+											<i className="fas fa-sort-down" />
+										)}
+									</button>
+								</div>
+								{this.state.issues === true ? <Prio priority={5} /> : null}
+								<div className="todaysTasks mt-3">
+									<button
+										className={this.state.wow === false ? "toggleClosed" : "toggleOpen"}
+										onClick={() => this.toggleWow(this.state.wow)}>
+										wow:{" "}
+										{this.state.wow === false ? (
+											<i className="fas fa-caret-left" />
+										) : (
+											<i className="fas fa-sort-down" />
+										)}
+									</button>
+								</div>
+								{this.state.wow === true ? <Prio priority={6} /> : null}
+								<div className="todaysTasks mt-3">
+									<button
+										className={this.state.gThots === false ? "toggleClosed" : "toggleOpen"}
+										onClick={() => this.togglegThots(this.state.gThots)}>
+										gThots:{" "}
+										{this.state.gThots === false ? (
+											<i className="fas fa-caret-left" />
+										) : (
+											<i className="fas fa-sort-down" />
+										)}
+									</button>
+								</div>
+								{this.state.gThots === true ? <Prio priority={7} /> : null}
+								<div className="todaysTasks mt-3">
+									<button
+										className={this.state.archives === false ? "toggleClosed" : "toggleOpen"}
+										onClick={() => this.toggleArchives(this.state.archives)}>
+										archives:{" "}
+										{this.state.archives === false ? (
+											<i className="fas fa-caret-left" />
+										) : (
+											<i className="fas fa-sort-down" />
+										)}
+									</button>
+								</div>
+								{this.state.archives === true ? <Prio priority={8} /> : null}
 							</div>
-							{/* </div> */}
 						</div>
 						<div className="col-12">
 							<CopyToClipboard text={this.state.notes}>
-								<button>Copy to clipboard</button>
+								<button>Copy Notes to clipboard</button>
 							</CopyToClipboard>
 							<textarea
 								className="p-2 mt-3 col-12 notes"
