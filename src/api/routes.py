@@ -4,7 +4,7 @@ This module takes care of starting the API Server, Loading the DB and Adding the
 from flask import Flask, request, jsonify, url_for, Blueprint
 from api.models import db, User, Task, Notes
 from api.utils import generate_sitemap, APIException
-from datetime import datetime
+from datetime import datetime, timedelta
 from sqlalchemy import or_
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
@@ -62,10 +62,8 @@ def login():
 def get_all_tasks(_from, _until): 
     all_tasks = Task.query
     if _from is not None : 
-        date_time_obj = datetime.strptime(_from, '%Y/%m/%d')
         all_tasks = all_tasks.filter(or_(Task.date >= _from, Task.date == None))
     if _until is not None : 
-        date_time_obj = datetime.strptime(_until, '%Y/%m/%d')
         all_tasks = all_tasks.filter(or_(Task.date <= _until, Task.date == None))
     all_tasks = all_tasks.all()
     return all_tasks
@@ -77,7 +75,9 @@ def handle_hello():
     print(user_id)
     if request.method == 'GET':
         _from = request.args.get('from', None)
+        _from = datetime.strptime(_from, '%Y/%m/%d')
         _until = request.args.get('until', None)
+        _until = datetime.strptime(_until, '%Y/%m/%d')
         all_tasks = get_all_tasks(_from, _until)
         all_tasks = list(map(lambda t: t.serialize(), all_tasks))
         return jsonify(all_tasks), 200
@@ -88,7 +88,7 @@ def handle_hello():
         db.session.add(new_task)
         db.session.commit()
         _from = new_task.date
-        _until = new_task.date + datetime.timedelta(days=1)
+        _until = new_task.date + timedelta(days=1)
         all_tasks = get_all_tasks(_from, _until)
         all_tasks = list(map(lambda t: t.serialize(), all_tasks))
         return jsonify(all_tasks), 201
