@@ -10,6 +10,7 @@ import { Prio } from "../component/prio";
 import TextareaAutosize from "react-textarea-autosize";
 import ReactDatePicker from "react-datepicker";
 import { WorkNavbar } from "../component/worknavbar";
+import { TodoWidget } from "../component/todowidget";
 import { Spring, Transition, animated } from "react-spring/renderprops";
 import Clock from "../component/clock";
 import dayjs from "dayjs";
@@ -25,25 +26,25 @@ export class Hobby extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			showTodoIndex: false,
-			hobby: [],
+			archives: false,
+			color: "black",
+			currentDate: dayjs(),
 			delta: 0,
+			gThots: false,
+			hobby: [],
+			ideas: false,
+			issues: false,
 			notes: "",
+			priority: 2,
 			status: {
 				color: "success",
 				message: ""
 			},
-			todo: "",
+			showTodoIndex: false,
+			task: null,
 			taskDate: dayjs(),
-			currentDate: dayjs(),
-			color: "black",
-			priority: 2,
-			ideas: false,
-			issues: false,
-			wow: false,
-			gThots: false,
-			archives: false,
-			task: null
+			todo: "",
+			wow: false
 		};
 	}
 
@@ -58,19 +59,13 @@ export class Hobby extends React.Component {
 	};
 
 	componentDidMount() {
-		this.context.actions.getAllTasks(this.state.currentDate, this.state.currentDate);
+		this.context.actions.getAllTasks(this.state.currentDate, this.state.currentDate.add(24, "hour"));
 		this.context.actions.getNotes().then(() => {
 			console.log(this.state.currentDate);
 			if (Array.isArray(this.context.store.notes) && this.context.store.notes.length > 0)
 				this.setState({ notes: this.context.store.notes[0].notes });
 		});
-		// this.context.store.notes != null && this.setState({ notes: "maybe this is wrong" });
-		// console.log("notes:", this.context.store.notes);
 	}
-
-	// componentDidUpdate() {
-	// 	this.context.actions.getAllTasks(this.state.currentDate, this.state.currentDate);
-	// }
 
 	handleChange = e => {
 		this.setState({
@@ -120,6 +115,9 @@ export class Hobby extends React.Component {
 	};
 
 	render() {
+		const tasks = Array.isArray(this.context.store.hobby)
+			? this.context.store.hobby.filter(todo => todo.priority <= 3)
+			: [];
 		return (
 			<Context.Consumer>
 				{({ actions, store }) => (
@@ -130,7 +128,7 @@ export class Hobby extends React.Component {
 								this.setState({ currentDate: dayjs() });
 								this.setState({ taskDate: dayjs() });
 								this.setState({ priority: 2 });
-								actions.getAllTasks(dayjs(), dayjs());
+								actions.getAllTasks(dayjs(), dayjs().add(24, "hour"));
 							}}
 							onClick={() => this.toggle()}>
 							<i className="far fa-calendar-alt" />
@@ -151,7 +149,7 @@ export class Hobby extends React.Component {
 												this.setState({ currentDate: date });
 												this.setState({ taskDate: date });
 												this.setState({ priority: 2 });
-												actions.getAllTasks(date, date);
+												actions.getAllTasks(date, dayjs(date).add(24, "hour"));
 												this.toggle();
 											}}
 										/>
@@ -163,8 +161,8 @@ export class Hobby extends React.Component {
 							{this.state.currentDate.format("dddd  M/DD/YYYY")}
 							<Clock />
 						</div>
-						<div className="text-center mb-5 col-10 mt-3 mx-auto">
-							<Prio priority={1} />
+						<div className=" mb-5 col-md-10 mt-3 mx-auto">
+							<TodoWidget priority={1} tasks={store.hobby} type={"Dashboard"} collapse={false} />
 						</div>
 						<div className="d-flex flex-wrap mt-5">
 							<div className="col-md-6">
@@ -228,78 +226,14 @@ export class Hobby extends React.Component {
 										/>
 									</div>
 								</div>
-								<div className="todaysTasks mt-3">Tasks:</div>
-								<Prio priority={2} />
+								<TodoWidget priority={2} tasks={store.hobby} type={"Tasks"} collapse={false} />
 							</div>
 							{/* PUT MAP FUNC HERE -- learn how to generate components like these dynamically so users can add more as they need to */}
 							<div className="col-md-6">
-								<div className="todaysTasks mt-3 ">Meetings:</div>
-								<Prio priority={3} />
-								<div className="todaysTasks mt-3">
-									<button
-										className={this.state.ideas === false ? "toggleClosed" : "toggleOpen"}
-										onClick={() => this.toggleIdeas(this.state.ideas)}>
-										ideas:{" "}
-										{this.state.ideas === false ? (
-											<i className="fas fa-caret-left" />
-										) : (
-											<i className="fas fa-sort-down" />
-										)}
-									</button>
-								</div>
-								{this.state.ideas === true ? <Prio priority={4} /> : null}
-								<div className="todaysTasks mt-3">
-									<button
-										className={this.state.issues === false ? "toggleClosed" : "toggleOpen"}
-										onClick={() => this.toggleIssues(this.state.issues)}>
-										issues:{" "}
-										{this.state.issues === false ? (
-											<i className="fas fa-caret-left" />
-										) : (
-											<i className="fas fa-sort-down" />
-										)}
-									</button>
-								</div>
-								{this.state.issues === true ? <Prio priority={5} /> : null}
-								<div className="todaysTasks mt-3">
-									<button
-										className={this.state.wow === false ? "toggleClosed" : "toggleOpen"}
-										onClick={() => this.toggleWow(this.state.wow)}>
-										wow:{" "}
-										{this.state.wow === false ? (
-											<i className="fas fa-caret-left" />
-										) : (
-											<i className="fas fa-sort-down" />
-										)}
-									</button>
-								</div>
-								{this.state.wow === true ? <Prio priority={6} /> : null}
-								<div className="todaysTasks mt-3">
-									<button
-										className={this.state.gThots === false ? "toggleClosed" : "toggleOpen"}
-										onClick={() => this.togglegThots(this.state.gThots)}>
-										gThots:{" "}
-										{this.state.gThots === false ? (
-											<i className="fas fa-caret-left" />
-										) : (
-											<i className="fas fa-sort-down" />
-										)}
-									</button>
-								</div>
-								{this.state.gThots === true ? <Prio priority={7} /> : null}
-								<div className="todaysTasks mt-3">
-									<button
-										className={this.state.archives === false ? "toggleClosed" : "toggleOpen"}
-										onClick={() => this.toggleArchives(this.state.archives)}>
-										archives:{" "}
-										{this.state.archives === false ? (
-											<i className="fas fa-caret-left" />
-										) : (
-											<i className="fas fa-sort-down" />
-										)}
-									</button>
-								</div>
-								{this.state.archives === true ? <Prio priority={8} /> : null}
+								<TodoWidget priority={3} tasks={store.hobby} type={"meetings"} collapse={false} />
+								<TodoWidget priority={4} tasks={store.hobby} type={"issues"} collapse={true} />
+								<TodoWidget priority={5} tasks={store.hobby} type={"ideas"} collapse={true} />
+								<TodoWidget priority={6} tasks={store.hobby} type={"lessons"} collapse={true} />
 							</div>
 						</div>
 						<div className="col-12">

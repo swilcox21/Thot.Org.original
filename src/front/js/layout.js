@@ -1,9 +1,17 @@
 import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import ScrollToTop from "./component/scrollToTop";
+import dayjs from "dayjs";
+import timezone from "dayjs/plugin/timezone";
+import utc from "dayjs/plugin/utc";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+dayjs.tz.setDefault("America/New_York");
 
 import { Home } from "./views/home";
 import { Hobby } from "./views/hobby";
+import { Preview } from "./views/preview";
 import { Login } from "./views/login";
 import { SignUp } from "./views/signup";
 import { Demo } from "./views/demo";
@@ -25,10 +33,11 @@ const Layout = () => {
 				<ScrollToTop>
 					<Navbar1 />
 					<Switch>
+						<Route exact path="/login" component={Login} />
 						<Route exact path="/" component={Home} />
 						<Route exact path="/home" component={Home} />
 						<Route exact path="/hobby" component={Hobby} />
-						<Route exact path="/login" component={Login} />
+						<Route exact path="/preview" component={Preview} />
 						<Route exact path="/signup" component={SignUp} />
 						<Route exact path="/demo">
 							<Demo />

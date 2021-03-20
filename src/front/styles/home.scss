@@ -15,9 +15,17 @@
     border-bottom: 1px solid black;
 }
 
+.Absolute {
+    position: absolute;
+}
+
 .blackkkk {
     color: black;
 }
+
+// body {
+//     background-color: #4a6970;
+// }
 
 button {
     border-radius: 5px;
@@ -106,6 +114,9 @@ button {
     resize: vertical;
 }
 
+.Opacity {
+    opacity: 0;
+}
 
 .react-calendar__tile {
     height: 50px;
@@ -139,12 +150,14 @@ button {
 }
 
 .toggleClosed {
+    cursor: pointer;
     border: none;
     background-color: white;
     color: #1b704d;
 }
 
 .toggleOpen {
+    cursor: pointer;
     border: none;
     border-bottom: 1px solid black;
     background-color: white;

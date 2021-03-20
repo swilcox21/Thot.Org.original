@@ -9,14 +9,11 @@ from sqlalchemy import or_
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
-from flask_jwt_extended import JWTManager
 
 api = Blueprint('api', __name__)
 
-# api.config["JWT_SECRET_KEY"] = "super-secret"
-# jwt = JWTManager(api)
-
 @api.route('/user', methods=['GET'])
+# @jwt_required()
 def handle_user():
     if request.method == 'GET':
         all_users = User.query.all()
@@ -59,31 +56,40 @@ def login():
         return jsonify({"msg": "Bad Email"}), 401
 
     # Identity can be any data that is json serializable
-    access_token = create_access_token(identity=email)
+    access_token = create_access_token(identity=usercheck.id, expires_delta=False)
     return jsonify(access_token=access_token), 200
 
+def get_all_tasks(_from, _until): 
+    all_tasks = Task.query
+    if _from is not None : 
+        date_time_obj = datetime.strptime(_from, '%Y/%m/%d')
+        all_tasks = all_tasks.filter(or_(Task.date >= _from, Task.date == None))
+    if _until is not None : 
+        date_time_obj = datetime.strptime(_until, '%Y/%m/%d')
+        all_tasks = all_tasks.filter(or_(Task.date <= _until, Task.date == None))
+    all_tasks = all_tasks.all()
+    return all_tasks
+
 @api.route('/task', methods=['GET', 'POST'])
+@jwt_required()
 def handle_hello():
+    user_id = get_jwt_identity()
+    print(user_id)
     if request.method == 'GET':
-        all_tasks = Task.query
         _from = request.args.get('from', None)
         _until = request.args.get('until', None)
-        if _from is not None : 
-            date_time_obj = datetime.strptime(_from, '%Y/%m/%d')
-            all_tasks = all_tasks.filter(or_(Task.date >= _from, Task.date == None))
-        if _until is not None : 
-            date_time_obj = datetime.strptime(_until, '%Y/%m/%d')
-            all_tasks = all_tasks.filter(or_(Task.date <= _until, Task.date == None))
-        all_tasks = all_tasks.all()
+        all_tasks = get_all_tasks(_from, _until)
         all_tasks = list(map(lambda t: t.serialize(), all_tasks))
         return jsonify(all_tasks), 200
     if request.method == 'POST':
         body = request.get_json()
         print("BODDYYY***", body)
-        new_task = Task(label= body['label'], date= body['date'], completed= body['completed'], priority= body['priority'])
+        new_task = Task(label= body['label'], date= body['date'], completed= body['completed'], priority= body['priority'], user_id= user_id)
         db.session.add(new_task)
         db.session.commit()
-        all_tasks = Task.query.all()
+        _from = new_task.date
+        _until = new_task.date + datetime.timedelta(days=1)
+        all_tasks = get_all_tasks(_from, _until)
         all_tasks = list(map(lambda t: t.serialize(), all_tasks))
         return jsonify(all_tasks), 201
     return "invalid request method", 404

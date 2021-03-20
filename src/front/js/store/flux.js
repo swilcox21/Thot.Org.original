@@ -1,9 +1,26 @@
+import axios from "axios";
+axios.interceptors.request.use(
+	function(config) {
+		// Do something before request is sent
+		const token = localStorage.getItem("thot.org.token");
+		config.headers.Authorization = "Bearer " + token;
+		console.log("requesting the following: ", config);
+		return config;
+	},
+	function(error) {
+		// Do something with request error
+		return Promise.reject(error);
+	}
+);
+
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
-			user: null,
+			userEmail: null,
 			hobby: [],
+			token: null,
 			notes: null,
+			thots: [],
 			addDate: ""
 		},
 		actions: {
@@ -35,13 +52,53 @@ const getState = ({ getStore, getActions, setStore }) => {
 					});
 			},
 
+			initialize: () => {
+				setStore({
+					token: localStorage.getItem("thot.org.token"),
+					email: localStorage.getItem("thot.org.email")
+				});
+			},
+
+			logging: (email, password) => {
+				const store = getStore();
+				fetch(process.env.BACKEND_URL + "/api/login", {
+					method: "POST", // or 'POST'
+					body: JSON.stringify({
+						email: email,
+						password: password
+					}), // data can be `string` or {object}!
+					headers: {
+						"Content-Type": "application/json"
+					}
+				})
+					.then(res => res.json())
+					.then(response => {
+						console.log("Success:", response);
+						setStore({
+							userEmail: email,
+							token: response.access_token
+						});
+						localStorage.setItem("thot.org.token", response.access_token);
+						localStorage.setItem("thot.org.email", email);
+					})
+
+					// sends error to user and to console log
+					.catch(error => {
+						setStore({ errors: error });
+						console.error("Error:", error);
+						return true;
+					});
+			},
+
 			getAllTasks: (from, until) => {
-				fetch(
-					process.env.BACKEND_URL +
-						`/api/task?from=${from.format("YYYY/MM/DD")}&until=${until.format("YYYY/MM/DD")}`
-				)
-					.then(response => response.json())
-					.then(tasks => setStore({ hobby: tasks }));
+				console.log("from and until: ", from, until);
+				axios
+					.get(
+						process.env.BACKEND_URL +
+							`/api/task?from=${from.format("YYYY/MM/DD")}&until=${until.format("YYYY/MM/DD")}`
+					)
+
+					.then(response => setStore({ hobby: response.data }));
 			},
 
 			getNotes: async () => {
@@ -49,6 +106,18 @@ const getState = ({ getStore, getActions, setStore }) => {
 				const notes = await res.json();
 				setStore({ notes: notes });
 				return notes;
+			},
+
+			addNewThot: t => {
+				let store = getStore();
+				store.thots.push(t);
+				setStore(store);
+			},
+
+			handleChangeThot: (id, task) => {
+				let store = getStore();
+				store.thots.filter(todo => todo.id != id).push(task);
+				setStore(store);
 			},
 
 			addNewTask: async hobby => {
@@ -61,7 +130,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 						priority: hobby.priority
 					}),
 					headers: {
-						"Content-Type": "application/json"
+						"Content-Type": "application/json",
+						Authorization: "Bearer " + getStore().token
 					}
 				});
 				const task = await res.json();

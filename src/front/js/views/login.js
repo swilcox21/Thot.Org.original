@@ -118,7 +118,7 @@ export class Login extends React.Component {
 												</div>
 											)}
 											<div className="form-group mt-5">
-												<h5 className="text-center">Dont have account?</h5>
+												<h5 className="text-center">Dont have an account?</h5>
 											</div>
 										</form>
 									</div>

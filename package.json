@@ -76,6 +76,7 @@
 		]
 	},
 	"dependencies": {
+		"axios": "^0.21.1",
 		"bootstrap": "^4.6.0",
 		"dayjs": "^1.10.4",
 		"dayjs-ext": "^2.2.0",
