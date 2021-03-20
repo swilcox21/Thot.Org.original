@@ -11,7 +11,7 @@ dayjs.tz.setDefault("America/New_York");
 
 import { Home } from "./views/home";
 import { Hobby } from "./views/hobby";
-import { Preview } from "./views/preview";
+// import { Preview } from "./views/preview";
 import { Login } from "./views/login";
 import { SignUp } from "./views/signup";
 import { Demo } from "./views/demo";
@@ -37,7 +37,7 @@ const Layout = () => {
 						<Route exact path="/" component={Home} />
 						<Route exact path="/home" component={Home} />
 						<Route exact path="/hobby" component={Hobby} />
-						<Route exact path="/preview" component={Preview} />
+						{/* <Route exact path="/preview" component={Preview} /> */}
 						<Route exact path="/signup" component={SignUp} />
 						<Route exact path="/demo">
 							<Demo />

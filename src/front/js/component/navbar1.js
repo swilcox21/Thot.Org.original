@@ -14,15 +14,15 @@ export const Navbar1 = props => {
 					<i className="fas fa-home" />
 				</span>
 			</Link>
-			<Link to="/preview">
+			<Link to="/">
 				<span className="greyIcons">
 					<i className="fas fa-hotel" />
 				</span>
 			</Link>
-			<Link to="/goals">
+			<Link to="/">
 				<span className="" />
 			</Link>
-			<Link to="/goals">
+			<Link to="/">
 				<span className="" />
 			</Link>
 			<Link to="/login">
