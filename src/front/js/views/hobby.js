@@ -61,7 +61,6 @@ export class Hobby extends React.Component {
 	componentDidMount() {
 		this.context.actions.getAllTasks(this.state.currentDate, this.state.currentDate.add(24, "hour"));
 		this.context.actions.getNotes().then(() => {
-			console.log(this.state.currentDate);
 			if (Array.isArray(this.context.store.notes) && this.context.store.notes.length > 0)
 				this.setState({ notes: this.context.store.notes[0].notes });
 		});
@@ -115,8 +114,8 @@ export class Hobby extends React.Component {
 	};
 
 	render() {
-		const tasks = Array.isArray(this.context.store.hobby)
-			? this.context.store.hobby.filter(todo => todo.priority <= 3)
+		const tasksPrio1 = Array.isArray(this.context.store.hobby)
+			? this.context.store.hobby.filter(todo => todo.dashboard === true)
 			: [];
 		return (
 			<Context.Consumer>
@@ -161,82 +160,102 @@ export class Hobby extends React.Component {
 							{this.state.currentDate.format("dddd  M/DD/YYYY")}
 							<Clock />
 						</div>
-						<div className=" mb-5 col-md-10 mt-3 mx-auto">
-							<TodoWidget priority={1} tasks={store.hobby} type={"Dashboard"} collapse={false} />
+						{tasksPrio1.length > 0 && (
+							<div className="mb-5 col-md-10 mt-3 mx-auto">
+								<span className="toggleOpen">DashBoard:</span>
+								<Prio tasks={tasksPrio1} autoSize={true} />
+								<br />
+								<br />
+								<br />
+							</div>
+						)}
+						<div className="d-flex mt-5 mx-auto mb-3 col-md-6">
+							<input
+								value={this.state.priority}
+								onChange={e => {
+									this.setState({ priority: e.target.value });
+									e.target.value == 2
+										? this.setState({ taskDate: this.state.currentDate })
+										: e.target.value == 3
+											? this.setState({ taskDate: this.state.currentDate })
+											: this.setState({ taskDate: null });
+								}}
+								className="inputTypeNumber2 inputTypeNumber text-center"
+								type="number"
+								min="1"
+								max="8"
+							/>
+							<TextareaAutosize
+								className="pl-2 col-md-11 activeTodo onfucus addNew py-3"
+								placeholder="Stop being lazy and JUST DO IT!"
+								type="text"
+								value={this.state.todo}
+								onChange={e => this.handleChange(e)}
+							/>
+						</div>
+						{this.state.status.message !== "" && (
+							<div className={`alert alert-${this.state.status.color}`}>{this.state.status.message}</div>
+						)}
+						<div className="d-flex justify-content-center col-md-12 text-center">
+							<button
+								onClick={() => {
+									let todo = {
+										label: this.state.todo,
+										date: this.state.taskDate ? this.state.taskDate : null,
+										dashboard: false,
+										priority: this.state.priority
+									};
+									actions
+										.addNewTask(todo)
+										.then(() => {
+											this.resetTextArea();
+										})
+										.catch(error => {
+											this.setState({
+												status: { color: "danger", message: error.message }
+											});
+										});
+									// this.resetTextArea();
+								}}>
+								SUBMIT
+							</button>
+							<div className="newTaskDatePicker ml-5">
+								<ReactDatePicker
+									selected={this.state.taskDate ? this.state.taskDate.toDate() : null}
+									onChange={date => this.setState({ taskDate: dayjs(date) })}
+									minDate={dayjs().toDate()}
+								/>
+							</div>
 						</div>
 						<div className="d-flex flex-wrap mt-5">
-							<div className="col-md-6">
-								<div className="col-md-12 d-flex justify-content-between mb-3">
-									<input
-										value={this.state.priority}
-										onChange={e => {
-											this.setState({ priority: e.target.value });
-											e.target.value == 2
-												? this.setState({ taskDate: this.state.currentDate })
-												: e.target.value == 3
-													? this.setState({ taskDate: this.state.currentDate })
-													: this.setState({ taskDate: null });
-										}}
-										className="inputTypeNumber2 inputTypeNumber text-center"
-										type="number"
-										min="1"
-										max="8"
-									/>
-									<TextareaAutosize
-										className="pl-2 col-11 activeTodo onfucus addNew py-3"
-										placeholder="Stop being lazy and JUST DO IT!"
-										type="text"
-										value={this.state.todo}
-										onChange={e => this.handleChange(e)}
+							<div className="container-fluid col-md-6">
+								<div className="mt-3">
+									<TodoWidget
+										priority={2}
+										tasks={store.hobby}
+										type={"Tasks"}
+										collapse={false}
+										className="mt-3"
 									/>
 								</div>
-								{this.state.status.message !== "" && (
-									<div className={`alert alert-${this.state.status.color}`}>
-										{this.state.status.message}
-									</div>
-								)}
-								<div className="d-flex justify-content-around col-md-12 text-center">
-									<button
-										onClick={() => {
-											let todo = {
-												label: this.state.todo,
-												date: this.state.taskDate ? this.state.taskDate : null,
-												completed: false,
-												priority: this.state.priority
-											};
-											actions
-												.addNewTask(todo)
-												.then(() => {
-													this.resetTextArea();
-												})
-												.catch(error => {
-													this.setState({
-														status: { color: "danger", message: error.message }
-													});
-												});
-											// this.resetTextArea();
-										}}>
-										SUBMIT
-									</button>
-									<div className="newTaskDatePicker">
-										<ReactDatePicker
-											selected={this.state.taskDate ? this.state.taskDate.toDate() : null}
-											onChange={date => this.setState({ taskDate: dayjs(date) })}
-											minDate={dayjs().toDate()}
-										/>
-									</div>
-								</div>
-								<TodoWidget priority={2} tasks={store.hobby} type={"Tasks"} collapse={false} />
 							</div>
 							{/* PUT MAP FUNC HERE -- learn how to generate components like these dynamically so users can add more as they need to */}
 							<div className="col-md-6">
-								<TodoWidget priority={3} tasks={store.hobby} type={"meetings"} collapse={false} />
-								<TodoWidget priority={4} tasks={store.hobby} type={"issues"} collapse={true} />
-								<TodoWidget priority={5} tasks={store.hobby} type={"ideas"} collapse={true} />
-								<TodoWidget priority={6} tasks={store.hobby} type={"lessons"} collapse={true} />
+								<div className="mt-5">
+									<TodoWidget priority={3} tasks={store.hobby} type={"meetings"} collapse={false} />
+								</div>
+								<div className="mt-5">
+									<TodoWidget priority={4} tasks={store.hobby} type={"issues"} collapse={true} />
+								</div>
+								<div className="mt-5">
+									<TodoWidget priority={5} tasks={store.hobby} type={"ideas"} collapse={true} />
+								</div>
+								<div className="mt-5">
+									<TodoWidget priority={6} tasks={store.hobby} type={"lessons"} collapse={true} />
+								</div>
 							</div>
 						</div>
-						<div className="col-12">
+						<div className="col-12 mt-3">
 							<CopyToClipboard text={this.state.notes}>
 								<button>Copy Notes to clipboard</button>
 							</CopyToClipboard>

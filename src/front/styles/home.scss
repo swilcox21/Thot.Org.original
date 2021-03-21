@@ -128,6 +128,12 @@ button {
     text-decoration: none;
 }
 
+.Right {
+    margin-left: 80%;
+    z-index: 10;
+    cursor: pointer;
+}
+
 .sideBar {
     position: absolute;
     z-index: 10;
@@ -153,7 +159,6 @@ button {
     cursor: pointer;
     border: none;
     background-color: white;
-    color: #1b704d;
 }
 
 .toggleOpen {
@@ -161,5 +166,4 @@ button {
     border: none;
     border-bottom: 1px solid black;
     background-color: white;
-    color: #1b704d;
 }

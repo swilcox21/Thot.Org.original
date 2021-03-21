@@ -84,7 +84,7 @@ def handle_hello():
     if request.method == 'POST':
         body = request.get_json()
         print("BODDYYY***", body)
-        new_task = Task(label= body['label'], date= body['date'], completed= body['completed'], priority= body['priority'], user_id= user_id)
+        new_task = Task(label= body['label'], date= body['date'], dashboard= body['dashboard'], priority= body['priority'], user_id= user_id)
         db.session.add(new_task)
         db.session.commit()
         _from = new_task.date
@@ -100,7 +100,7 @@ def get_single_task(task_id):
     current_task = Task.query.get(task_id)
     if request.method == 'PUT':
         current_task.label = body['label']
-        current_task.completed = body['completed']
+        current_task.dashboard = body['dashboard']
         current_task.date = body['date']
         current_task.priority = body['priority']
         db.session.commit()

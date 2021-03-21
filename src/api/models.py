@@ -32,7 +32,7 @@ class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     label = db.Column(db.String(1200000), unique=False, nullable=False)
     date = db.Column(db.DateTime(timezone=True), unique=False, nullable=True)
-    completed = db.Column(db.Boolean(), unique=False, nullable=True)
+    dashboard = db.Column(db.Boolean(), unique=False, nullable=True)
     priority = db.Column(db.Integer, unique=False, default=0, nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'),
         nullable=False)
@@ -46,7 +46,7 @@ class Task(db.Model):
             "id": self.id,
             "label": self.label,
             "date": self.date,
-            "completed": self.completed,
+            "dashboard": self.dashboard,
             "priority": self.priority
             # do not serialize the password, its a security breach
         }

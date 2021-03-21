@@ -17,7 +17,7 @@ import PropTypes from "prop-types";
 
 const Textarea = ({ children, ...props }) => <textarea {...props}>{children}</textarea>;
 
-export class Prio extends React.Component {
+export class Dashboard extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -98,7 +98,7 @@ export class Prio extends React.Component {
 				{({ actions, store }) => {
 					return (
 						<div className="container text-center">
-							{this.props.tasks.map((todo, index) => (
+							{this.props.dashboard.map((todo, index) => (
 								<div key={todo.id}>
 									<div className="d-flex justify-content-around mx-auto col-md-11 activeTodoDiv inputAndTextArea">
 										<input
@@ -112,7 +112,7 @@ export class Prio extends React.Component {
 													task: {
 														label: todo.label,
 														date: todo.date,
-														dashboard: todo.dashboard,
+														completed: todo.completed,
 														priority: e.target.value
 													}
 												});
@@ -134,7 +134,7 @@ export class Prio extends React.Component {
 													task: {
 														label: e.target.value,
 														date: todo.date,
-														dashboard: todo.dashboard,
+														completed: todo.completed,
 														priority: todo.priority
 													}
 												});
@@ -144,17 +144,7 @@ export class Prio extends React.Component {
 												this.resetTask();
 											}}
 										/>
-										<Dropdown
-											className="mt-2 ml-3"
-											onDoubleClick={() => {
-												let task = {
-													label: todo.label,
-													date: todo.date,
-													dashboard: !todo.dashboard,
-													priority: todo.priority
-												};
-												actions.handleChangeHobby(todo.id, task);
-											}}>
+										<Dropdown className="mt-2 ml-3">
 											<Dropdown.Toggle as={this.CustomToggle} id="dropdown-custom-components">
 												<button className="dropdowntoggle">
 													{todo.date ? (
@@ -165,71 +155,54 @@ export class Prio extends React.Component {
 												</button>
 											</Dropdown.Toggle>
 											<Dropdown.Menu className="mt-1">
-												<div>
-													{todo.date ? (
+												{todo.date && (
+													<div>
 														<div className="Absolute">
 															{dayjs(todo.date).format("MM/DD/YYYY")}
 														</div>
-													) : (
-														<div className="Absolute">assign date...</div>
-													)}
-													{todo.date != null && (
-														<span
-															onClick={() => {
-																this.setState({ selectedDate: null });
-																let dateChange = {
-																	label: todo.label,
-																	date: null,
-																	dashboard: todo.dashboard,
-																	priority: todo.priority
-																};
-																this.setState({
-																	task: dateChange
-																});
-																actions.handleChangeHobby(todo.id, dateChange);
-																this.resetTask();
-															}}
-															className="Absolute Right">
-															N
+														<span>
+															<ReactDatePicker
+																className={
+																	this.state.selectedDate === null
+																		? "Opacity newTaskDatePicker"
+																		: "newTaskDatePicker"
+																}
+																selected={
+																	this.state.selectedDate &&
+																	this.state.selectedDate.toDate()
+																}
+																onChange={date => {
+																	// this.setState({ dateChange: !this.state.dateChange });
+																	this.setState({ selectedDate: dayjs(date) });
+																	this.setState({
+																		task: {
+																			label: todo.label,
+																			date: date,
+																			completed: todo.completed,
+																			priority: todo.priority
+																		}
+																	});
+																}}
+																minDate={dayjs().toDate()}
+															/>
 														</span>
-													)}
-													<span>
-														<ReactDatePicker
-															className={
-																this.state.selectedDate === null
-																	? "Opacity newTaskDatePicker"
-																	: "newTaskDatePicker"
-															}
-															selected={
-																this.state.selectedDate &&
-																this.state.selectedDate.toDate()
-															}
-															onChange={date => {
-																// this.setState({ dateChange: !this.state.dateChange });
-																this.setState({ selectedDate: dayjs(date) });
-																let dateChange = {
-																	label: todo.label,
-																	date: date,
-																	dashboard: todo.dashboard,
-																	priority: todo.priority
-																};
-																this.setState({
-																	task: dateChange
-																});
-																actions.handleChangeHobby(todo.id, dateChange);
+													</div>
+												)}
+												{this.state.task && (
+													<Dropdown.Item eventKey="1">
+														<button
+															className=""
+															onClick={() => {
+																actions.handleChangeHobby(todo.id, this.state.task);
 																this.resetTask();
-															}}
-															minDate={dayjs().toDate()}
-														/>
-													</span>
-												</div>
-												<Dropdown.Item eventKey="3">
-													<CopyToClipboard className="" text={todo.label}>
-														<div className="text-center">
-															<i className="far fa-clipboard" />
-														</div>
-													</CopyToClipboard>
-												</Dropdown.Item>
+															}}>
+															CONFIRM DATE
+														</button>
+													</Dropdown.Item>
+												)}
+												<CopyToClipboard className="ml-4" text={todo.label}>
+													<button>Copy to clipboard</button>
+												</CopyToClipboard>
 												<Dropdown.Item
 													eventKey="2"
 													onClick={() => {
@@ -241,20 +214,21 @@ export class Prio extends React.Component {
 														};
 														actions.handleChangeHobby(todo.id, task);
 													}}>
-													<div className="">DASHBOARD</div>
+													<button className="text-center">DASHBOARD</button>
 												</Dropdown.Item>
 												{/* <CopyToClipboard text={todo.label}>
 														COPY TO CLIPBOARD
 													</CopyToClipboard> */}
 												<Dropdown.Divider />
 												<Dropdown.Item eventKey="4">
-													<div
+													<span
 														onClick={() => {
 															actions.deleteHobby(todo.id);
 														}}
-														className="text-center mt-3">
-														<i className="fas fa-trash-alt" />
-													</div>
+														className="deleteX text-center mt-3">
+														&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+														<i className="fab fa-xing" />
+													</span>
 												</Dropdown.Item>
 											</Dropdown.Menu>
 										</Dropdown>
@@ -269,9 +243,9 @@ export class Prio extends React.Component {
 	}
 }
 
-Prio.contextType = Context;
+Dashboard.contextType = Context;
 
-Prio.propTypes = {
+Dashboard.propTypes = {
 	priority: PropTypes.number,
 	autoSize: PropTypes.bool,
 	tasks: PropTypes.array

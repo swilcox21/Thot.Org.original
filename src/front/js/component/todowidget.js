@@ -17,7 +17,10 @@ import PropTypes from "prop-types";
 
 export const TodoWidget = props => {
 	const [collapse, setCollapse] = useState(props.collapse);
-	const tasks = Array.isArray(props.tasks) ? props.tasks.filter(todo => todo.priority === props.priority) : [];
+	const tasks = Array.isArray(props.tasks)
+		? props.tasks.filter(todo => (todo.priority === props.priority) & (todo.dashboard === false))
+		: [];
+
 	return (
 		<>
 			{tasks.length === 0 ? (

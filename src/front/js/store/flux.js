@@ -4,7 +4,6 @@ axios.interceptors.request.use(
 		// Do something before request is sent
 		const token = localStorage.getItem("thot.org.token");
 		config.headers.Authorization = "Bearer " + token;
-		console.log("requesting the following: ", config);
 		return config;
 	},
 	function(error) {
@@ -91,7 +90,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			getAllTasks: (from, until) => {
-				console.log("from and until: ", from, until);
 				axios
 					.get(
 						process.env.BACKEND_URL +
@@ -116,8 +114,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			handleChangeThot: (id, task) => {
 				let store = getStore();
-				store.thots.filter(todo => todo.id != id).push(task);
-				setStore(store);
+				let newStore = store.thots.filter(todo => todo.id != id);
+				newStore.push(task);
+				setStore({ thot: newStore });
 			},
 
 			addNewTask: async hobby => {
@@ -126,7 +125,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					body: JSON.stringify({
 						label: hobby.label,
 						date: hobby.date,
-						completed: hobby.completed,
+						dashboard: hobby.dashboard,
 						priority: hobby.priority
 					}),
 					headers: {
@@ -135,6 +134,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 					}
 				});
 				const task = await res.json();
+				console.log("this is the TASKFLAGG!$: ", task);
+
 				setStore({
 					hobby: task
 				});
@@ -159,13 +160,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			handleChangeHobby: (todo, hobby) => {
-				console.log("hobby!!!!:", hobby);
 				fetch(process.env.BACKEND_URL + "/api/task/" + todo, {
 					method: "PUT",
 					body: JSON.stringify({
 						label: hobby.label,
 						date: hobby.date,
-						completed: hobby.completed,
+						dashboard: hobby.dashboard,
 						priority: hobby.priority
 					}),
 					headers: {
@@ -173,7 +173,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 					}
 				})
 					.then(() => {
-						getActions().getAllTasks();
+						let store = getStore();
+						let newStore = store.hobby.filter(hobby => hobby.id != todo);
+						newStore.push(hobby);
+						setStore({ hobby: newStore });
 					})
 					.catch(error => {
 						setStore({ errors: error });
