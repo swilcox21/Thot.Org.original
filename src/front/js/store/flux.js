@@ -17,6 +17,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 		store: {
 			userEmail: null,
 			hobby: [],
+			folder: ["tasks", "meetings"],
 			token: null,
 			notes: null,
 			thots: [],
@@ -119,6 +120,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 				setStore({ thot: newStore });
 			},
 
+			addNewFolder: newFolder => {
+				const store = getStore();
+				const newStore = store.folder.push(newFolder);
+				setStore(newStore);
+			},
+
 			addNewTask: async hobby => {
 				const res = await fetch(process.env.BACKEND_URL + "/api/task", {
 					method: "POST",
@@ -126,7 +133,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						label: hobby.label,
 						date: hobby.date,
 						dashboard: hobby.dashboard,
-						priority: hobby.priority
+						folder: hobby.folder
 					}),
 					headers: {
 						"Content-Type": "application/json",
@@ -166,7 +173,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						label: hobby.label,
 						date: hobby.date,
 						dashboard: hobby.dashboard,
-						priority: hobby.priority
+						folder: hobby.folder
 					}),
 					headers: {
 						"Content-Type": "application/json"

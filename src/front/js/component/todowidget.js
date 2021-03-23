@@ -18,14 +18,14 @@ import PropTypes from "prop-types";
 export const TodoWidget = props => {
 	const [collapse, setCollapse] = useState(props.collapse);
 	const tasks = Array.isArray(props.tasks)
-		? props.tasks.filter(todo => (todo.priority === props.priority) & (todo.dashboard === false))
+		? props.tasks.filter(todo => (todo.folder === props.folder) & (todo.dashboard === false))
 		: [];
 
 	return (
 		<>
 			{tasks.length === 0 ? (
 				<div className="mt-3">
-					<span>{props.type}:</span>
+					<span>{props.folder}:</span>
 				</div>
 			) : (
 				<>
@@ -33,7 +33,7 @@ export const TodoWidget = props => {
 						<span
 							className={collapse === true ? "toggleClosed" : "toggleOpen"}
 							onClick={() => setCollapse(!collapse)}>
-							{props.type}: &nbsp;
+							{props.folder}: &nbsp;
 							{tasks.length} &nbsp;
 							{collapse === true ? (
 								<i className="fas fa-caret-left" />
@@ -42,7 +42,7 @@ export const TodoWidget = props => {
 							)}
 						</span>
 					</div>
-					{collapse === false ? <Prio tasks={tasks} autoSize={props.priority === 1} /> : null}
+					{collapse === false ? <Prio tasks={tasks} /> : null}
 				</>
 			)}
 		</>
@@ -50,8 +50,7 @@ export const TodoWidget = props => {
 };
 
 TodoWidget.propTypes = {
-	priority: PropTypes.number,
-	type: PropTypes.string,
+	folder: PropTypes.string,
 	collapse: PropTypes.bool,
 	tasks: PropTypes.array
 };

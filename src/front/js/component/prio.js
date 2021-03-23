@@ -31,7 +31,7 @@ export class Prio extends React.Component {
 			selectedDate: null,
 			todo: "",
 			color: "black",
-			priority: 1,
+			folder: 1,
 			dateChange: false,
 			taskDate: null
 		};
@@ -106,14 +106,14 @@ export class Prio extends React.Component {
 											type="number"
 											min="1"
 											max="7"
-											defaultValue={todo.priority}
+											defaultValue={todo.folder}
 											onChange={e => {
 												this.setState({
 													task: {
 														label: todo.label,
 														date: todo.date,
 														dashboard: todo.dashboard,
-														priority: e.target.value
+														folder: e.target.value
 													}
 												});
 											}}
@@ -124,7 +124,7 @@ export class Prio extends React.Component {
 										/>
 										<Tag
 											className={`pl-2 col-12 activeTodo ${
-												this.props.priority !== 1 ? "onfucus" : "pb-5"
+												this.props.folder !== 1 ? "onfucus" : "pb-5"
 											}`}
 											type="text"
 											defaultValue={todo.label}
@@ -135,7 +135,7 @@ export class Prio extends React.Component {
 														label: e.target.value,
 														date: todo.date,
 														dashboard: todo.dashboard,
-														priority: todo.priority
+														folder: todo.folder
 													}
 												});
 											}}
@@ -151,7 +151,7 @@ export class Prio extends React.Component {
 													label: todo.label,
 													date: todo.date,
 													dashboard: !todo.dashboard,
-													priority: todo.priority
+													folder: todo.folder
 												};
 												actions.handleChangeHobby(todo.id, task);
 											}}>
@@ -181,7 +181,7 @@ export class Prio extends React.Component {
 																	label: todo.label,
 																	date: null,
 																	dashboard: todo.dashboard,
-																	priority: todo.priority
+																	folder: todo.folder
 																};
 																this.setState({
 																	task: dateChange
@@ -211,7 +211,7 @@ export class Prio extends React.Component {
 																	label: todo.label,
 																	date: date,
 																	dashboard: todo.dashboard,
-																	priority: todo.priority
+																	folder: todo.folder
 																};
 																this.setState({
 																	task: dateChange
@@ -237,7 +237,7 @@ export class Prio extends React.Component {
 															label: todo.label,
 															date: todo.date,
 															dashboard: !todo.dashboard,
-															priority: todo.priority
+															folder: todo.folder
 														};
 														actions.handleChangeHobby(todo.id, task);
 													}}>
@@ -272,7 +272,7 @@ export class Prio extends React.Component {
 Prio.contextType = Context;
 
 Prio.propTypes = {
-	priority: PropTypes.number,
+	folder: PropTypes.number,
 	autoSize: PropTypes.bool,
 	tasks: PropTypes.array
 };
