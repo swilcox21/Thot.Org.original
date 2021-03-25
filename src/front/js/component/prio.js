@@ -124,7 +124,7 @@ export class Prio extends React.Component {
 										/>
 										<Tag
 											className={`pl-2 col-12 activeTodo ${
-												this.props.folder !== 1 ? "onfucus" : "pb-5"
+												this.props.dashboard != true ? "onfucus" : "pb-5"
 											}`}
 											type="text"
 											defaultValue={todo.label}
@@ -273,6 +273,7 @@ Prio.contextType = Context;
 
 Prio.propTypes = {
 	folder: PropTypes.number,
+	dashboard: PropTypes.bool,
 	autoSize: PropTypes.bool,
 	tasks: PropTypes.array
 };

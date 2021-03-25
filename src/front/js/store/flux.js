@@ -12,12 +12,25 @@ axios.interceptors.request.use(
 	}
 );
 
+axios.interceptors.response.use(
+	function(response) {
+		return response;
+	},
+	function(error) {
+		if (401 === error.response.status || 422 === error.response.status) {
+			window.location = "/login";
+		} else {
+			return Promise.reject(error);
+		}
+	}
+);
+
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
 			userEmail: null,
 			hobby: [],
-			folder: ["tasks", "meetings"],
+			folder: [{ folder: "tasks" }, { folder: "meetings" }],
 			token: null,
 			notes: null,
 			thots: [],
@@ -76,10 +89,13 @@ const getState = ({ getStore, getActions, setStore }) => {
 						console.log("Success:", response);
 						setStore({
 							userEmail: email,
-							token: response.access_token
+							token: response.access_token,
+							errorMSG: response.msg
 						});
 						localStorage.setItem("thot.org.token", response.access_token);
 						localStorage.setItem("thot.org.email", email);
+						window.location.href = "/home";
+						getActions().getSingleUser();
 					})
 
 					// sends error to user and to console log
@@ -90,6 +106,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 					});
 			},
 
+			logOut: () => {
+				localStorage.setItem("thot.org.token", "something");
+				localStorage.setItem("thot.org.email", "");
+				window.location.href = "/login";
+			},
+
 			getAllTasks: (from, until) => {
 				axios
 					.get(
@@ -98,6 +120,34 @@ const getState = ({ getStore, getActions, setStore }) => {
 					)
 
 					.then(response => setStore({ hobby: response.data }));
+			},
+
+			getSingleUser: () => {
+				fetch(process.env.BACKEND_URL + "/api/single_user", {
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${localStorage.getItem("thot.org.token")}`
+					}
+				})
+					.then(res => res.json())
+					.then(response => {
+						console.log("Success:", response);
+						console.log("Success:", response.msg);
+						response.folders.push({ folder: "tasks" }, { folder: "meetings" });
+						response.msg != "Not enough segments"
+							? setStore({
+									hobby: response.tasks,
+									folder: response.folders
+							  })
+							: (window.location = "/login");
+					})
+					// sends error to user and to console log
+					.catch(error => {
+						setStore({ errors: error });
+						console.error("Error:", error);
+						return true;
+					});
 			},
 
 			getNotes: async () => {
@@ -120,12 +170,30 @@ const getState = ({ getStore, getActions, setStore }) => {
 				setStore({ thot: newStore });
 			},
 
-			addNewFolder: newFolder => {
-				const store = getStore();
-				const newStore = store.folder.push(newFolder);
-				setStore(newStore);
-			},
+			// addNewFolder: newFolder => {
+			// 	const store = getStore();
+			// 	const newStore = store.folder.push(newFolder);
+			// 	setStore(newStore);
+			// },
 
+			addNewFolder: async newFolder => {
+				const res = await fetch(process.env.BACKEND_URL + "/api/folder", {
+					method: "POST",
+					body: JSON.stringify({
+						folder: newFolder
+					}),
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: "Bearer " + getStore().token
+					}
+				});
+				const folder = await res.json();
+				console.log("this is the folderFLAGG!$: ", folder);
+				const store = getStore();
+				folder.push({ folder: "tasks" }, { folder: "meetings" });
+				setStore({ folder: folder });
+				return folder;
+			},
 			addNewTask: async hobby => {
 				const res = await fetch(process.env.BACKEND_URL + "/api/task", {
 					method: "POST",
@@ -149,6 +217,22 @@ const getState = ({ getStore, getActions, setStore }) => {
 				return task;
 			},
 
+			deleteFolder: folder_id => {
+				fetch(process.env.BACKEND_URL + "/api/folder/" + folder_id, {
+					method: "DELETE"
+				})
+					.then(response => {
+						if (response.status >= 200 && response.status < 300) {
+							const store = getStore();
+							setStore({ folder: store.folder.filter(t => t.id != folder_id) });
+						} else throw Error("there was a problem deleting the task");
+					})
+					.catch(error => {
+						setStore({ errors: error });
+						console.error("Error:", error);
+						return true;
+					});
+			},
 			deleteHobby: task_id => {
 				fetch(process.env.BACKEND_URL + "/api/task/" + task_id, {
 					method: "DELETE"

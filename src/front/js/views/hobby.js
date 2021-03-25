@@ -60,9 +60,9 @@ export class Hobby extends React.Component {
 			hobby: [...this.state.hobby, todo]
 		});
 	};
-
+	// this.state.currentDate, this.state.currentDate.add(24, "hour")
 	componentDidMount() {
-		this.context.actions.getAllTasks(this.state.currentDate, this.state.currentDate.add(24, "hour"));
+		this.context.actions.getSingleUser();
 		this.context.actions.getNotes().then(() => {
 			if (Array.isArray(this.context.store.notes) && this.context.store.notes.length > 0)
 				this.setState({ notes: this.context.store.notes[0].notes });
@@ -123,7 +123,7 @@ export class Hobby extends React.Component {
 			? this.context.store.hobby.filter(todo => todo.dashboard === true)
 			: [];
 		const _newFolder = Array.isArray(this.context.store.folder)
-			? this.context.store.folder.filter(folder => folder === this.state.newFolder)
+			? this.context.store.folder.filter(folder => folder.folder === this.state.newFolder)
 			: [];
 		return (
 			<Context.Consumer>
@@ -177,17 +177,19 @@ export class Hobby extends React.Component {
 								<br />
 							</div>
 						)}
-						<div className="d-flex mt-5 mx-auto mb-3 col-md-6">
+						<div className="d-flex mt-5 mx-auto mb-3 col-md-7">
 							<input
 								onBlur={() => this.setState({ folderValue: "" })}
-								className="borderBottomRight"
+								className="borderBottomRight col-3 col-md-3"
 								placeholder={this.state.folder}
 								value={this.state.folderValue}
 								onChange={e => {
 									this.setState({ folder: e.target.value });
 									this.setState({ folderValue: e.target.value });
 									this.setState({ newFolder: e.target.value });
-									// e.target.value != "tasks", "meetings" && (() => this.setState({ taskDate: null }));
+									e.target.value != "tasks" && e.target.value != "meetings"
+										? this.setState({ taskDate: null })
+										: this.setState({ taskDate: this.state.currentDate });
 								}}
 								list="folders"
 								name="folder"
@@ -196,7 +198,7 @@ export class Hobby extends React.Component {
 							<datalist id="folders">
 								{store.folder.map(folder => (
 									<div key={folder.id}>
-										<option value={folder} />
+										<option value={folder.folder} />
 									</div>
 								))}
 							</datalist>
@@ -205,15 +207,15 @@ export class Hobby extends React.Component {
 							)}
 							<TextareaAutosize
 								className="pl-2 col-md-11 activeTodo onfucus addNew py-3"
-								placeholder="Stop being lazy and JUST DO IT!"
+								placeholder="Just type what ya thinking about"
 								type="text"
 								value={this.state.todo}
 								onChange={e => this.handleChange(e)}
 							/>
 						</div>
-						{this.state.status.message !== "" && (
+						{/* {this.state.status.message !== "" && (
 							<div className={`alert alert-${this.state.status.color}`}>{this.state.status.message}</div>
-						)}
+						)} */}
 						<div className="d-flex justify-content-center col-md-12 text-center">
 							<button
 								onClick={() => {
@@ -268,16 +270,25 @@ export class Hobby extends React.Component {
 									/>
 								</div>
 							</div>
-							{store.folder.filter(folder => (folder != "tasks") & (folder != "meetings")).map(folder => (
-								<div key={folder.id} className="mt-5 col-md-6">
-									<TodoWidget folder={folder} tasks={store.hobby} collapse={true} />
-								</div>
-							))}
+							{store.folder
+								.filter(folder => (folder.folder != "tasks") & (folder.folder != "meetings"))
+								.map(folder => (
+									<div key={folder.id} className="mt-5 col-md-6">
+										<small onClick={() => actions.deleteFolder(folder.id)}>df</small>
+										<TodoWidget folder={folder.folder} tasks={store.hobby} collapse={true} />
+									</div>
+								))}
 						</div>
-						<div className="col-12 mt-3">
-							<CopyToClipboard text={this.state.notes}>
-								<button>Copy Notes to clipboard</button>
-							</CopyToClipboard>
+						<div className="col-12 mt-5">
+							<small>
+								Please feel free to give any feedback or tips to improve the app in the shared text area
+								below
+							</small>
+							<br />
+							<small>
+								** DISCLAIMER: all users of this app can see and modify this section PLEASE BE
+								CONSIDERATE AND DONT ALTER OTHERS NOTES **
+							</small>
 							<textarea
 								className="p-2 mt-3 col-12 notes"
 								placeholder="NOTES"

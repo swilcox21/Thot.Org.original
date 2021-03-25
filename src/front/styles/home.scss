@@ -1,3 +1,32 @@
+// id
+// #loginDivBackground {
+//     background-color: #90f8cd00;
+//     box-shadow: 5px 5px 5px 0px #1a8055e1;
+//     border-radius: 5px;
+// }
+
+#loginBox {
+    box-shadow: 15px 15px 25px 0px #343a40;
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 15px;
+}
+
+#shadowHobbyView {
+    margin-top: 85px;
+    z-index: 0;
+    margin-left: 10%;
+}
+
+#loginBackground {
+    background-color: rgba(255, 255, 255, 0.801);
+    z-index: 10;
+    // position: absolute;
+    // margin-top: 90px;
+}
+
+// className
+
 .activeTodo {
     border: none;
     font-size: 1.1rem;
@@ -37,6 +66,10 @@ button {
     border-radius: 5px;
     background-color: #343a40;
     color: #49f7ae;
+}
+
+.cursorPointer {
+    cursor: pointer;
 }
 
 .calender {
@@ -104,6 +137,10 @@ button {
 .inputTypeNumber2 {
     border: none;
 }
+
+
+
+
 
 .notes {
     height: 300px;

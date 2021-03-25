@@ -18,7 +18,12 @@ import PropTypes from "prop-types";
 export const TodoWidget = props => {
 	const [collapse, setCollapse] = useState(props.collapse);
 	const tasks = Array.isArray(props.tasks)
-		? props.tasks.filter(todo => (todo.folder === props.folder) & (todo.dashboard === false))
+		? props.tasks.filter(
+				todo => (todo.folder === props.folder) & (todo.dashboard === false)
+				// (dayjs(todo.date).toDate()
+				// 	? dayjs(todo.date).toDate() === dayjs(props.date).toDate()
+				// 	: dayjs(todo.date).toDate() === null)
+		  )
 		: [];
 
 	return (

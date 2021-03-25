@@ -11,6 +11,7 @@ class User(db.Model):
     password = db.Column(db.String(80), unique=False, nullable=False)
     is_active = db.Column(db.Boolean(), unique=False, nullable=True)
     tasks = db.relationship('Task', backref='user', lazy=True)
+    folders = db.relationship('Folder', backref='user', lazy=True)
 
     def __repr__(self):
         return '<User %r>' % self.id
@@ -21,7 +22,8 @@ class User(db.Model):
             "firstName": self.first_name,
             "lastName": self.last_name,
             "email": self.email,
-            "tasks": list(map(lambda x : x.serialize(), self.tasks))
+            "tasks": list(map(lambda x : x.serialize(), self.tasks)),
+            "folders": list(map(lambda x : x.serialize(), self.folders))
 
             # do not serialize the password, its a security breach
         }
@@ -47,6 +49,24 @@ class Task(db.Model):
             "label": self.label,
             "date": self.date,
             "dashboard": self.dashboard,
+            "folder": self.folder
+            # do not serialize the password, its a security breach
+        }
+
+class Folder(db.Model):
+
+    id = db.Column(db.Integer, primary_key=True)
+    folder = db.Column(db.String(120), unique=False, nullable=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'),
+    nullable=False)
+
+    def __repr__(self):
+        return f'<Folder {self.folder}>'
+
+    def serialize(self):
+        print("flag:",self.folder)
+        return {
+            "id": self.id,
             "folder": self.folder
             # do not serialize the password, its a security breach
         }

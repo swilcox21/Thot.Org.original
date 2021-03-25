@@ -12,7 +12,7 @@
 // import PropTypes from "prop-types";
 
 // export const Thot = props => {
-// 	const { store, actions } = useContext(Context);
+// const { store, actions } = useContext(Context);
 // 	const [selectedDate, setSelectedDate] = useState(dayjs());
 // 	const [task, setTask] = useState();
 // 	// const [, set] = useState();

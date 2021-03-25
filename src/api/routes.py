@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Task, Notes
+from api.models import db, User, Task, Notes, Folder
 from api.utils import generate_sitemap, APIException
 from datetime import datetime, timedelta
 from sqlalchemy import or_
@@ -20,6 +20,14 @@ def handle_user():
         all_users = list(map(lambda t: t.serialize(), all_users))
         return jsonify(all_users), 200
     return "invalid request method", 404
+
+@api.route('/single_user', methods=['GET'])
+@jwt_required()
+def get_single_user():
+    user_id = get_jwt_identity() 
+    user = User.query.get(user_id)
+    return jsonify(user.serialize()), 200
+
 
 @api.route('/user', methods=['POST'])
 def post_user():
@@ -51,9 +59,9 @@ def login():
     if not password:
         return jsonify({"msg": "Missing password parameter"}), 400
 
-    usercheck = User.query.filter_by(email=email).first()
+    usercheck = User.query.filter_by(email=email, password=password).first()
     if usercheck == None:
-        return jsonify({"msg": "Bad Email"}), 401
+        return jsonify({"msg": "Invalid Email or Password"}), 401
 
     # Identity can be any data that is json serializable
     access_token = create_access_token(identity=usercheck.id, expires_delta=False)
@@ -94,6 +102,28 @@ def handle_hello():
         return jsonify(all_tasks), 201
     return "invalid request method", 404
 
+@api.route('/folder', methods=['POST'])
+@jwt_required()
+def post_folder():
+    user_id = get_jwt_identity()
+    body = request.get_json()
+    print("MY BODY FLAG: ",body['folder'])
+    new_folder = Folder(folder= body['folder'], user_id= user_id)
+    db.session.add(new_folder)
+    db.session.commit()
+    all_folders = Folder.query.filter_by(user_id= user_id)
+    all_folders = list(map(lambda t: t.serialize(), all_folders))
+    return jsonify(all_folders), 201
+    return "invalid request method", 404
+
+@api.route('/folder/<int:folder_id>', methods=['DELETE'])
+def delete_folder(folder_id):
+    body = request.get_json() 
+    current_folder = Folder.query.get(folder_id)
+    db.session.delete(current_folder)
+    db.session.commit()
+    return "folder removed", 201
+
 @api.route('/task/<int:task_id>', methods=['PUT', 'GET', 'DELETE'])
 def get_single_task(task_id):
     body = request.get_json() 
@@ -113,6 +143,8 @@ def get_single_task(task_id):
         return "task removed", 201
 
     return "Invalid Method", 404
+
+
 
 @api.route('/notes', methods=['GET'])
 def handle_notes():
