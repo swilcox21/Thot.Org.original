@@ -95,8 +95,8 @@ export const Preview = props => {
 								e.target.value === "1"
 									? () => setTaskDate(currentDate)
 									: e.target.value === "2"
-										? setTaskDate(currentDate)
-										: setTaskDate(null);
+									? setTaskDate(currentDate)
+									: setTaskDate(null);
 							}}
 							className="inputTypeNumber2 inputTypeNumber text-center"
 							type="number"

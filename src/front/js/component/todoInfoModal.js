@@ -22,34 +22,36 @@ export const TodoInfoModal = props => {
 			<div className="modal-dialog" role="document">
 				<div className="modal-content">
 					{store.hobby &&
-						store.hobby.filter((todo, index) => index == props.show).map((todo, index) => (
-							<>
-								<div key={todo.id} className="modal-header">
-									<h3 className="modal-title">
-										Todo number: &nbsp;
-										{props.show + 1}
-									</h3>
-									{props.onClose ? (
-										<button
-											onClick={() => props.onClose()}
-											type="button"
-											className="close"
-											data-dismiss="modal"
-											aria-label="Close">
-											<span aria-hidden="true">&times;</span>
-										</button>
-									) : (
-										""
-									)}
-								</div>
-								<div className="modal-body">
-									<h5>
-										<strong>{todo.name}</strong>
-									</h5>
-									<p>created on: {todo.date}</p>
-								</div>
-							</>
-						))}
+						store.hobby
+							.filter((todo, index) => index == props.show)
+							.map((todo, index) => (
+								<>
+									<div key={todo.id} className="modal-header">
+										<h3 className="modal-title">
+											Todo number: &nbsp;
+											{props.show + 1}
+										</h3>
+										{props.onClose ? (
+											<button
+												onClick={() => props.onClose()}
+												type="button"
+												className="close"
+												data-dismiss="modal"
+												aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+											</button>
+										) : (
+											""
+										)}
+									</div>
+									<div className="modal-body">
+										<h5>
+											<strong>{todo.name}</strong>
+										</h5>
+										<p>created on: {todo.date}</p>
+									</div>
+								</>
+							))}
 					{/* <div className="modal-footer mx-auto">
 							 	<a
 									type="button"

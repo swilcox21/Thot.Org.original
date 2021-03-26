@@ -68,6 +68,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			initialize: () => {
 				setStore({
 					token: localStorage.getItem("thot.org.token"),
+					errorMSG: localStorage.getItem("thot.org.errorMSG"),
 					email: localStorage.getItem("thot.org.email")
 				});
 			},
@@ -87,13 +88,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 					.then(res => res.json())
 					.then(response => {
 						console.log("Success:", response);
-						setStore({
-							userEmail: email,
-							token: response.access_token,
-							errorMSG: response.msg
-						});
 						localStorage.setItem("thot.org.token", response.access_token);
 						localStorage.setItem("thot.org.email", email);
+						localStorage.setItem("thot.org.errorMSG", response.msg);
 						window.location.href = "/home";
 						getActions().getSingleUser();
 					})
@@ -122,7 +119,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					.then(response => setStore({ hobby: response.data }));
 			},
 
-			getSingleUser: () => {
+			getUser: () => {
 				fetch(process.env.BACKEND_URL + "/api/single_user", {
 					method: "GET",
 					headers: {
@@ -145,6 +142,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 					// sends error to user and to console log
 					.catch(error => {
 						setStore({ errors: error });
+						window.location = "/login";
+
 						console.error("Error:", error);
 						return true;
 					});

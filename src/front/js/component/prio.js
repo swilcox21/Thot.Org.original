@@ -17,7 +17,7 @@ import PropTypes from "prop-types";
 
 const Textarea = ({ children, ...props }) => <textarea {...props}>{children}</textarea>;
 
-export class Prio extends React.Component {
+class Prio extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -144,34 +144,49 @@ export class Prio extends React.Component {
 												this.resetTask();
 											}}
 										/>
-										<Dropdown
-											className="mt-2 ml-3"
-											onDoubleClick={() => {
-												let task = {
-													label: todo.label,
-													date: todo.date,
-													dashboard: !todo.dashboard,
-													folder: todo.folder
-												};
-												actions.handleChangeHobby(todo.id, task);
-											}}>
+										<Dropdown className="mt-2 ml-3">
 											<Dropdown.Toggle as={this.CustomToggle} id="dropdown-custom-components">
-												<button className="dropdowntoggle">
-													{todo.date ? (
-														dayjs(todo.date).format("M/D")
-													) : (
-														<i className="fas fa-list" />
-													)}
-												</button>
+												{todo.date ? (
+													<button
+														onDoubleClick={() => {
+															let task = {
+																label: todo.label,
+																date: todo.date,
+																dashboard: !todo.dashboard,
+																folder: todo.folder
+															};
+															actions.handleChangeHobby(todo.id, task);
+														}}
+														className="dropdowntoggle"
+														id="dropdowntoggle">
+														<div className="text-center" id="dropDownDate">
+															{dayjs(todo.date).format("M/D")}
+														</div>
+													</button>
+												) : (
+													<button
+														onDoubleClick={() => {
+															let task = {
+																label: todo.label,
+																date: todo.date,
+																dashboard: !todo.dashboard,
+																folder: todo.folder
+															};
+															actions.handleChangeHobby(todo.id, task);
+														}}
+														className="dropdowntoggle">
+														<i className="fas fa-list" id="" />
+													</button>
+												)}
 											</Dropdown.Toggle>
 											<Dropdown.Menu className="mt-1">
 												<div>
 													{todo.date ? (
-														<div className="Absolute">
+														<small className="Absolute ml-4">
 															{dayjs(todo.date).format("MM/DD/YYYY")}
-														</div>
+														</small>
 													) : (
-														<div className="Absolute">assign date...</div>
+														<small className="Absolute ml-4">assign date...</small>
 													)}
 													{todo.date != null && (
 														<span
@@ -269,11 +284,20 @@ export class Prio extends React.Component {
 	}
 }
 
+Prio.displayName = "Prio";
+
+export default Prio;
+
 Prio.contextType = Context;
 
 Prio.propTypes = {
 	folder: PropTypes.number,
 	dashboard: PropTypes.bool,
 	autoSize: PropTypes.bool,
+	style: PropTypes.node.isRequired,
+	className: PropTypes.node.isRequired,
+	children: PropTypes.node.isRequired,
+	"aria-labelledby": PropTypes.node.isRequired,
+	onClick: PropTypes.node.isRequired,
 	tasks: PropTypes.array
 };

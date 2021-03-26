@@ -5,6 +5,44 @@
 //     border-radius: 5px;
 // }
 
+// body {
+//     background-color: whitesmoke;
+// }
+
+#addDayButtons {
+    border: none;
+    background-color: white;
+    color: #343a40;
+}
+
+#addDayButtons:hover {
+    border: none;
+    background-color: #343a40;
+    color: #49f7ae;
+}
+
+#addDayButtons {
+    border: none;
+    background-color: white;
+    color: #343a40;
+}
+
+#dropDownDate{
+    font-size: .78rem;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-left: -5px;
+}
+
+#dropDownList {
+    margin-left: -10px;
+}
+
+#dropdowntoggle{
+    max-width: 35px;
+    min-width: 35px;
+}
+
 #loginBox {
     box-shadow: 15px 15px 25px 0px #343a40;
     background-color: white;
@@ -64,8 +102,14 @@
 
 button {
     border-radius: 5px;
+    border: 2px solid #343a40;
     background-color: #343a40;
     color: #49f7ae;
+}
+button:hover {
+    border-radius: 5px;
+    background-color: #49f7ae;
+    color: #343a40;
 }
 
 .cursorPointer {
@@ -106,7 +150,6 @@ button {
 
 .dropdowntoggle {
     position: absolute;
-    // margin-top: 25px;
     z-index: 2;
 }
 
@@ -118,7 +161,7 @@ button {
 }
 
 .grey {
-    color: grey;
+    color: #343a40;
 }
 
 .greyIcons {

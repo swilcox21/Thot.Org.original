@@ -115,7 +115,7 @@ export class SignUp extends React.Component {
 						<div className="container-fluid" id="loginBackground">
 							<div className="container col-lg-3 col-md-6 col-9 mt-5" id="loginBox">
 								<div className="row">
-									<div className="col-md-7 mx-auto">
+									<div className="col-12 mx-auto">
 										<div id="second">
 											<div className="myform form ">
 												<div className="logo mb-3">
@@ -212,6 +212,11 @@ export class SignUp extends React.Component {
 									</div>
 								</div>
 								<br />
+								<Link to={"/login"}>
+									<div className="text-center">
+										<small>Back to Login</small>
+									</div>
+								</Link>
 								<br />
 								<br />
 							</div>
@@ -310,7 +315,7 @@ export class SignUp extends React.Component {
 							<br />
 							<small>
 								** DISCLAIMER: all users of this app can see and modify this section PLEASE BE
-								CONSIDERATE AND DONT ALTER OTHERS NOTES **
+								CONSIDERATE **
 							</small>
 							<textarea
 								className="p-2 mt-3 col-12 notes"

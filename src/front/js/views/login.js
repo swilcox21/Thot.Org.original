@@ -124,13 +124,13 @@ export class Login extends React.Component {
 				{({ actions, store }) => (
 					<>
 						<div className="container-fluid" id="loginBackground">
-							<div className="container col-lg-3 col-md-6 col-9 mt-5" id="loginBox">
+							<div className="container col-lg-3 col-md-6 col-9 mt-5 mt-md-3" id="loginBox">
 								<div className="row">
 									<div className="col-12 mx-auto">
 										<div id="first">
 											<div className="myform form ">
 												<div className="logo mb-3">
-													<div className="col-md-12 mt-5 text-center">
+													<div className="col-md-12 mt-4 mt-md-5 text-center">
 														<h1>Login</h1>
 													</div>
 												</div>
@@ -184,7 +184,7 @@ export class Login extends React.Component {
 														</div>
 													)}
 													<br />
-													<div className="mt-5" id="loginDivBackground">
+													<div className="mt-md-5 mt-2 " id="loginDivBackground">
 														<h5 className="text-center">Dont have an account?</h5>
 													</div>
 												</form>
@@ -340,7 +340,7 @@ export class Login extends React.Component {
 							<br />
 							<small>
 								** DISCLAIMER: all users of this app can see and modify this section PLEASE BE
-								CONSIDERATE AND DONT ALTER OTHERS NOTES **
+								CONSIDERATE**
 							</small>
 							<textarea
 								className="p-2 mt-3 col-12 notes"
