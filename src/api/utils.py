@@ -18,12 +18,15 @@ class APIException(Exception):
         rv['message'] = self.message
         return rv
 
-def get_all_tasks(user_id, _from, _until): 
+def get_all_tasks(user_id, _from, _until, _null): 
     all_tasks = Task.query.filter_by(user_id = user_id)
     if _from is not None : 
         all_tasks = all_tasks.filter(or_(Task.date >= _from, Task.date == None))
     if _until is not None : 
         all_tasks = all_tasks.filter(or_(Task.date <= _until, Task.date == None))
+    if _null == False : 
+        all_tasks = all_tasks.filter(Task.date != None)
+        print("isNUL", _null)
     all_tasks = all_tasks.all()
     return all_tasks
 

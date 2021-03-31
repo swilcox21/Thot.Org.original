@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: b11cac226c34
+Revision ID: e557499b1ca5
 Revises: 
-Create Date: 2021-03-30 19:01:17.446357
+Create Date: 2021-03-31 19:20:01.777279
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'b11cac226c34'
+revision = 'e557499b1ca5'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -37,7 +37,7 @@ def upgrade():
     )
     op.create_table('folder',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('folder', sa.String(length=120), nullable=True),
+    sa.Column('folder', sa.String(length=1000), nullable=True),
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id')
@@ -47,7 +47,7 @@ def upgrade():
     sa.Column('label', sa.String(length=1200000), nullable=False),
     sa.Column('date', sa.DateTime(timezone=True), nullable=True),
     sa.Column('dashboard', sa.Boolean(), nullable=True),
-    sa.Column('folder', sa.String(length=60), nullable=True),
+    sa.Column('folder', sa.String(length=1000), nullable=True),
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id')

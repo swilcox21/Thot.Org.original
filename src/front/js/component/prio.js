@@ -100,30 +100,34 @@ class Prio extends React.Component {
 						<div className="container text-center">
 							{this.props.tasks.map((todo, index) => (
 								<div key={todo.id}>
-									<div className="d-flex justify-content-around mx-auto col-md-11 activeTodoDiv inputAndTextArea">
-										<input
-											className="inputTypeNumber text-center"
-											type="number"
-											min="1"
-											max="7"
-											defaultValue={todo.folder}
-											onChange={e => {
-												this.setState({
-													task: {
-														label: todo.label,
-														date: todo.date,
-														dashboard: todo.dashboard,
-														folder: e.target.value
-													}
-												});
-											}}
-											onBlur={() => {
-												this.state.task && actions.handleChangeHobby(todo.id, this.state.task);
-												this.resetTask();
-											}}
-										/>
+									<div className="d-flex justify-content-around mx-auto col-xs-12 col-md-11 activeTodoDiv inputAndTextArea">
+										{this.props.autoSize ? null : (
+											<input
+												className="inputTypeNumber text-center"
+												type="number"
+												min="1"
+												max="7"
+												defaultValue={todo.folder}
+												onChange={e => {
+													this.setState({
+														task: {
+															label: todo.label,
+															date: todo.date,
+															dashboard: todo.dashboard,
+															folder: e.target.value
+														}
+													});
+												}}
+												onBlur={() => {
+													this.state.task &&
+														actions.handleChangeHobby(todo.id, this.state.task);
+													this.resetTask();
+												}}
+											/>
+										)}
 										{this.props.autoSize ? (
 											<TextareaAutosize
+												id="textareaautosize"
 												className="pl-2 col-12 activeTodo pb-5"
 												type="text"
 												defaultValue={todo.label}
@@ -182,7 +186,7 @@ class Prio extends React.Component {
 														}}
 														className="dropdowntogglee text-center"
 														id="dropdowntoggle">
-														<div className="text-center" id="dropDownDate">
+														<div className="text-center py-1" id="dropDownDate">
 															{dayjs(todo.date).format("MM/DD")}
 														</div>
 													</button>
@@ -198,7 +202,7 @@ class Prio extends React.Component {
 															actions.handleChangeHobby(todo.id, task);
 														}}
 														className="dropdowntogglee"
-														id="dropdowntoggle">
+														id="dropdowntoggle dropDownList">
 														<i className="fas fa-list" id="" />
 													</button>
 												)}

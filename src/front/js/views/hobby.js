@@ -14,6 +14,7 @@ import { TodoWidget } from "../component/todowidget";
 import { Spring, Transition, animated } from "react-spring/renderprops";
 import Clock from "../component/clock";
 import dayjs from "dayjs";
+import isToday from "dayjs/plugin/isToday";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import timeZone from "dayjs-ext/plugin/timeZone";
 import utc from "dayjs/plugin/utc";
@@ -22,7 +23,7 @@ import { Dropdown } from "semantic-ui-react";
 // dayjs.extend(utc);
 // dayjs.extend(timeZone);
 // dayjs.tz.setDefault("America/New_York");
-
+dayjs.extend(isToday);
 export class Hobby extends React.Component {
 	constructor() {
 		super();
@@ -64,7 +65,11 @@ export class Hobby extends React.Component {
 	// this.state.currentDate, this.state.currentDate.add(24, "hour")
 	componentDidMount() {
 		this.context.actions.getUser();
-		this.context.actions.getAllTasks(this.state.currentDate, this.state.currentDate.add(24, "hour"));
+		this.context.actions.getAllTasks(
+			this.state.currentDate,
+			this.state.currentDate.add(24, "hour"),
+			this.state.currentDate.isToday()
+		);
 		this.context.actions.getNotes().then(() => {
 			if (Array.isArray(this.context.store.notes) && this.context.store.notes.length > 0)
 				this.setState({ notes: this.context.store.notes[0].notes });
@@ -136,20 +141,27 @@ export class Hobby extends React.Component {
 						<div className="toggleButton mt-1 mr-3">
 							<button
 								id="addDayButtons"
-								onClick={() =>
-									this.setState({ currentDate: dayjs(this.state.currentDate).subtract(24, "hour") })
-								}
-								onDoubleClick={() =>
-									this.setState({ currentDate: dayjs(this.state.currentDate).subtract(120, "hour") })
-								}>
+								onClick={() => {
+									this.setState({ currentDate: dayjs(this.state.currentDate).subtract(24, "hour") });
+									this.state.folder === "meetings"
+										? this.setState({
+												taskDate: dayjs(this.state.currentDate).subtract(24, "hour")
+										  })
+										: this.setState({ taskDate: null });
+									actions.getAllTasks(
+										dayjs(this.state.currentDate).subtract(24, "hour"),
+										this.state.currentDate
+									);
+								}}>
 								<i className="fas fa-chevron-left" />
 							</button>
 							<button
 								className="mx-1"
 								onDoubleClick={() => {
 									this.setState({ currentDate: dayjs() });
-									this.setState({ taskDate: dayjs() });
-									this.setState({ folder: "tasks" });
+									this.state.folder === "meetings"
+										? this.setState({ taskDate: dayjs() })
+										: this.setState({ taskDate: null });
 									actions.getAllTasks(dayjs(), dayjs().add(24, "hour"));
 								}}
 								onClick={() => this.toggle()}>
@@ -157,12 +169,16 @@ export class Hobby extends React.Component {
 							</button>
 							<button
 								id="addDayButtons"
-								onDoubleClick={() =>
-									this.setState({ currentDate: dayjs(this.state.currentDate).add(120, "hour") })
-								}
-								onClick={() =>
-									this.setState({ currentDate: dayjs(this.state.currentDate).add(24, "hour") })
-								}>
+								onClick={() => {
+									this.setState({ currentDate: dayjs(this.state.currentDate).add(24, "hour") });
+									this.state.folder === "meetings"
+										? this.setState({ taskDate: dayjs(this.state.currentDate).add(24, "hour") })
+										: this.setState({ taskDate: null });
+									actions.getAllTasks(
+										this.state.currentDate.add(24, "hour"),
+										this.state.currentDate.add(48, "hour")
+									);
+								}}>
 								<i className="fas fa-chevron-right" />
 							</button>
 						</div>
@@ -180,9 +196,11 @@ export class Hobby extends React.Component {
 											toggle={this.toggle}
 											onChange={date => {
 												this.setState({ currentDate: date });
-												this.setState({ taskDate: date });
-												this.setState({ folder: "tasks" });
-												actions.getAllTasks(date, dayjs(date).add(24, "hour"));
+
+												this.state.folder === "meetings"
+													? this.setState({ taskDate: date })
+													: this.setState({ taskDate: null });
+												actions.getAllTasks(date, dayjs(date).add(24, "hour"), date.isToday());
 												this.toggle();
 											}}
 										/>
@@ -203,7 +221,7 @@ export class Hobby extends React.Component {
 								<br />
 							</div>
 						)}
-						<div className="d-flex flex-wrap mt-5">
+						<div className="d-flex flex-wrap justify-content-between mt-5">
 							<div className="col-md-6">
 								<div className="d-flex mt-3 mx-auto mb-3">
 									<input
@@ -274,7 +292,7 @@ export class Hobby extends React.Component {
 									</div>
 								</div>
 							</div>
-							<div className="col-md-5 ml-md-5">
+							<div className="col-md-5 ">
 								<div className="">
 									<TodoWidget
 										folder={"meetings"}
@@ -298,7 +316,7 @@ export class Hobby extends React.Component {
 
 								<small
 									onClick={() => this.setState({ forum: !this.state.forum })}
-									className="toggleOpen">
+									className="toggleOpen mt-5">
 									open line of communication between all users
 									{this.state.forum === true ? (
 										<i className="fas fa-sort-down" />

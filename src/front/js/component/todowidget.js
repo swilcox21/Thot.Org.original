@@ -1,7 +1,6 @@
 import "../../styles/home.scss";
-import React, { useState, setStore } from "react";
+import React, { useState, setStore, useContext } from "react";
 import { Context } from "../store/appContext";
-import { useContext } from "../store/appContext";
 import TextareaAutosize from "react-textarea-autosize";
 import { TodoInfoModal } from "./todoInfoModal";
 import Dropdown from "react-bootstrap/Dropdown";
@@ -16,7 +15,7 @@ import Prio from "../component/prio";
 import PropTypes from "prop-types";
 
 export const TodoWidget = props => {
-	// const { store, actions } = useContext(Context);
+	const { store, actions } = useContext(Context);
 	const [collapse, setCollapse] = useState(props.collapse);
 	const tasks = Array.isArray(props.tasks)
 		? props.tasks.filter(

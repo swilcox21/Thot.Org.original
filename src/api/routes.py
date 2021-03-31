@@ -76,11 +76,13 @@ def handle_hello():
     user_id = get_jwt_identity()
     print(user_id)
     if request.method == 'GET':
+        # if _from = todays_date get all matching dates and all None dates else just get all matching dates
         _from = request.args.get('from', None)
+        null = request.args.get('null', None)
         _from = datetime.strptime(_from, '%Y/%m/%d')
         _until = request.args.get('until', None)
         _until = datetime.strptime(_until, '%Y/%m/%d')
-        all_tasks = get_all_tasks(user_id, _from, _until)
+        all_tasks = get_all_tasks(user_id, _from, _until, null == "true")
         all_tasks = list(map(lambda t: t.serialize(), all_tasks))
         return jsonify(all_tasks), 200
     if request.method == 'POST':

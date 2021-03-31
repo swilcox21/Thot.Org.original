@@ -115,11 +115,13 @@ const getState = ({ getStore, getActions, setStore }) => {
 				window.location.href = "/login";
 			},
 
-			getAllTasks: (from, until) => {
+			getAllTasks: (from, until, _null = true) => {
 				axios
 					.get(
 						process.env.BACKEND_URL +
-							`/api/task?from=${from.format("YYYY/MM/DD")}&until=${until.format("YYYY/MM/DD")}`
+							`/api/task?from=${from.format("YYYY/MM/DD")}&until=${until.format(
+								"YYYY/MM/DD"
+							)}&null=${_null == true}`
 					)
 
 					.then(response => setStore({ hobby: response.data }));

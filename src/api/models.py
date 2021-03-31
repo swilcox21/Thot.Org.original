@@ -34,7 +34,7 @@ class Task(db.Model):
     label = db.Column(db.String(1200000), unique=False, nullable=False)
     date = db.Column(db.DateTime(timezone=True), unique=False, nullable=True)
     dashboard = db.Column(db.Boolean(), unique=False, nullable=True)
-    folder = db.Column(db.String(60), unique=False, default=0, nullable=True)
+    folder = db.Column(db.String(1000), unique=False, default=0, nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'),
         nullable=False)
 
@@ -55,7 +55,7 @@ class Task(db.Model):
 class Folder(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
-    folder = db.Column(db.String(120), unique=False, nullable=True)
+    folder = db.Column(db.String(1000), unique=False, nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'),
     nullable=False)
 
