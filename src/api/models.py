@@ -22,7 +22,6 @@ class User(db.Model):
             "firstName": self.first_name,
             "lastName": self.last_name,
             "email": self.email,
-            "tasks": list(map(lambda x : x.serialize(), self.tasks)),
             "folders": list(map(lambda x : x.serialize(), self.folders))
 
             # do not serialize the password, its a security breach

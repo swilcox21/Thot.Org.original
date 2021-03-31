@@ -168,6 +168,11 @@ export class Login extends React.Component {
 														)}
 													</div>
 													<br />
+													{store.errors === "invalid user name or password" && (
+														<div className="text-center text-danger mb-2">
+															<small>invalid user name or password</small>
+														</div>
+													)}
 													{validateForm(this.state.errors) && (
 														<div className="col-md-12 text-center ">
 															<button
@@ -212,15 +217,11 @@ export class Login extends React.Component {
 						{/* the div below is just for show =P */}
 						{/* the div below is just for show =P */}
 						{/* the div below is just for show =P */}
+
 						<div className="container col-8 Absolute" id="shadowHobbyView">
 							<button
 								className="toggleButton mt-1"
-								onDoubleClick={() => {
-									this.setState({ currentDate: dayjs() });
-									this.setState({ taskDate: dayjs() });
-									this.setState({ folder: "tasks" });
-									actions.getAllTasks(dayjs(), dayjs().add(24, "hour"));
-								}}
+								onDoubleClick={() => {}}
 								onClick={() => this.toggle()}>
 								<i className="far fa-calendar-alt" />
 							</button>
@@ -252,52 +253,26 @@ export class Login extends React.Component {
 								{this.state.currentDate.format("dddd  M/DD/YYYY")}
 								<Clock />
 							</div>
-							<div className="d-flex mt-5 mx-auto mb-3 col-md-6">
+							<div className="d-flex mt-5 mx-auto mb-3 col-md-7">
 								<input
-									className="borderBottomRight col-md-6 col-3"
-									placeholder={this.state.folder}
+									className="borderBottomRight col-3 col-md-3"
 									list="folders"
 									name="folder"
 									id="folder"
 								/>
+								<datalist id="folders" />
 								<TextareaAutosize
-									className="pl-2 col-md-12 activeTodo onfucus addNew py-3"
+									className="pl-2 col-md-11 activeTodo onfucus addNew py-3"
 									placeholder="Stop being lazy and JUST DO IT!"
 									type="text"
 									value={this.state.todo}
 									onChange={e => this.handleChange(e)}
 								/>
 							</div>
-
-							<div className="d-flex justify-content-center ml-4 col-md-12 text-center">
-								<button
-									onClick={() => {
-										let todo = {
-											label: this.state.todo,
-											date: this.state.taskDate ? this.state.taskDate : null,
-											dashboard: false,
-											folder: this.state.folder
-										};
-										actions
-											.addNewTask(todo)
-											.then(() => {
-												this.resetTextArea();
-											})
-											.catch(error => {
-												this.setState({
-													status: { color: "danger", message: error.message }
-												});
-											});
-										// this.resetTextArea();
-									}}>
-									SUBMIT
-								</button>
+							<div className="d-flex justify-content-center col-md-12 text-center">
+								<button>SUBMIT</button>
 								<div className="newTaskDatePicker ml-5">
-									<ReactDatePicker
-										selected={this.state.taskDate ? this.state.taskDate.toDate() : null}
-										onChange={date => this.setState({ taskDate: dayjs(date) })}
-										minDate={dayjs().toDate()}
-									/>
+									<ReactDatePicker />
 								</div>
 							</div>
 							<div className="d-flex flex-wrap mt-5">
@@ -323,15 +298,9 @@ export class Login extends React.Component {
 										/>
 									</div>
 								</div>
-								{store.folder
-									.filter(folder => (folder.folder != "tasks") & (folder.folder != "meetings"))
-									.map(folder => (
-										<div key={folder.id} className="mt-5 col-md-6">
-											<TodoWidget folder={folder.folder} tasks={store.hobby} collapse={true} />
-										</div>
-									))}
 							</div>
 						</div>
+
 						<div className="container col-md-8 mt-3">
 							<small>
 								Please feel free to give any feedback or tips to improve the app in the shared text area

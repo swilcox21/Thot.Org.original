@@ -64,6 +64,7 @@ export class Hobby extends React.Component {
 	// this.state.currentDate, this.state.currentDate.add(24, "hour")
 	componentDidMount() {
 		this.context.actions.getUser();
+		this.context.actions.getAllTasks(this.state.currentDate, this.state.currentDate.add(24, "hour"));
 		this.context.actions.getNotes().then(() => {
 			if (Array.isArray(this.context.store.notes) && this.context.store.notes.length > 0)
 				this.setState({ notes: this.context.store.notes[0].notes });
@@ -203,7 +204,7 @@ export class Hobby extends React.Component {
 							</div>
 						)}
 						<div className="d-flex flex-wrap mt-5">
-							<div>
+							<div className="col-md-6">
 								<div className="d-flex mt-3 mx-auto mb-3">
 									<input
 										onBlur={() => this.setState({ folderValue: "" })}
@@ -229,11 +230,6 @@ export class Hobby extends React.Component {
 											</div>
 										))}
 									</datalist>
-									{_newFolder.length === 0 && (
-										<button onClick={() => actions.addNewFolder(this.state.newFolder)}>
-											create
-										</button>
-									)}
 									<TextareaAutosize
 										className="pl-2 col-md-11 activeTodo onfucus addNew py-3"
 										placeholder="Just type what ya thinking about"
@@ -278,7 +274,7 @@ export class Hobby extends React.Component {
 									</div>
 								</div>
 							</div>
-							<div className="container-fluid col-md-6">
+							<div className="col-md-5 ml-md-5">
 								<div className="">
 									<TodoWidget
 										folder={"meetings"}

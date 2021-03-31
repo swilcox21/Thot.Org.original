@@ -3,12 +3,13 @@ This module takes care of starting the API Server, Loading the DB and Adding the
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
 from api.models import db, User, Task, Notes, Folder
-from api.utils import generate_sitemap, APIException
+from api.utils import generate_sitemap, APIException, get_all_tasks
 from datetime import datetime, timedelta
 from sqlalchemy import or_
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
+
 
 api = Blueprint('api', __name__)
 
@@ -67,14 +68,7 @@ def login():
     access_token = create_access_token(identity=usercheck.id, expires_delta=False)
     return jsonify(access_token=access_token), 200
 
-def get_all_tasks(_from, _until): 
-    all_tasks = Task.query
-    if _from is not None : 
-        all_tasks = all_tasks.filter(or_(Task.date >= _from, Task.date == None))
-    if _until is not None : 
-        all_tasks = all_tasks.filter(or_(Task.date <= _until, Task.date == None))
-    all_tasks = all_tasks.all()
-    return all_tasks
+
 
 @api.route('/task', methods=['GET', 'POST'])
 @jwt_required()
@@ -86,7 +80,7 @@ def handle_hello():
         _from = datetime.strptime(_from, '%Y/%m/%d')
         _until = request.args.get('until', None)
         _until = datetime.strptime(_until, '%Y/%m/%d')
-        all_tasks = get_all_tasks(_from, _until)
+        all_tasks = get_all_tasks(user_id, _from, _until)
         all_tasks = list(map(lambda t: t.serialize(), all_tasks))
         return jsonify(all_tasks), 200
     if request.method == 'POST':
@@ -97,7 +91,7 @@ def handle_hello():
         db.session.commit()
         _from = new_task.date
         _until = new_task.date + timedelta(days=1)
-        all_tasks = get_all_tasks(_from, _until)
+        all_tasks = get_all_tasks(user_id, _from, _until)
         all_tasks = list(map(lambda t: t.serialize(), all_tasks))
         return jsonify(all_tasks), 201
     return "invalid request method", 404
@@ -143,8 +137,6 @@ def get_single_task(task_id):
         return "task removed", 201
 
     return "Invalid Method", 404
-
-
 
 @api.route('/notes', methods=['GET'])
 def handle_notes():

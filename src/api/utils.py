@@ -1,4 +1,7 @@
 from flask import jsonify, url_for
+from api.models import Task
+from sqlalchemy import or_
+
 
 class APIException(Exception):
     status_code = 400
@@ -14,6 +17,15 @@ class APIException(Exception):
         rv = dict(self.payload or ())
         rv['message'] = self.message
         return rv
+
+def get_all_tasks(user_id, _from, _until): 
+    all_tasks = Task.query.filter_by(user_id = user_id)
+    if _from is not None : 
+        all_tasks = all_tasks.filter(or_(Task.date >= _from, Task.date == None))
+    if _until is not None : 
+        all_tasks = all_tasks.filter(or_(Task.date <= _until, Task.date == None))
+    all_tasks = all_tasks.all()
+    return all_tasks
 
 def has_no_empty_params(rule):
     defaults = rule.defaults if rule.defaults is not None else ()

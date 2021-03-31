@@ -15,7 +15,7 @@ import dayjs from "dayjs";
 import DropdownItem from "react-bootstrap/esm/DropdownItem";
 import PropTypes from "prop-types";
 
-const Textarea = ({ children, ...props }) => <textarea {...props}>{children}</textarea>;
+// const Textarea = ({ children, ...props }) => <textarea {...props}>{children}</textarea>;
 
 class Prio extends React.Component {
 	constructor(props) {
@@ -57,42 +57,42 @@ class Prio extends React.Component {
 		this.setState({ task: null });
 	};
 
-	CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
-		<a
-			href=""
-			ref={ref}
-			onClick={e => {
-				e.preventDefault();
-				onClick(e);
-			}}>
-			{children}
-			&#x25bc;
-		</a>
-	));
+	// CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
+	// 	<a
+	// 		href=""
+	// 		ref={ref}
+	// 		onClick={e => {
+	// 			e.preventDefault();
+	// 			onClick(e);
+	// 		}}>
+	// 		{children}
+	// 		&#x25bc;
+	// 	</a>
+	// ));
 
-	CustomMenu = React.forwardRef(({ children, style, className, "aria-labelledby": labeledBy }, ref) => {
-		const [value, setValue] = useState("");
+	// CustomMenu = React.forwardRef(({ children, style, className, "aria-labelledby": labeledBy }, ref) => {
+	// 	const [value, setValue] = useState("");
 
-		return (
-			<div ref={ref} style={style} className={className} aria-labelledby={labeledBy}>
-				<FormControl
-					autoFocus
-					className="mx-3 my-2 w-auto"
-					placeholder="Type to filter..."
-					onChange={e => setValue(e.target.value)}
-					value={value}
-				/>
-				<ul className="list-unstyled">
-					{React.Children.toArray(children).filter(
-						child => !value || child.props.children.toLowerCase().startsWith(value)
-					)}
-				</ul>
-			</div>
-		);
-	});
+	// 	return (
+	// 		<div ref={ref} style={style} className={className} aria-labelledby={labeledBy}>
+	// 			<FormControl
+	// 				autoFocus
+	// 				className="mx-3 my-2 w-auto"
+	// 				placeholder="Type to filter..."
+	// 				onChange={e => setValue(e.target.value)}
+	// 				value={value}
+	// 			/>
+	// 			<ul className="list-unstyled">
+	// 				{React.Children.toArray(children).filter(
+	// 					child => !value || child.props.children.toLowerCase().startsWith(value)
+	// 				)}
+	// 			</ul>
+	// 		</div>
+	// 	);
+	// });
 
 	render() {
-		const Tag = this.props.autoSize ? TextareaAutosize : Textarea;
+		// const Tag = this.props.autoSize ? TextareaAutosize : Textarea;
 		return (
 			<Context.Consumer>
 				{({ actions, store }) => {
@@ -122,30 +122,53 @@ class Prio extends React.Component {
 												this.resetTask();
 											}}
 										/>
-										<Tag
-											className={`pl-2 col-12 activeTodo ${
-												this.props.dashboard != true ? "onfucus" : "pb-5"
-											}`}
-											type="text"
-											defaultValue={todo.label}
-											placeholder="dont leave me blank!"
-											onChange={e => {
-												this.setState({
-													task: {
-														label: e.target.value,
-														date: todo.date,
-														dashboard: todo.dashboard,
-														folder: todo.folder
-													}
-												});
-											}}
-											onBlur={() => {
-												this.state.task && actions.handleChangeHobby(todo.id, this.state.task);
-												this.resetTask();
-											}}
-										/>
+										{this.props.autoSize ? (
+											<TextareaAutosize
+												className="pl-2 col-12 activeTodo pb-5"
+												type="text"
+												defaultValue={todo.label}
+												placeholder="dont leave me blank!"
+												onChange={e => {
+													this.setState({
+														task: {
+															label: e.target.value,
+															date: todo.date,
+															dashboard: todo.dashboard,
+															folder: todo.folder
+														}
+													});
+												}}
+												onBlur={() => {
+													this.state.task &&
+														actions.handleChangeHobby(todo.id, this.state.task);
+													this.resetTask();
+												}}
+											/>
+										) : (
+											<textarea
+												className="pl-2 col-12 activeTodo onfucus"
+												type="text"
+												defaultValue={todo.label}
+												placeholder="dont leave me blank!"
+												onChange={e => {
+													this.setState({
+														task: {
+															label: e.target.value,
+															date: todo.date,
+															dashboard: todo.dashboard,
+															folder: todo.folder
+														}
+													});
+												}}
+												onBlur={() => {
+													this.state.task &&
+														actions.handleChangeHobby(todo.id, this.state.task);
+													this.resetTask();
+												}}
+											/>
+										)}
 										<Dropdown className="mt-2 ml-3">
-											<Dropdown.Toggle as={this.CustomToggle} id="dropdown-custom-components">
+											<Dropdown.Toggle id="dropdown-custom-components" className="dropdowntoggle">
 												{todo.date ? (
 													<button
 														onDoubleClick={() => {
@@ -157,10 +180,10 @@ class Prio extends React.Component {
 															};
 															actions.handleChangeHobby(todo.id, task);
 														}}
-														className="dropdowntoggle"
+														className="dropdowntogglee text-center"
 														id="dropdowntoggle">
 														<div className="text-center" id="dropDownDate">
-															{dayjs(todo.date).format("M/D")}
+															{dayjs(todo.date).format("MM/DD")}
 														</div>
 													</button>
 												) : (
@@ -174,7 +197,8 @@ class Prio extends React.Component {
 															};
 															actions.handleChangeHobby(todo.id, task);
 														}}
-														className="dropdowntoggle">
+														className="dropdowntogglee"
+														id="dropdowntoggle">
 														<i className="fas fa-list" id="" />
 													</button>
 												)}
@@ -258,9 +282,6 @@ class Prio extends React.Component {
 													}}>
 													<div className="">DASHBOARD</div>
 												</Dropdown.Item>
-												{/* <CopyToClipboard text={todo.label}>
-														COPY TO CLIPBOARD
-													</CopyToClipboard> */}
 												<Dropdown.Divider />
 												<Dropdown.Item eventKey="4">
 													<div
@@ -285,6 +306,8 @@ class Prio extends React.Component {
 }
 
 Prio.displayName = "Prio";
+// CustomToggle.displayName = "CustomToggle";
+// CustomMenu.displayName = "CustomMenu";
 
 export default Prio;
 

@@ -59,7 +59,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					})
 					// sends error to user and to console log
 					.catch(error => {
-						setStore({ errors: error });
+						setStore({ errors: error.message || error });
 						console.error("Error:", error);
 						return true;
 					});
@@ -85,20 +85,26 @@ const getState = ({ getStore, getActions, setStore }) => {
 						"Content-Type": "application/json"
 					}
 				})
-					.then(res => res.json())
+					.then(res => {
+						if (res.status >= 200 && res.status < 300) {
+							return res.json();
+						} else {
+							throw Error("invalid user name or password");
+						}
+					})
 					.then(response => {
 						console.log("Success:", response);
 						localStorage.setItem("thot.org.token", response.access_token);
 						localStorage.setItem("thot.org.email", email);
 						localStorage.setItem("thot.org.errorMSG", response.msg);
 						window.location.href = "/home";
-						getActions().getSingleUser();
+						// getActions().getSingleUser();
 					})
 
 					// sends error to user and to console log
 					.catch(error => {
-						setStore({ errors: error });
-						console.error("Error:", error);
+						setStore({ errors: error.message || error });
+						console.error("Error:", error.message);
 						return true;
 					});
 			},
@@ -134,7 +140,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 						response.folders.push({ folder: "tasks" }, { folder: "meetings" });
 						response.msg != "Not enough segments"
 							? setStore({
-									hobby: response.tasks,
 									folder: response.folders
 							  })
 							: (window.location = "/login");
