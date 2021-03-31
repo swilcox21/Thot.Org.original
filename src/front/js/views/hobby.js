@@ -150,7 +150,8 @@ export class Hobby extends React.Component {
 										: this.setState({ taskDate: null });
 									actions.getAllTasks(
 										dayjs(this.state.currentDate).subtract(24, "hour"),
-										this.state.currentDate
+										this.state.currentDate,
+										this.state.currentDate.subtract(24, "hour").isToday()
 									);
 								}}>
 								<i className="fas fa-chevron-left" />
@@ -176,7 +177,8 @@ export class Hobby extends React.Component {
 										: this.setState({ taskDate: null });
 									actions.getAllTasks(
 										this.state.currentDate.add(24, "hour"),
-										this.state.currentDate.add(48, "hour")
+										this.state.currentDate.add(48, "hour"),
+										this.state.currentDate.add(24, "hour").isToday()
 									);
 								}}>
 								<i className="fas fa-chevron-right" />
@@ -235,7 +237,8 @@ export class Hobby extends React.Component {
 											this.setState({ newFolder: e.target.value });
 											e.target.value != "meetings"
 												? this.setState({ taskDate: null })
-												: this.setState({ taskDate: this.state.currentDate });
+												: this.state.taskDate === null &&
+												  this.setState({ taskDate: this.state.currentDate });
 										}}
 										list="folders"
 										name="folder"
