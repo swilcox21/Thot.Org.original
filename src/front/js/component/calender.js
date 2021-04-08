@@ -21,7 +21,6 @@ const ReactCalendar = props => {
 				}}
 				value={cDate.toDate()}
 			/>
-			{console.log(cDate)}
 			{/* {actions.addDate(date)} */}
 		</div>
 	);

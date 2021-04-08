@@ -9,6 +9,7 @@ from flask_cors import CORS
 from api.utils import APIException, generate_sitemap
 from api.models import db
 from api.routes import api
+from flask_jwt_extended import JWTManager
 from api.admin import setup_admin
 #from models import Person
 
@@ -26,7 +27,8 @@ else:
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 MIGRATE = Migrate(app, db)
 db.init_app(app)
-
+app.config["JWT_SECRET_KEY"] = "super-secret"
+jwt = JWTManager(app)
 # Allow CORS requests to this API
 CORS(app)
 

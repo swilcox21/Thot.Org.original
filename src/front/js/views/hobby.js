@@ -6,44 +6,50 @@ import { Context } from "../store/appContext";
 import { TodoInfoModal } from "../component/todoInfoModal";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { Prio } from "../component/prio";
+import Prio from "../component/prio";
 import TextareaAutosize from "react-textarea-autosize";
 import ReactDatePicker from "react-datepicker";
 import { WorkNavbar } from "../component/worknavbar";
+import { TodoWidget } from "../component/todowidget";
 import { Spring, Transition, animated } from "react-spring/renderprops";
 import Clock from "../component/clock";
 import dayjs from "dayjs";
+import isToday from "dayjs/plugin/isToday";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import timeZone from "dayjs-ext/plugin/timeZone";
 import utc from "dayjs/plugin/utc";
+import { Dropdown } from "semantic-ui-react";
 
 // dayjs.extend(utc);
 // dayjs.extend(timeZone);
 // dayjs.tz.setDefault("America/New_York");
-
+dayjs.extend(isToday);
 export class Hobby extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			showTodoIndex: false,
-			hobby: [],
+			archives: false,
+			color: "black",
+			currentDate: dayjs(),
 			delta: 0,
+			gThots: false,
+			hobby: [],
+			ideas: false,
+			issues: false,
 			notes: "",
+			folderValue: "",
+			folder: "tasks",
+			newFolder: "tasks",
 			status: {
 				color: "success",
 				message: ""
 			},
+			forum: false,
+			showTodoIndex: false,
+			task: null,
+			taskDate: null,
 			todo: "",
-			taskDate: dayjs(),
-			currentDate: dayjs(),
-			color: "black",
-			priority: 2,
-			ideas: false,
-			issues: false,
-			wow: false,
-			gThots: false,
-			archives: false,
-			task: null
+			wow: false
 		};
 	}
 
@@ -56,21 +62,19 @@ export class Hobby extends React.Component {
 			hobby: [...this.state.hobby, todo]
 		});
 	};
-
+	// this.state.currentDate, this.state.currentDate.add(24, "hour")
 	componentDidMount() {
-		this.context.actions.getAllTasks(this.state.currentDate, this.state.currentDate);
+		this.context.actions.getUser();
+		this.context.actions.getAllTasks(
+			this.state.currentDate,
+			this.state.currentDate.add(24, "hour"),
+			this.state.currentDate.isToday()
+		);
 		this.context.actions.getNotes().then(() => {
-			console.log(this.state.currentDate);
 			if (Array.isArray(this.context.store.notes) && this.context.store.notes.length > 0)
 				this.setState({ notes: this.context.store.notes[0].notes });
 		});
-		// this.context.store.notes != null && this.setState({ notes: "maybe this is wrong" });
-		// console.log("notes:", this.context.store.notes);
 	}
-
-	// componentDidUpdate() {
-	// 	this.context.actions.getAllTasks(this.state.currentDate, this.state.currentDate);
-	// }
 
 	handleChange = e => {
 		this.setState({
@@ -86,7 +90,8 @@ export class Hobby extends React.Component {
 
 	resetTextArea = () => {
 		this.setState({ todo: "" });
-		this.setState({ priority: 2 });
+		// this.setState({ folder: "tasks" });
+		this.setState({ folderValue: "" });
 		this.setState({ taskDate: this.state.currentDate });
 	};
 
@@ -120,21 +125,65 @@ export class Hobby extends React.Component {
 	};
 
 	render() {
+		const dashboardThots = Array.isArray(this.context.store.hobby)
+			? this.context.store.hobby.filter(todo => todo.dashboard === true)
+			: [];
+		const _newFolder = Array.isArray(this.context.store.folder)
+			? this.context.store.folder.filter(folder => folder.folder === this.state.newFolder)
+			: [];
+		// const meetingsFunc = Array.isArray(this.context.store.hobby)
+		// 	? this.context.store.hobby.filter(hobby => hobby.folder === "meetings")
+		// 	: [];
 		return (
 			<Context.Consumer>
 				{({ actions, store }) => (
 					<div className="container-fluid">
-						<button
-							className="toggleButton mt-1"
-							onDoubleClick={() => {
-								this.setState({ currentDate: dayjs() });
-								this.setState({ taskDate: dayjs() });
-								this.setState({ priority: 2 });
-								actions.getAllTasks(dayjs(), dayjs());
-							}}
-							onClick={() => this.toggle()}>
-							<i className="far fa-calendar-alt" />
-						</button>
+						<div className="toggleButton mt-1 mr-3">
+							<button
+								id="addDayButtons"
+								onClick={() => {
+									this.setState({ currentDate: dayjs(this.state.currentDate).subtract(24, "hour") });
+									this.state.folder === "meetings"
+										? this.setState({
+												taskDate: dayjs(this.state.currentDate).subtract(24, "hour")
+										  })
+										: this.setState({ taskDate: null });
+									actions.getAllTasks(
+										dayjs(this.state.currentDate).subtract(24, "hour"),
+										this.state.currentDate,
+										this.state.currentDate.subtract(24, "hour").isToday()
+									);
+								}}>
+								<i className="fas fa-chevron-left" />
+							</button>
+							<button
+								className="mx-1"
+								onDoubleClick={() => {
+									this.setState({ currentDate: dayjs() });
+									this.state.folder === "meetings"
+										? this.setState({ taskDate: dayjs() })
+										: this.setState({ taskDate: null });
+									actions.getAllTasks(dayjs(), dayjs().add(24, "hour"));
+								}}
+								onClick={() => this.toggle()}>
+								<i className="far fa-calendar-alt" />
+							</button>
+							<button
+								id="addDayButtons"
+								onClick={() => {
+									this.setState({ currentDate: dayjs(this.state.currentDate).add(24, "hour") });
+									this.state.folder === "meetings"
+										? this.setState({ taskDate: dayjs(this.state.currentDate).add(24, "hour") })
+										: this.setState({ taskDate: null });
+									actions.getAllTasks(
+										this.state.currentDate.add(24, "hour"),
+										this.state.currentDate.add(48, "hour"),
+										this.state.currentDate.add(24, "hour").isToday()
+									);
+								}}>
+								<i className="fas fa-chevron-right" />
+							</button>
+						</div>
 						<Transition
 							native
 							items={this.state.showWorkNavbar}
@@ -149,9 +198,11 @@ export class Hobby extends React.Component {
 											toggle={this.toggle}
 											onChange={date => {
 												this.setState({ currentDate: date });
-												this.setState({ taskDate: date });
-												this.setState({ priority: 2 });
-												actions.getAllTasks(date, date);
+
+												this.state.folder === "meetings"
+													? this.setState({ taskDate: date })
+													: this.setState({ taskDate: null });
+												actions.getAllTasks(date, dayjs(date).add(24, "hour"), date.isToday());
 												this.toggle();
 											}}
 										/>
@@ -163,48 +214,62 @@ export class Hobby extends React.Component {
 							{this.state.currentDate.format("dddd  M/DD/YYYY")}
 							<Clock />
 						</div>
-						<div className="text-center mb-5 col-10 mt-3 mx-auto">
-							<Prio priority={1} />
-						</div>
-						<div className="d-flex flex-wrap mt-5">
+						{dashboardThots.length > 0 && (
+							<div className="mb-5 col-md-10 mt-3 mx-auto">
+								<span className="toggleOpen">DashBoard:</span>
+								<Prio tasks={dashboardThots} autoSize={true} />
+								<br />
+								<br />
+								<br />
+							</div>
+						)}
+						<div className="d-flex flex-wrap justify-content-between mt-5">
 							<div className="col-md-6">
-								<div className="col-md-12 d-flex justify-content-between mb-3">
+								<div className="d-flex mt-3 mx-auto mb-3">
 									<input
-										value={this.state.priority}
+										onBlur={() => this.setState({ folderValue: "" })}
+										className="borderBottomRight col-3 col-md-3"
+										placeholder={this.state.folder}
+										value={this.state.folderValue}
 										onChange={e => {
-											this.setState({ priority: e.target.value });
-											e.target.value == 2
-												? this.setState({ taskDate: this.state.currentDate })
-												: e.target.value == 3
-													? this.setState({ taskDate: this.state.currentDate })
-													: this.setState({ taskDate: null });
+											this.setState({ folder: e.target.value });
+											this.setState({ folderValue: e.target.value });
+											this.setState({ newFolder: e.target.value });
+											e.target.value != "meetings"
+												? this.setState({ taskDate: null })
+												: this.state.taskDate === null &&
+												  this.setState({ taskDate: this.state.currentDate });
 										}}
-										className="inputTypeNumber2 inputTypeNumber text-center"
-										type="number"
-										min="1"
-										max="8"
+										list="folders"
+										name="folder"
+										id="folder"
 									/>
+									<datalist id="folders">
+										{store.folder.map(folder => (
+											<div key={folder.id}>
+												<option value={folder.folder} />
+											</div>
+										))}
+									</datalist>
 									<TextareaAutosize
-										className="pl-2 col-11 activeTodo onfucus addNew py-3"
-										placeholder="Stop being lazy and JUST DO IT!"
+										className="pl-2 col-md-11 activeTodo onfucus addNew py-3"
+										placeholder="Just type what ya thinking about"
 										type="text"
 										value={this.state.todo}
 										onChange={e => this.handleChange(e)}
 									/>
 								</div>
-								{this.state.status.message !== "" && (
-									<div className={`alert alert-${this.state.status.color}`}>
-										{this.state.status.message}
-									</div>
-								)}
-								<div className="d-flex justify-content-around col-md-12 text-center">
+								{/* {this.state.status.message !== "" && (
+							<div className={`alert alert-${this.state.status.color}`}>{this.state.status.message}</div>
+						)} */}
+								<div className="d-flex justify-content-center col-md-12 text-center">
 									<button
 										onClick={() => {
 											let todo = {
 												label: this.state.todo,
 												date: this.state.taskDate ? this.state.taskDate : null,
-												completed: false,
-												priority: this.state.priority
+												dashboard: false,
+												folder: this.state.folder
 											};
 											actions
 												.addNewTask(todo)
@@ -216,11 +281,12 @@ export class Hobby extends React.Component {
 														status: { color: "danger", message: error.message }
 													});
 												});
+											_newFolder.length === 0 && actions.addNewFolder(this.state.newFolder);
 											// this.resetTextArea();
 										}}>
 										SUBMIT
 									</button>
-									<div className="newTaskDatePicker">
+									<div className="newTaskDatePicker ml-5">
 										<ReactDatePicker
 											selected={this.state.taskDate ? this.state.taskDate.toDate() : null}
 											onChange={date => this.setState({ taskDate: dayjs(date) })}
@@ -228,93 +294,79 @@ export class Hobby extends React.Component {
 										/>
 									</div>
 								</div>
-								<div className="todaysTasks mt-3">Tasks:</div>
-								<Prio priority={2} />
+							</div>
+							<div className="col-md-5 ">
+								<div className="">
+									<TodoWidget
+										folder={"meetings"}
+										tasks={store.hobby}
+										type={"meetings"}
+										collapse={false}
+									/>
+								</div>
 							</div>
 							{/* PUT MAP FUNC HERE -- learn how to generate components like these dynamically so users can add more as they need to */}
 							<div className="col-md-6">
-								<div className="todaysTasks mt-3 ">Meetings:</div>
-								<Prio priority={3} />
-								<div className="todaysTasks mt-3">
-									<button
-										className={this.state.ideas === false ? "toggleClosed" : "toggleOpen"}
-										onClick={() => this.toggleIdeas(this.state.ideas)}>
-										ideas:{" "}
-										{this.state.ideas === false ? (
-											<i className="fas fa-caret-left" />
-										) : (
-											<i className="fas fa-sort-down" />
-										)}
-									</button>
+								<div className="mt-3">
+									<TodoWidget
+										folder={"tasks"}
+										tasks={store.hobby}
+										type={"Tasks"}
+										collapse={false}
+										className="mt-3"
+									/>
 								</div>
-								{this.state.ideas === true ? <Prio priority={4} /> : null}
-								<div className="todaysTasks mt-3">
-									<button
-										className={this.state.issues === false ? "toggleClosed" : "toggleOpen"}
-										onClick={() => this.toggleIssues(this.state.issues)}>
-										issues:{" "}
-										{this.state.issues === false ? (
-											<i className="fas fa-caret-left" />
-										) : (
-											<i className="fas fa-sort-down" />
-										)}
-									</button>
-								</div>
-								{this.state.issues === true ? <Prio priority={5} /> : null}
-								<div className="todaysTasks mt-3">
-									<button
-										className={this.state.wow === false ? "toggleClosed" : "toggleOpen"}
-										onClick={() => this.toggleWow(this.state.wow)}>
-										wow:{" "}
-										{this.state.wow === false ? (
-											<i className="fas fa-caret-left" />
-										) : (
-											<i className="fas fa-sort-down" />
-										)}
-									</button>
-								</div>
-								{this.state.wow === true ? <Prio priority={6} /> : null}
-								<div className="todaysTasks mt-3">
-									<button
-										className={this.state.gThots === false ? "toggleClosed" : "toggleOpen"}
-										onClick={() => this.togglegThots(this.state.gThots)}>
-										gThots:{" "}
-										{this.state.gThots === false ? (
-											<i className="fas fa-caret-left" />
-										) : (
-											<i className="fas fa-sort-down" />
-										)}
-									</button>
-								</div>
-								{this.state.gThots === true ? <Prio priority={7} /> : null}
-								<div className="todaysTasks mt-3">
-									<button
-										className={this.state.archives === false ? "toggleClosed" : "toggleOpen"}
-										onClick={() => this.toggleArchives(this.state.archives)}>
-										archives:{" "}
-										{this.state.archives === false ? (
-											<i className="fas fa-caret-left" />
-										) : (
-											<i className="fas fa-sort-down" />
-										)}
-									</button>
-								</div>
-								{this.state.archives === true ? <Prio priority={8} /> : null}
+
+								<small
+									onClick={() => this.setState({ forum: !this.state.forum })}
+									className="toggleOpen mt-5">
+									open line of communication between all users
+									{this.state.forum === true ? (
+										<i className="fas fa-sort-down" />
+									) : (
+										<i className="fas fa-caret-left" />
+									)}
+								</small>
+								{this.state.forum === true && (
+									<>
+										<br />
+										<small>
+											Please feel free to give any feedback or tips to improve the app in the
+											shared text area below
+										</small>
+										<br />
+										<small>
+											** DISCLAIMER: all users of this app can see and modify this section PLEASE
+											BE CONSIDERATE **
+										</small>
+										<textarea
+											className="p-2 mt-3 mb-3 col-12 notes"
+											placeholder="NOTES"
+											type="text"
+											value={this.state.notes}
+											onChange={e => this.handleChangeNotes(e)}
+											onFocus={e => this.handleChangeNotes(e)}
+											onBlur={() => actions.handleChangeNotes(this.state.notes)}
+										/>
+									</>
+									// add things to bottom left of website in here but note that they will push all other folders down
+									// if its not inside the collapseable notes widget
+								)}
 							</div>
-						</div>
-						<div className="col-12">
-							<CopyToClipboard text={this.state.notes}>
-								<button>Copy Notes to clipboard</button>
-							</CopyToClipboard>
-							<textarea
-								className="p-2 mt-3 col-12 notes"
-								placeholder="NOTES"
-								type="text"
-								value={this.state.notes}
-								onChange={e => this.handleChangeNotes(e)}
-								onFocus={e => this.handleChangeNotes(e)}
-								onBlur={() => actions.handleChangeNotes(this.state.notes)}
-							/>
+							<div className="col-md-6">
+								{store.folder
+									.filter(folder => (folder.folder != "tasks") & (folder.folder != "meetings"))
+									.map(folder => (
+										<div key={folder.id}>
+											<TodoWidget
+												folder={folder.folder}
+												id={folder.id}
+												tasks={store.hobby}
+												collapse={true}
+											/>
+										</div>
+									))}
+							</div>
 						</div>
 					</div>
 				)}

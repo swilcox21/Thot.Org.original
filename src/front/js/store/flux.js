@@ -1,9 +1,39 @@
+import axios from "axios";
+axios.interceptors.request.use(
+	function(config) {
+		// Do something before request is sent
+		const token = localStorage.getItem("thot.org.token");
+		config.headers.Authorization = "Bearer " + token;
+		return config;
+	},
+	function(error) {
+		// Do something with request error
+		return Promise.reject(error);
+	}
+);
+
+axios.interceptors.response.use(
+	function(response) {
+		return response;
+	},
+	function(error) {
+		if (401 === error.response.status || 422 === error.response.status) {
+			window.location = "/login";
+		} else {
+			return Promise.reject(error);
+		}
+	}
+);
+
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
-			user: null,
+			userEmail: null,
 			hobby: [],
+			folder: [{ folder: "tasks" }, { folder: "meetings" }],
+			token: null,
 			notes: null,
+			thots: [],
 			addDate: ""
 		},
 		actions: {
@@ -29,19 +59,101 @@ const getState = ({ getStore, getActions, setStore }) => {
 					})
 					// sends error to user and to console log
 					.catch(error => {
-						setStore({ errors: error });
+						setStore({ errors: error.message || error });
 						console.error("Error:", error);
 						return true;
 					});
 			},
 
-			getAllTasks: (from, until) => {
-				fetch(
-					process.env.BACKEND_URL +
-						`/api/task?from=${from.format("YYYY/MM/DD")}&until=${until.format("YYYY/MM/DD")}`
-				)
-					.then(response => response.json())
-					.then(tasks => setStore({ hobby: tasks }));
+			initialize: () => {
+				setStore({
+					token: localStorage.getItem("thot.org.token"),
+					errorMSG: localStorage.getItem("thot.org.errorMSG"),
+					email: localStorage.getItem("thot.org.email")
+				});
+			},
+
+			logging: (email, password) => {
+				const store = getStore();
+				fetch(process.env.BACKEND_URL + "/api/login", {
+					method: "POST", // or 'POST'
+					body: JSON.stringify({
+						email: email,
+						password: password
+					}), // data can be `string` or {object}!
+					headers: {
+						"Content-Type": "application/json"
+					}
+				})
+					.then(res => {
+						if (res.status >= 200 && res.status < 300) {
+							return res.json();
+						} else {
+							throw Error("invalid user name or password");
+						}
+					})
+					.then(response => {
+						console.log("Success:", response);
+						localStorage.setItem("thot.org.token", response.access_token);
+						localStorage.setItem("thot.org.email", email);
+						localStorage.setItem("thot.org.errorMSG", response.msg);
+						window.location.href = "/home";
+						// getActions().getSingleUser();
+					})
+
+					// sends error to user and to console log
+					.catch(error => {
+						setStore({ errors: error.message || error });
+						console.error("Error:", error.message);
+						return true;
+					});
+			},
+
+			logOut: () => {
+				localStorage.setItem("thot.org.token", "something");
+				localStorage.setItem("thot.org.email", "");
+				window.location.href = "/login";
+			},
+
+			getAllTasks: (from, until, _null = true) => {
+				axios
+					.get(
+						process.env.BACKEND_URL +
+							`/api/task?from=${from.format("YYYY/MM/DD")}&until=${until.format(
+								"YYYY/MM/DD"
+							)}&null=${_null == true}`
+					)
+
+					.then(response => setStore({ hobby: response.data }));
+			},
+
+			getUser: () => {
+				fetch(process.env.BACKEND_URL + "/api/single_user", {
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${localStorage.getItem("thot.org.token")}`
+					}
+				})
+					.then(res => res.json())
+					.then(response => {
+						console.log("Success:", response);
+						console.log("Success:", response.msg);
+						response.folders.push({ folder: "tasks" }, { folder: "meetings" });
+						response.msg != "Not enough segments"
+							? setStore({
+									folder: response.folders
+							  })
+							: (window.location = "/login");
+					})
+					// sends error to user and to console log
+					.catch(error => {
+						setStore({ errors: error });
+						window.location = "/login";
+
+						console.error("Error:", error);
+						return true;
+					});
 			},
 
 			getNotes: async () => {
@@ -51,26 +163,82 @@ const getState = ({ getStore, getActions, setStore }) => {
 				return notes;
 			},
 
+			addNewThot: t => {
+				let store = getStore();
+				store.thots.push(t);
+				setStore(store);
+			},
+
+			handleChangeThot: (id, task) => {
+				let store = getStore();
+				let newStore = store.thots.filter(todo => todo.id != id);
+				newStore.push(task);
+				setStore({ thot: newStore });
+			},
+
+			// addNewFolder: newFolder => {
+			// 	const store = getStore();
+			// 	const newStore = store.folder.push(newFolder);
+			// 	setStore(newStore);
+			// },
+
+			addNewFolder: async newFolder => {
+				const res = await fetch(process.env.BACKEND_URL + "/api/folder", {
+					method: "POST",
+					body: JSON.stringify({
+						folder: newFolder
+					}),
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: "Bearer " + getStore().token
+					}
+				});
+				const folder = await res.json();
+				console.log("this is the folderFLAGG!$: ", folder);
+				const store = getStore();
+				folder.push({ folder: "tasks" }, { folder: "meetings" });
+				setStore({ folder: folder });
+				return folder;
+			},
 			addNewTask: async hobby => {
 				const res = await fetch(process.env.BACKEND_URL + "/api/task", {
 					method: "POST",
 					body: JSON.stringify({
 						label: hobby.label,
 						date: hobby.date,
-						completed: hobby.completed,
-						priority: hobby.priority
+						dashboard: hobby.dashboard,
+						folder: hobby.folder
 					}),
 					headers: {
-						"Content-Type": "application/json"
+						"Content-Type": "application/json",
+						Authorization: "Bearer " + getStore().token
 					}
 				});
 				const task = await res.json();
+				console.log("this is the TASKFLAGG!$: ", task);
+
 				setStore({
 					hobby: task
 				});
 				return task;
 			},
 
+			deleteFolder: folder_id => {
+				fetch(process.env.BACKEND_URL + "/api/folder/" + folder_id, {
+					method: "DELETE"
+				})
+					.then(response => {
+						if (response.status >= 200 && response.status < 300) {
+							const store = getStore();
+							setStore({ folder: store.folder.filter(t => t.id != folder_id) });
+						} else throw Error("there was a problem deleting the task");
+					})
+					.catch(error => {
+						setStore({ errors: error });
+						console.error("Error:", error);
+						return true;
+					});
+			},
 			deleteHobby: task_id => {
 				fetch(process.env.BACKEND_URL + "/api/task/" + task_id, {
 					method: "DELETE"
@@ -89,21 +257,23 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			handleChangeHobby: (todo, hobby) => {
-				console.log("hobby!!!!:", hobby);
 				fetch(process.env.BACKEND_URL + "/api/task/" + todo, {
 					method: "PUT",
 					body: JSON.stringify({
 						label: hobby.label,
 						date: hobby.date,
-						completed: hobby.completed,
-						priority: hobby.priority
+						dashboard: hobby.dashboard,
+						folder: hobby.folder
 					}),
 					headers: {
 						"Content-Type": "application/json"
 					}
 				})
 					.then(() => {
-						getActions().getAllTasks();
+						let store = getStore();
+						let newStore = store.hobby.filter(hobby => hobby.id != todo);
+						newStore.push(hobby);
+						setStore({ hobby: newStore });
 					})
 					.catch(error => {
 						setStore({ errors: error });

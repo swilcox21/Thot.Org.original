@@ -1,9 +1,106 @@
+
+
+// body {
+//     background-color: whitesmoke;
+// }
+
+button {
+    border-radius: 5px;
+    border: 2px solid #343a40;
+    background-color: #343a40;
+    color: #49f7ae;
+}
+
+button:hover {
+    border: 3px solid #343a40;
+    border-radius: 5px;
+    background-color: #49f7ae;
+    color: #343a40;
+    font-weight: 600;
+}
+
+// id
+
+#addDayButtons {
+    border: none;
+    background-color: white;
+    color: #343a40;
+}
+
+#addDayButtons:hover {
+    border: none;
+    background-color: #343a40;
+    color: #49f7ae;
+}
+
+#addDayButtons {
+    border: none;
+    background-color: white;
+    color: #343a40;
+}
+
+#dropDownDate{
+    font-size: .78rem;
+    font-weight: 600;
+    // padding-top: 5px;
+    padding-left: -2px;
+    padding-right: -2px;
+    // padding-bottom: 5px;
+    // margin-left: -7px;
+}
+
+#dropDownList {
+    margin-left: -20px;
+}
+
+#dropDownMR {
+    margin-right: -70px;
+}
+
+// #dropdowntoggle{
+//     max-height: 35px;
+//     max-width: 35px;
+//     min-height: 35px;
+//     min-width: 35px;
+// }
+
+#loginBackground {
+    background-color: rgba(255, 255, 255, 0.801);
+    z-index: 10;
+    // position: absolute;
+    // margin-top: 90px;
+}
+#loginBox {
+    box-shadow: 15px 15px 25px 0px #343a40;
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 15px;
+}
+
+#shadowHobbyView {
+    margin-top: 85px;
+    z-index: 0;
+    margin-left: 10%;
+}
+
+#textareaautosize {
+    border-left: 1px dotted black;
+}
+
+#thotdotLabel {
+    margin-left: -50px;
+
+}
+
+// className
+
 .activeTodo {
     border: none;
     font-size: 1.1rem;
     padding-top: 10px;
     overflow: hidden;
     resize: none;
+    min-width: 260px;
 }
 
 .activeTodoDiv {
@@ -15,14 +112,28 @@
     border-bottom: 1px solid black;
 }
 
+.Absolute {
+    position: absolute;
+}
+
 .blackkkk {
     color: black;
 }
 
-button {
-    border-radius: 5px;
-    background-color: #343a40;
-    color: #49f7ae;
+// body {
+//     background-color: #4a6970;
+// }
+
+.borderBottomRight {
+    border: none;
+    border-bottom: 1px solid black;
+    border-right: 1px solid black;
+}
+
+
+
+.cursorPointer {
+    cursor: pointer;
 }
 
 .calender {
@@ -58,20 +169,19 @@ button {
 }
 
 .dropdowntoggle {
-    position: absolute;
-    // margin-top: 25px;
-    z-index: 2;
+    max-width: 5px;
+    max-height: 5px;
 }
 
 .dropdowntogglee {
     position: absolute;
-    margin-top: -33px;
-    margin-left: 78px;
+    margin-top: -20px;
+    margin-left: -15px;
     z-index: 2;
 }
 
 .grey {
-    color: grey;
+    color: #343a40;
 }
 
 .greyIcons {
@@ -91,6 +201,10 @@ button {
     border: none;
 }
 
+
+
+
+
 .notes {
     height: 300px;
     margin: auto;
@@ -106,6 +220,9 @@ button {
     resize: vertical;
 }
 
+.Opacity {
+    opacity: 0;
+}
 
 .react-calendar__tile {
     height: 50px;
@@ -115,6 +232,12 @@ button {
     background-color: white;
     font-weight: bold;
     text-decoration: none;
+}
+
+.Right {
+    margin-left: 80%;
+    z-index: 10;
+    cursor: pointer;
 }
 
 .sideBar {
@@ -139,14 +262,14 @@ button {
 }
 
 .toggleClosed {
+    cursor: pointer;
     border: none;
     background-color: white;
-    color: #1b704d;
 }
 
 .toggleOpen {
+    cursor: pointer;
     border: none;
     border-bottom: 1px solid black;
     background-color: white;
-    color: #1b704d;
 }

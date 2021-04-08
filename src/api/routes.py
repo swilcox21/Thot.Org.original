@@ -2,27 +2,33 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Task, Notes
-from api.utils import generate_sitemap, APIException
-from datetime import datetime
+from api.models import db, User, Task, Notes, Folder
+from api.utils import generate_sitemap, APIException, get_all_tasks
+from datetime import datetime, timedelta
 from sqlalchemy import or_
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
-from flask_jwt_extended import JWTManager
+
 
 api = Blueprint('api', __name__)
 
-# api.config["JWT_SECRET_KEY"] = "super-secret"
-# jwt = JWTManager(api)
-
 @api.route('/user', methods=['GET'])
+# @jwt_required()
 def handle_user():
     if request.method == 'GET':
         all_users = User.query.all()
         all_users = list(map(lambda t: t.serialize(), all_users))
         return jsonify(all_users), 200
     return "invalid request method", 404
+
+@api.route('/single_user', methods=['GET'])
+@jwt_required()
+def get_single_user():
+    user_id = get_jwt_identity() 
+    user = User.query.get(user_id)
+    return jsonify(user.serialize()), 200
+
 
 @api.route('/user', methods=['POST'])
 def post_user():
@@ -54,39 +60,65 @@ def login():
     if not password:
         return jsonify({"msg": "Missing password parameter"}), 400
 
-    usercheck = User.query.filter_by(email=email).first()
+    usercheck = User.query.filter_by(email=email, password=password).first()
     if usercheck == None:
-        return jsonify({"msg": "Bad Email"}), 401
+        return jsonify({"msg": "Invalid Email or Password"}), 401
 
     # Identity can be any data that is json serializable
-    access_token = create_access_token(identity=email)
+    access_token = create_access_token(identity=usercheck.id, expires_delta=False)
     return jsonify(access_token=access_token), 200
 
+
+
 @api.route('/task', methods=['GET', 'POST'])
+@jwt_required()
 def handle_hello():
+    user_id = get_jwt_identity()
+    print(user_id)
     if request.method == 'GET':
-        all_tasks = Task.query
+        # if _from = todays_date get all matching dates and all None dates else just get all matching dates
         _from = request.args.get('from', None)
+        null = request.args.get('null', None)
+        _from = datetime.strptime(_from, '%Y/%m/%d')
         _until = request.args.get('until', None)
-        if _from is not None : 
-            date_time_obj = datetime.strptime(_from, '%Y/%m/%d')
-            all_tasks = all_tasks.filter(or_(Task.date >= _from, Task.date == None))
-        if _until is not None : 
-            date_time_obj = datetime.strptime(_until, '%Y/%m/%d')
-            all_tasks = all_tasks.filter(or_(Task.date <= _until, Task.date == None))
-        all_tasks = all_tasks.all()
+        _until = datetime.strptime(_until, '%Y/%m/%d')
+        all_tasks = get_all_tasks(user_id, _from, _until, null == "true")
         all_tasks = list(map(lambda t: t.serialize(), all_tasks))
         return jsonify(all_tasks), 200
     if request.method == 'POST':
         body = request.get_json()
         print("BODDYYY***", body)
-        new_task = Task(label= body['label'], date= body['date'], completed= body['completed'], priority= body['priority'])
+        new_task = Task(label= body['label'], date= body['date'], dashboard= body['dashboard'], folder= body['folder'], user_id= user_id)
         db.session.add(new_task)
         db.session.commit()
-        all_tasks = Task.query.all()
+        _from = new_task.date
+        _until = new_task.date + timedelta(days=1)
+        all_tasks = get_all_tasks(user_id, _from, _until)
         all_tasks = list(map(lambda t: t.serialize(), all_tasks))
         return jsonify(all_tasks), 201
     return "invalid request method", 404
+
+@api.route('/folder', methods=['POST'])
+@jwt_required()
+def post_folder():
+    user_id = get_jwt_identity()
+    body = request.get_json()
+    print("MY BODY FLAG: ",body['folder'])
+    new_folder = Folder(folder= body['folder'], user_id= user_id)
+    db.session.add(new_folder)
+    db.session.commit()
+    all_folders = Folder.query.filter_by(user_id= user_id)
+    all_folders = list(map(lambda t: t.serialize(), all_folders))
+    return jsonify(all_folders), 201
+    return "invalid request method", 404
+
+@api.route('/folder/<int:folder_id>', methods=['DELETE'])
+def delete_folder(folder_id):
+    body = request.get_json() 
+    current_folder = Folder.query.get(folder_id)
+    db.session.delete(current_folder)
+    db.session.commit()
+    return "folder removed", 201
 
 @api.route('/task/<int:task_id>', methods=['PUT', 'GET', 'DELETE'])
 def get_single_task(task_id):
@@ -94,9 +126,9 @@ def get_single_task(task_id):
     current_task = Task.query.get(task_id)
     if request.method == 'PUT':
         current_task.label = body['label']
-        current_task.completed = body['completed']
+        current_task.dashboard = body['dashboard']
         current_task.date = body['date']
-        current_task.priority = body['priority']
+        current_task.folder = body['folder']
         db.session.commit()
         return jsonify(current_task.serialize()), 200
     if request.method == 'GET':
