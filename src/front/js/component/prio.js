@@ -14,8 +14,13 @@ import NumericInput from "react-numeric-input";
 import dayjs from "dayjs";
 import DropdownItem from "react-bootstrap/esm/DropdownItem";
 import PropTypes from "prop-types";
-
+import isToday from "dayjs/plugin/isToday";
+import timeZone from "dayjs-ext/plugin/timeZone";
+import utc from "dayjs/plugin/utc";
 // const Textarea = ({ children, ...props }) => <textarea {...props}>{children}</textarea>;
+dayjs.extend(utc);
+dayjs.extend(timeZone);
+dayjs.extend(isToday);
 
 class Prio extends React.Component {
 	constructor(props) {
@@ -92,6 +97,7 @@ class Prio extends React.Component {
 	// });
 
 	render() {
+		const time_zone = "America/New_York";
 		// const Tag = this.props.autoSize ? TextareaAutosize : Textarea;
 		return (
 			<Context.Consumer>
@@ -187,7 +193,9 @@ class Prio extends React.Component {
 														className="dropdowntogglee text-center"
 														id="dropdowntoggle">
 														<div className="text-center py-1" id="dropDownDate">
-															{dayjs(todo.date).format("MM/DD")}
+															{dayjs(todo.date)
+																.tz(time_zone)
+																.format("MM/DD")}
 														</div>
 													</button>
 												) : (
@@ -211,7 +219,9 @@ class Prio extends React.Component {
 												<div>
 													{todo.date ? (
 														<small className="Absolute ml-4">
-															{dayjs(todo.date).format("MM/DD/YYYY")}
+															{dayjs(todo.date)
+																.tz(time_zone)
+																.format("MM/DD/YYYY")}
 														</small>
 													) : (
 														<small className="Absolute ml-4">assign date...</small>
@@ -249,7 +259,9 @@ class Prio extends React.Component {
 															}
 															onChange={date => {
 																// this.setState({ dateChange: !this.state.dateChange });
-																this.setState({ selectedDate: dayjs(date) });
+																this.setState({
+																	selectedDate: dayjs(date).tz(time_zone)
+																});
 																let dateChange = {
 																	label: todo.label,
 																	date: date,
@@ -262,7 +274,9 @@ class Prio extends React.Component {
 																actions.handleChangeHobby(todo.id, dateChange);
 																this.resetTask();
 															}}
-															minDate={dayjs().toDate()}
+															minDate={dayjs()
+																.tz(time_zone)
+																.toDate()}
 														/>
 													</span>
 												</div>

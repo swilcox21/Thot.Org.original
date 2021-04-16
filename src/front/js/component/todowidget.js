@@ -13,6 +13,13 @@ import dayjs from "dayjs";
 import DropdownItem from "react-bootstrap/esm/DropdownItem";
 import Prio from "../component/prio";
 import PropTypes from "prop-types";
+import isToday from "dayjs/plugin/isToday";
+import timeZone from "dayjs-ext/plugin/timeZone";
+import utc from "dayjs/plugin/utc";
+
+dayjs.extend(utc);
+dayjs.extend(timeZone);
+dayjs.extend(isToday);
 
 export const TodoWidget = props => {
 	const { store, actions } = useContext(Context);

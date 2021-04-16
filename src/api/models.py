@@ -7,6 +7,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(120), unique=True, nullable=True)
     last_name = db.Column(db.String(120), unique=True, nullable=True)
+    time_zone = db.Column(db.String(120), unique=True, nullable=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(80), unique=False, nullable=False)
     is_active = db.Column(db.Boolean(), unique=False, nullable=True)
@@ -21,6 +22,7 @@ class User(db.Model):
             "id": self.id,
             "firstName": self.first_name,
             "lastName": self.last_name,
+            "time_zone": self.time_zone,
             "email": self.email,
             "folders": list(map(lambda x : x.serialize(), self.folders))
 

@@ -43,6 +43,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					body: JSON.stringify({
 						firstName: user.firstName,
 						lastName: user.lastName,
+						time_zone: user.time_zone,
 						email: user.email,
 						password: user.password
 					}), // data can be `string` or {object}!
@@ -131,33 +132,57 @@ const getState = ({ getStore, getActions, setStore }) => {
 					});
 			},
 
-			getUser: () => {
-				fetch(process.env.BACKEND_URL + "/api/single_user", {
+			addNewTask: async (hobby, from, until, _null = true) => {
+				const res = await fetch(
+					process.env.BACKEND_URL +
+						`/api/task?hobby=${hobby}&from=${from.format("YYYY/MM/DD")}&until=${until.format(
+							"YYYY/MM/DD"
+						)}&_null=${_null == true}`,
+					{
+						method: "POST",
+						body: JSON.stringify({
+							label: hobby.label,
+							date: hobby.date,
+							dashboard: hobby.dashboard,
+							folder: hobby.folder
+						}),
+						headers: {
+							"Content-Type": "application/json",
+							Authorization: "Bearer " + getStore().token
+						}
+					}
+				);
+				const task = await res.json();
+				console.log("this is the TASKFLAGG!$: ", task);
+
+				setStore({
+					hobby: task
+				});
+				return task;
+			},
+
+			getUser: async () => {
+				const res = await fetch(process.env.BACKEND_URL + "/api/single_user", {
 					method: "GET",
 					headers: {
 						"Content-Type": "application/json",
 						Authorization: `Bearer ${localStorage.getItem("thot.org.token")}`
 					}
-				})
-					.then(res => res.json())
-					.then(response => {
-						console.log("Success:", response);
-						console.log("Success:", response.msg);
-						response.folders.push({ folder: "tasks" }, { folder: "meetings" });
-						response.msg != "Not enough segments"
-							? setStore({
-									folder: response.folders
-							  })
-							: (window.location = "/login");
-					})
-					// sends error to user and to console log
-					.catch(error => {
-						setStore({ errors: error });
-						window.location = "/login";
+				});
+				const response = await res.json();
 
-						console.error("Error:", error);
-						return true;
-					});
+				console.log("Success:", response);
+				console.log("Success:", response.msg);
+				console.log("Success:", response.time_zone);
+				response.folders.push({ folder: "tasks" }, { folder: "meetings" });
+				response.msg != "Not enough segments"
+					? setStore({
+							folder: response.folders,
+							time_zone: response.time_zone
+					  })
+					: (window.location = "/login");
+
+				// sends error to user and to console log
 			},
 
 			getNotes: async () => {
@@ -204,28 +229,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 				setStore({ folder: folder });
 				return folder;
 			},
-			addNewTask: async hobby => {
-				const res = await fetch(process.env.BACKEND_URL + "/api/task", {
-					method: "POST",
-					body: JSON.stringify({
-						label: hobby.label,
-						date: hobby.date,
-						dashboard: hobby.dashboard,
-						folder: hobby.folder
-					}),
-					headers: {
-						"Content-Type": "application/json",
-						Authorization: "Bearer " + getStore().token
-					}
-				});
-				const task = await res.json();
-				console.log("this is the TASKFLAGG!$: ", task);
-
-				setStore({
-					hobby: task
-				});
-				return task;
-			},
 
 			deleteFolder: folder_id => {
 				fetch(process.env.BACKEND_URL + "/api/folder/" + folder_id, {
@@ -267,6 +270,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						label: hobby.label,
 						date: hobby.date,
 						dashboard: hobby.dashboard,
+						id: todo,
 						folder: hobby.folder
 					}),
 					headers: {
@@ -274,6 +278,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					}
 				})
 					.then(() => {
+						console.log(hobby);
 						let store = getStore();
 						let newStore = store.hobby.filter(hobby => hobby.id != todo);
 						newStore.push(hobby);

@@ -3,7 +3,9 @@
 // body {
 //     background-color: whitesmoke;
 // }
-
+.Link {
+    color: #49f7ae
+}
 button {
     border-radius: 5px;
     border: 2px solid #343a40;
@@ -85,6 +87,12 @@ button:hover {
 
 #textareaautosize {
     border-left: 1px dotted black;
+}
+
+#timezone-offset {
+    max-width: 100%;
+    min-height: 40px;
+    border-radius: 5px;
 }
 
 #thotdotLabel {

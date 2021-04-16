@@ -92,15 +92,17 @@ def handle_hello():
         new_task = Task(label= body['label'], date= body['date'], dashboard= body['dashboard'], folder= body['folder'], user_id= user_id)
         db.session.add(new_task)
         db.session.commit()
+        _from = request.args.get('from', None)
         _null = request.args.get('_null', None)
-        _from = new_task.date
-        _until = new_task.date
+        _from = datetime.strptime(_from, '%Y/%m/%d')
+        _until = request.args.get('until', None)
+        _until = datetime.strptime(_until, '%Y/%m/%d')
         if _until is not None:
             _until += timedelta(days=1)
-        all_tasks = get_all_tasks(user_id, _from, _until, True)
+        all_tasks = get_all_tasks(user_id, _from, _until, _null == "true")
         all_tasks = list(map(lambda t: t.serialize(), all_tasks))
         return jsonify(all_tasks), 201
-    return "invalid request method", 404
+    return "invalid request4r  method", 404
 
 @api.route('/folder', methods=['POST'])
 @jwt_required()
@@ -133,6 +135,7 @@ def get_single_task(task_id):
         current_task.dashboard = body['dashboard']
         current_task.date = body['date']
         current_task.folder = body['folder']
+        current_task.id = body['id']
         db.session.commit()
         return jsonify(current_task.serialize()), 200
     if request.method == 'GET':

@@ -8,35 +8,35 @@ export const Navbar1 = props => {
 	const { store, actions } = useContext(Context);
 
 	return (
-		<nav className="container-fluid navbar  py-4">
+		<nav className="container-fluid navbar bg-dark py-4">
 			<Link to="/">
-				<span className="" />
+				<span className="Link" />
 			</Link>
 			<Link to="/">
-				<span className="">
+				<span className="Link">
 					<i className="fas fa-home" />
 				</span>
 			</Link>
 			<Link to="/preview">
-				<span className="">
+				<span className="Link">
 					<i className="fas fa-hotel" />
 				</span>
 			</Link>
 			<Link to="/">
-				<span className="">@</span>
+				<span className="Link">@</span>
 			</Link>
 
 			{store.errorMSG === "Invalid Email or Password" ? (
 				<Link to="/login">
-					<span className="">Login</span>
+					<span className="Link">Login</span>
 				</Link>
 			) : store.email ? (
-				<span className="text-primary cursorPointer" onClick={() => actions.logOut()}>
+				<span className="Link cursorPointer" onClick={() => actions.logOut()}>
 					Log Out
 				</span>
 			) : (
 				<Link to="/login">
-					<span className="">Login</span>
+					<span className="Link">Login</span>
 				</Link>
 			)}
 			<span />
