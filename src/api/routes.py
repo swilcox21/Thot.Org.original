@@ -78,11 +78,12 @@ def handle_hello():
     if request.method == 'GET':
         # if _from = todays_date get all matching dates and all None dates else just get all matching dates
         _from = request.args.get('from', None)
-        null = request.args.get('null', None)
+        _null = request.args.get('_null', None)
+        print("_nullywully", _null)
         _from = datetime.strptime(_from, '%Y/%m/%d')
         _until = request.args.get('until', None)
         _until = datetime.strptime(_until, '%Y/%m/%d')
-        all_tasks = get_all_tasks(user_id, _from, _until, null == "true")
+        all_tasks = get_all_tasks(user_id, _from, _until, _null == "true")
         all_tasks = list(map(lambda t: t.serialize(), all_tasks))
         return jsonify(all_tasks), 200
     if request.method == 'POST':
@@ -91,9 +92,12 @@ def handle_hello():
         new_task = Task(label= body['label'], date= body['date'], dashboard= body['dashboard'], folder= body['folder'], user_id= user_id)
         db.session.add(new_task)
         db.session.commit()
+        _null = request.args.get('_null', None)
         _from = new_task.date
-        _until = new_task.date + timedelta(days=1)
-        all_tasks = get_all_tasks(user_id, _from, _until)
+        _until = new_task.date
+        if _until is not None:
+            _until += timedelta(days=1)
+        all_tasks = get_all_tasks(user_id, _from, _until, True)
         all_tasks = list(map(lambda t: t.serialize(), all_tasks))
         return jsonify(all_tasks), 201
     return "invalid request method", 404

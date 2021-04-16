@@ -163,7 +163,7 @@ export class Hobby extends React.Component {
 									this.state.folder === "meetings"
 										? this.setState({ taskDate: dayjs() })
 										: this.setState({ taskDate: null });
-									actions.getAllTasks(dayjs(), dayjs().add(24, "hour"));
+									actions.getAllTasks(dayjs(), dayjs().add(24, "hour"), true);
 								}}
 								onClick={() => this.toggle()}>
 								<i className="far fa-calendar-alt" />

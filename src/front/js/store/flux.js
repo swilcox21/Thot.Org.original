@@ -116,15 +116,19 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			getAllTasks: (from, until, _null = true) => {
+				console.log("NULLFLAGGGGG", _null);
 				axios
 					.get(
 						process.env.BACKEND_URL +
 							`/api/task?from=${from.format("YYYY/MM/DD")}&until=${until.format(
 								"YYYY/MM/DD"
-							)}&null=${_null == true}`
+							)}&_null=${_null == true}`
 					)
 
-					.then(response => setStore({ hobby: response.data }));
+					.then(response => {
+						setStore({ hobby: response.data });
+						console.log(response);
+					});
 			},
 
 			getUser: () => {
