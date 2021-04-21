@@ -10,6 +10,7 @@ dayjs.extend(timezone);
 dayjs.tz.setDefault("America/New_York");
 
 import { Home } from "./views/home";
+import { Welcome } from "./views/welcome";
 import { Hobby } from "./views/hobby";
 import Preview from "./views/preview";
 import { Login } from "./views/login";
@@ -36,6 +37,7 @@ const Layout = () => {
 						<Route exact path="/login" component={Login} />
 						<Route exact path="/" component={Home} />
 						<Route exact path="/home" component={Home} />
+						<Route exact path="/welcome" component={Welcome} />
 						<Route exact path="/hobby" component={Hobby} />
 						<Route exact path="/preview" component={Preview} />
 						<Route exact path="/signup" component={SignUp} />

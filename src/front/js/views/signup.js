@@ -45,7 +45,6 @@ export class SignUp extends React.Component {
 			email: "",
 			password: "",
 			errors: {
-				firstName: " ",
 				email: " ",
 				password: " "
 			},
@@ -138,9 +137,9 @@ export class SignUp extends React.Component {
 															onChange={this.handleChange}
 															noValidate
 														/>
-														{errors.firstName.length > 0 && (
+														{/* {errors.firstName.length > 0 && (
 															<span className="error">{errors.firstName}</span>
-														)}
+														)} */}
 													</div>
 													<div className="lastName">
 														<label htmlFor="lastName">Last Name</label>
@@ -418,26 +417,6 @@ export class SignUp extends React.Component {
 									</div>
 								</div>
 							</div>
-						</div>
-						<div className="container col-md-8 mt-5">
-							<small>
-								Please feel free to give any feedback or tips to improve the app in the shared text area
-								below
-							</small>
-							<br />
-							<small>
-								** DISCLAIMER: all users of this app can see and modify this section PLEASE BE
-								CONSIDERATE **
-							</small>
-							<textarea
-								className="p-2 mt-3 col-12 notes"
-								placeholder="NOTES"
-								type="text"
-								value={this.state.notes}
-								onChange={e => this.setState({ notes: e.target.value })}
-								onFocus={e => this.setState({ notes: e.target.value })}
-								onBlur={() => actions.handleChangeNotes(this.state.notes)}
-							/>
 						</div>
 					</>
 				)}

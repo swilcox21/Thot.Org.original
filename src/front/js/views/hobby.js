@@ -140,9 +140,8 @@ export class Hobby extends React.Component {
 				{({ actions, store }) => (
 					<>
 						<div className="row">
-							<div className="col-12 col-md-2 bg-dark text-light">
-								this div will be a togglable navbar with all the extra folders or something idk exactly
-								what to do with it yet
+							<div className="col-12 col-md-2 bg-dark text-dark text-center" id="NFNB">
+								New Folder NavBar
 							</div>
 							<div className="container col-12 col-md-8 ml-3">
 								<div className="toggleButton mt-1 mr-3">

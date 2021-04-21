@@ -18,7 +18,7 @@ axios.interceptors.response.use(
 	},
 	function(error) {
 		if (401 === error.response.status || 422 === error.response.status) {
-			window.location.href = "/login";
+			window.location.href = "/welcome";
 		} else {
 			return Promise.reject(error);
 		}
@@ -113,7 +113,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			logOut: () => {
 				localStorage.setItem("thot.org.token", "something");
 				localStorage.setItem("thot.org.email", "");
-				window.location.href = "/login";
+				window.location.href = "/welcome";
 			},
 
 			getAllTasks: (from, until, _null = true) => {
@@ -180,7 +180,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 							folder: response.folders,
 							time_zone: response.time_zone
 					  })
-					: (window.location = "/login");
+					: (window.location = "/welcome");
 
 				// sends error to user and to console log
 			},
