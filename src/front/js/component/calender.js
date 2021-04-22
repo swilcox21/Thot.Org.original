@@ -6,7 +6,7 @@ import dayjs from "dayjs";
 import PropTypes from "prop-types";
 
 const ReactCalendar = props => {
-	const [cDate, setcDate] = useState(dayjs());
+	const [cDate, setcDate] = useState(dayjs.new());
 	const { actions, store } = useContext(Context);
 	const onChange = cDate => {
 		setcDate(cDate);

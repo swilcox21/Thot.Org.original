@@ -33,6 +33,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			folder: [{ folder: "tasks" }, { folder: "meetings" }],
 			token: null,
 			notes: null,
+			time_zones: [],
 			thots: [],
 			addDate: ""
 		},
@@ -99,7 +100,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						localStorage.setItem("thot.org.email", email);
 						localStorage.setItem("thot.org.errorMSG", response.msg);
 						window.location.href = "/home";
-						// getActions().getSingleUser();
+						getActions().getUser();
 					})
 
 					// sends error to user and to console log
@@ -162,7 +163,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			getUser: async () => {
-				const res = await fetch(process.env.BACKEND_URL + "/api/single_user", {
+				const res = await fetch(process.env.BACKEND_URL + "/api/me", {
 					method: "GET",
 					headers: {
 						"Content-Type": "application/json",
@@ -181,8 +182,24 @@ const getState = ({ getStore, getActions, setStore }) => {
 							time_zone: response.time_zone
 					  })
 					: (window.location = "/welcome");
+				localStorage.setItem("thot.org.time_zone", response.time_zone);
 
 				// sends error to user and to console log
+			},
+
+			getTimezones: async () => {
+				const res = await fetch(process.env.BACKEND_URL + "/api/time_zones", {
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json"
+					}
+				});
+				const payload = await res.json();
+
+				console.log("Success:", payload);
+				setStore({
+					time_zones: payload
+				});
 			},
 
 			getNotes: async () => {

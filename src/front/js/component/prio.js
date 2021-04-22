@@ -193,9 +193,7 @@ class Prio extends React.Component {
 														className="dropdowntogglee text-center"
 														id="dropdowntoggle">
 														<div className="text-center py-1" id="dropDownDate">
-															{dayjs(todo.date)
-																.tz(time_zone)
-																.format("MM/DD")}
+															{dayjs(todo.date).format("MM/DD")}
 														</div>
 													</button>
 												) : (
@@ -219,9 +217,7 @@ class Prio extends React.Component {
 												<div>
 													{todo.date ? (
 														<small className="Absolute ml-4">
-															{dayjs(todo.date)
-																.tz(time_zone)
-																.format("MM/DD/YYYY")}
+															{dayjs(todo.date).format("MM/DD/YYYY")}
 														</small>
 													) : (
 														<small className="Absolute ml-4">assign date...</small>
@@ -260,7 +256,7 @@ class Prio extends React.Component {
 															onChange={date => {
 																// this.setState({ dateChange: !this.state.dateChange });
 																this.setState({
-																	selectedDate: dayjs(date).tz(time_zone)
+																	selectedDate: dayjs(date)
 																});
 																let dateChange = {
 																	label: todo.label,
@@ -274,9 +270,7 @@ class Prio extends React.Component {
 																actions.handleChangeHobby(todo.id, dateChange);
 																this.resetTask();
 															}}
-															minDate={dayjs()
-																.tz(time_zone)
-																.toDate()}
+															minDate={dayjs.new().toDate()}
 														/>
 													</span>
 												</div>

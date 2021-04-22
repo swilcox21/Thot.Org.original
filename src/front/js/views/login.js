@@ -42,7 +42,7 @@ export class Login extends React.Component {
 		this.state = {
 			archives: false,
 			color: "black",
-			currentDate: dayjs(),
+			currentDate: dayjs.new(),
 			delta: 0,
 			gThots: false,
 			hobby: [],
@@ -73,7 +73,7 @@ export class Login extends React.Component {
 					folder: "meetings"
 				}
 			],
-			taskDate: dayjs(),
+			taskDate: dayjs.new(),
 			todo: "",
 			wow: false,
 			email: "",

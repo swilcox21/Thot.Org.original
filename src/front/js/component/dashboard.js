@@ -183,7 +183,7 @@ export class Dashboard extends React.Component {
 																		}
 																	});
 																}}
-																minDate={dayjs().toDate()}
+																minDate={dayjs.new().toDate()}
 															/>
 														</span>
 													</div>

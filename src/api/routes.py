@@ -22,9 +22,17 @@ def handle_user():
         return jsonify(all_users), 200
     return "invalid request method", 404
 
-@api.route('/single_user', methods=['GET'])
+@api.route('/time_zones', methods=['GET'])
+# @jwt_required()
+def handle_timezones():
+    with open('src/api/time_zones.json') as f:
+        s = f.read()
+        return s, 200
+
+
+@api.route('/me', methods=['GET'])
 @jwt_required()
-def get_single_user():
+def get_me():
     user_id = get_jwt_identity() 
     user = User.query.get(user_id)
     return jsonify(user.serialize()), 200
@@ -38,6 +46,7 @@ def post_user():
         raise APIException('this user is already registered', status_code = 404)
     new_user = User(first_name = body['firstName'],
                     last_name = body['lastName'],
+                    time_zone = body['time_zone'],
                     email = body['email'],
                     password = body['password'])
     db.session.add(new_user)

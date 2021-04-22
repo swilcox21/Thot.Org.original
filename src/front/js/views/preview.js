@@ -22,9 +22,9 @@ import utc from "dayjs/plugin/utc";
 export const Preview = props => {
 	const { store, actions } = useContext(Context);
 	const [thots, setThots] = useState([]);
-	const [currentDate, setCurrentDate] = useState(dayjs());
+	const [currentDate, setCurrentDate] = useState(dayjs.new());
 	const [label, setLabel] = useState("");
-	const [taskDate, setTaskDate] = useState(dayjs());
+	const [taskDate, setTaskDate] = useState(dayjs.new());
 	// const [task, setTask] = useState("");
 	const [type, setType] = useState(1);
 	const [showWorkNavbar, setShowWorkNavbar] = useState(false);
@@ -46,8 +46,8 @@ export const Preview = props => {
 			<button
 				className="toggleButton mt-1"
 				onDoubleClick={() => {
-					setCurrentDate(dayjs());
-					setTaskDate(dayjs());
+					setCurrentDate(dayjs.new());
+					setTaskDate(dayjs.new());
 					setType(2);
 				}}
 				// onClick={() => toggle()}
@@ -129,7 +129,7 @@ export const Preview = props => {
 							<ReactDatePicker
 								selected={taskDate ? taskDate.toDate() : null}
 								onChange={date => setTaskDate(dayjs(date))}
-								minDate={dayjs().toDate()}
+								minDate={dayjs.new().toDate()}
 							/>
 						</div>
 					</div>

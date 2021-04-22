@@ -5,9 +5,9 @@ db = SQLAlchemy()
 class User(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
-    first_name = db.Column(db.String(120), unique=True, nullable=True)
-    last_name = db.Column(db.String(120), unique=True, nullable=True)
-    time_zone = db.Column(db.String(120), unique=True, nullable=True)
+    first_name = db.Column(db.String(120), unique=False, nullable=True)
+    last_name = db.Column(db.String(120), unique=False, nullable=True)
+    time_zone = db.Column(db.String(120), unique=False, nullable=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(80), unique=False, nullable=False)
     is_active = db.Column(db.Boolean(), unique=False, nullable=True)

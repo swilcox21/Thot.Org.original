@@ -13,7 +13,7 @@
 
 // export const Thot = props => {
 // const { store, actions } = useContext(Context);
-// 	const [selectedDate, setSelectedDate] = useState(dayjs());
+// 	const [selectedDate, setSelectedDate] = useState(dayjs.new());
 // 	const [task, setTask] = useState();
 // 	// const [, set] = useState();
 // 	// const [, set] = useState();
@@ -126,7 +126,7 @@
 // 															}
 // 														});
 // 													}}
-// 													minDate={dayjs().toDate()}
+// 													minDate={dayjs.new().toDate()}
 // 												/>
 // 											</span>
 // 										</div>

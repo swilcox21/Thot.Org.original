@@ -42,10 +42,12 @@ export class SignUp extends React.Component {
 		this.state = {
 			firstName: "",
 			lastName: "",
-			time_zone: "Eastern Time",
+			time_zone: "",
+			time_zones: [],
 			email: "",
 			password: "",
 			errors: {
+				time_zone: " ",
 				email: " ",
 				password: " "
 			},
@@ -66,15 +68,14 @@ export class SignUp extends React.Component {
 				}
 			],
 			notes: null,
-			currentDate: dayjs(),
-			taskDate: dayjs()
+			currentDate: dayjs.new(),
+			taskDate: dayjs.new()
 		};
 	}
 
 	componentDidMount() {
-		this.context.actions.getNotes().then(() => {
-			if (Array.isArray(this.context.store.notes) && this.context.store.notes.length > 0)
-				this.setState({ notes: this.context.store.notes[0].notes });
+		this.context.actions.getTimezones().then(() => {
+			this.setState({ time_zones: this.context.store.time_zones });
 		});
 	}
 
@@ -84,14 +85,14 @@ export class SignUp extends React.Component {
 		let errors = this.state.errors;
 
 		switch (name) {
-			// case "firstName":
-			// 	errors.firstName = value.length < 1 ? "This field is required *" : "";
-			// 	break;
+			case "timezone_offset":
+				errors.time_zone = value.length < 1 ? "* invalid selection *" : "";
+				break;
 			case "email":
-				errors.email = validEmailRegex.test(value) ? "" : "Email is not valid!";
+				errors.email = validEmailRegex.test(value) ? "" : " * Email is not valid! *";
 				break;
 			case "password":
-				errors.password = value.length < 8 ? "Password must be atleast 8 characters long!" : "";
+				errors.password = value.length < 8 ? "* Password must be atleast 8 characters long! *" : "";
 				break;
 			default:
 				break;
@@ -138,9 +139,6 @@ export class SignUp extends React.Component {
 															onChange={this.handleChange}
 															noValidate
 														/>
-														{/* {errors.firstName.length > 0 && (
-															<span className="error">{errors.firstName}</span>
-														)} */}
 													</div>
 													<div className="lastName">
 														<label htmlFor="lastName">Last Name</label>
@@ -155,115 +153,27 @@ export class SignUp extends React.Component {
 														/>
 													</div>
 													<div>
-														<label htmlFor="span5">Time Zone</label>
-														<select
-															onChange={e => this.setState({ time_zone: e.target.value })}
-															name="timezone_offset"
-															id="timezone-offset"
-															className="span5">
-															<option value="Eniwetok, Kwajalein">
-																(GMT -12:00) Eniwetok, Kwajalein
-															</option>
-															<option value="Midway Island, Samoa">
-																(GMT -11:00) Midway Island, Samoa
-															</option>
-															<option value="Hawaii">(GMT -10:00) Hawaii</option>
-															<option value="Taiohae">(GMT -9:30) Taiohae</option>
-															<option value="Alaska">(GMT -9:00) Alaska</option>
-															<option value="Pacific Time">
-																(GMT -8:00) Pacific Time (US &amp; Canada)
-															</option>
-															<option value="Mountain Time">
-																(GMT -7:00) Mountain Time (US &amp; Canada)
-															</option>
-															<option value="Central Time">
-																(GMT -6:00) Central Time (US &amp; Canada), Mexico City
-															</option>
-															<option value="Eastern Time" selected="selected">
-																(GMT -5:00) Eastern Time (US &amp; Canada), Bogota, Lima
-															</option>
-															<option value="Caracas">(GMT -4:30) Caracas</option>
-															<option value="Atlantic Time">
-																(GMT -4:00) Atlantic Time (Canada), Caracas, La Paz
-															</option>
-															<option value="Newfoundland">
-																(GMT -3:30) Newfoundland
-															</option>
-															<option value="Brazil">
-																(GMT -3:00) Brazil, Buenos Aires, Georgetown
-															</option>
-															<option value="Mid-Atlantic">
-																(GMT -2:00) Mid-Atlantic
-															</option>
-															<option value="Azores">
-																(GMT -1:00) Azores, Cape Verde Islands
-															</option>
-															<option value="Western Europe Time">
-																(GMT) Western Europe Time, London, Lisbon, Casablanca
-															</option>
-															<option value="Brussels">
-																(GMT +1:00) Brussels, Copenhagen, Madrid, Paris
-															</option>
-															<option value="Kaliningrad">
-																(GMT +2:00) Kaliningrad, South Africa
-															</option>
-															<option value="Baghdad">
-																(GMT +3:00) Baghdad, Riyadh, Moscow, St. Petersburg
-															</option>
-															<option value="Tehran">(GMT +3:30) Tehran</option>
-															<option value="Abu Dhabi">
-																(GMT +4:00) Abu Dhabi, Muscat, Baku, Tbilisi
-															</option>
-															<option value="Kabul">(GMT +4:30) Kabul</option>
-															<option value="Ekaterinburg">
-																(GMT +5:00) Ekaterinburg, Islamabad, Karachi, Tashkent
-															</option>
-															<option value="Bombay">
-																(GMT +5:30) Bombay, Calcutta, Madras, New Delhi
-															</option>
-															<option value="Kathmandu">
-																(GMT +5:45) Kathmandu, Pokhara
-															</option>
-															<option value="Almaty">
-																(GMT +6:00) Almaty, Dhaka, Colombo
-															</option>
-															<option value="Yangon">(GMT +6:30) Yangon, Mandalay</option>
-															<option value="Bangkok">
-																(GMT +7:00) Bangkok, Hanoi, Jakarta
-															</option>
-															<option value="Beijing">
-																(GMT +8:00) Beijing, Perth, Singapore, Hong Kong
-															</option>
-															<option value="Eucla">(GMT +8:45) Eucla</option>
-															<option value="Tokyo">
-																(GMT +9:00) Tokyo, Seoul, Osaka, Sapporo, Yakutsk
-															</option>
-															<option value="Adelaide">
-																(GMT +9:30) Adelaide, Darwin
-															</option>
-															<option value="Eastern Australia">
-																(GMT +10:00) Eastern Australia, Guam, Vladivostok
-															</option>
-															<option value="Lord Howe Island">
-																(GMT +10:30) Lord Howe Island
-															</option>
-															<option value="Magadan">
-																(GMT +11:00) Magadan, Solomon Islands, New Caledonia
-															</option>
-															<option value="Norfolk Island">
-																(GMT +11:30) Norfolk Island
-															</option>
-															<option value="Auckland">
-																(GMT +12:00) Auckland, Wellington, Fiji, Kamchatka
-															</option>
-															<option value="Chatham Islands">
-																(GMT +12:45) Chatham Islands
-															</option>
-															<option value="Apia">(GMT +13:00) Apia, Nukualofa</option>
-															<option value="Line Islands">
-																(GMT +14:00) Line Islands, Tokelau
-															</option>
-														</select>
+														<label htmlFor="span5">Time Zone *</label>
+														{store.time_zones.length > 0 && (
+															<select
+																onChange={this.handleChange}
+																name="timezone_offset"
+																id="timezone-offset"
+																className="span5">
+																{store.time_zones.map(time_zones => {
+																	return (
+																		<option
+																			key={time_zones.id}
+																			value={time_zones.utc[0]}>
+																			{time_zones.value}
+																		</option>
+																	);
+																})}
+															</select>
+														)}
+														{errors.time_zone.length > 0 && (
+															<span className="error">{errors.time_zone}</span>
+														)}
 													</div>
 													<div className="email">
 														<label htmlFor="email">Email address *</label>
@@ -306,6 +216,7 @@ export class SignUp extends React.Component {
 																		let user = {
 																			firstName: this.state.firstName,
 																			lastName: this.state.lastName,
+																			time_zone: this.state.timezone_offset,
 																			email: this.state.email,
 																			password: this.state.password
 																		};

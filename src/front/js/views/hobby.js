@@ -13,23 +13,30 @@ import { WorkNavbar } from "../component/worknavbar";
 import { TodoWidget } from "../component/todowidget";
 import { Spring, Transition, animated } from "react-spring/renderprops";
 import Clock from "../component/clock";
-import dayjs from "dayjs";
-import isToday from "dayjs/plugin/isToday";
-import timeZone from "dayjs-ext/plugin/timeZone";
 import utc from "dayjs/plugin/utc";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { Dropdown } from "semantic-ui-react";
-
+import dayjs from "dayjs";
+import isToday from "dayjs/plugin/isToday";
+import timeZone from "dayjs/plugin/timezone";
+// .tz("America/New_York")
 dayjs.extend(utc);
 dayjs.extend(timeZone);
 dayjs.extend(isToday);
+console.log(dayjs);
+// dayjs.tz.setDefault("America/New_York");
+// dayjs.defaultTimezone
+dayjs.new = _date => {
+	console.log("NEWDATEFLAGGG:", localStorage.getItem("thot.org.time_zone"));
+	return dayjs(_date).tz(localStorage.getItem("thot.org.time_zone") || "America/New_York");
+};
 export class Hobby extends React.Component {
 	constructor() {
 		super();
 		this.state = {
 			archives: false,
 			color: "black",
-			currentDate: dayjs().tz("America/New_York"),
+			currentDate: dayjs.new(),
 			delta: 0,
 			gThots: false,
 			hobby: [],
@@ -65,7 +72,7 @@ export class Hobby extends React.Component {
 	componentDidMount() {
 		this.context.actions.getUser();
 		// .then(console.log("timezoooone", this.context.store.folder))
-		// .then(this.setState({ currentDate: dayjs().tz(this.context.store.time_zone.toString()), time_zone: this.context.store.time_zone.toString() }));
+		// .then(this.setState({ currentDate: dayjs.new().tz(this.context.store.time_zone.toString()), time_zone: this.context.store.time_zone.toString() }));
 		this.context.actions.getAllTasks(
 			this.state.currentDate,
 			this.state.currentDate.add(24, "hour"),
@@ -149,26 +156,17 @@ export class Hobby extends React.Component {
 										id="addDayButtons"
 										onClick={() => {
 											this.setState({
-												currentDate: dayjs(this.state.currentDate)
-													.tz(time_zone)
-													.subtract(24, "hour")
+												currentDate: dayjs(this.state.currentDate).subtract(24, "hour")
 											});
 											this.state.folder === "meetings"
 												? this.setState({
-														taskDate: dayjs(this.state.currentDate)
-															.tz(time_zone)
-															.subtract(24, "hour")
+														taskDate: dayjs(this.state.currentDate).subtract(24, "hour")
 												  })
 												: this.setState({ taskDate: null });
 											actions.getAllTasks(
-												dayjs(this.state.currentDate)
-													.tz(time_zone)
-													.subtract(24, "hour"),
+												dayjs(this.state.currentDate).subtract(24, "hour"),
 												this.state.currentDate,
-												this.state.currentDate
-													.tz(time_zone)
-													.subtract(24, "hour")
-													.isToday()
+												this.state.currentDate.subtract(24, "hour").isToday()
 											);
 										}}>
 										<i className="fas fa-chevron-left" />
@@ -177,17 +175,11 @@ export class Hobby extends React.Component {
 										className="mx-1"
 										onDoubleClick={() => {
 											console.log("timezoneflag:", time_zone);
-											this.setState({ currentDate: dayjs().tz(time_zone) });
+											this.setState({ currentDate: dayjs.new() });
 											this.state.folder === "meetings"
-												? this.setState({ taskDate: dayjs().tz(time_zone) })
+												? this.setState({ taskDate: dayjs.new() })
 												: this.setState({ taskDate: null });
-											actions.getAllTasks(
-												dayjs().tz(time_zone),
-												dayjs()
-													.tz(time_zone)
-													.add(24, "hour"),
-												true
-											);
+											actions.getAllTasks(dayjs.new(), dayjs.new().add(24, "hour"), true);
 										}}
 										onClick={() => this.toggle()}>
 										<i className="far fa-calendar-alt" />
@@ -196,24 +188,17 @@ export class Hobby extends React.Component {
 										id="addDayButtons"
 										onClick={() => {
 											this.setState({
-												currentDate: dayjs(this.state.currentDate)
-													.tz(time_zone)
-													.add(24, "hour")
+												currentDate: dayjs(this.state.currentDate).add(24, "hour")
 											});
 											this.state.folder === "meetings"
 												? this.setState({
-														taskDate: dayjs(this.state.currentDate)
-															.tz(time_zone)
-															.add(24, "hour")
+														taskDate: dayjs(this.state.currentDate).add(24, "hour")
 												  })
 												: this.setState({ taskDate: null });
 											actions.getAllTasks(
-												this.state.currentDate.tz(time_zone).add(24, "hour"),
-												this.state.currentDate.tz(time_zone).add(48, "hour"),
-												this.state.currentDate
-													.tz(time_zone)
-													.add(24, "hour")
-													.isToday()
+												this.state.currentDate.add(24, "hour"),
+												this.state.currentDate.add(48, "hour"),
+												this.state.currentDate.add(24, "hour").isToday()
 											);
 										}}>
 										<i className="fas fa-chevron-right" />
@@ -239,10 +224,8 @@ export class Hobby extends React.Component {
 															: this.setState({ taskDate: null });
 														actions.getAllTasks(
 															date,
-															dayjs(date)
-																.tz(time_zone)
-																.add(24, "hour"),
-															date.tz(time_zone).isToday()
+															dayjs(date).add(24, "hour"),
+															date.isToday()
 														);
 														this.toggle();
 													}}
@@ -336,12 +319,8 @@ export class Hobby extends React.Component {
 											<div className="newTaskDatePicker ml-5">
 												<ReactDatePicker
 													selected={this.state.taskDate ? this.state.taskDate.toDate() : null}
-													onChange={date =>
-														this.setState({ taskDate: dayjs(date).tz(time_zone) })
-													}
-													minDate={dayjs()
-														.tz(time_zone)
-														.toDate()}
+													onChange={date => this.setState({ taskDate: dayjs(date) })}
+													minDate={dayjs.new().toDate()}
 												/>
 											</div>
 										</div>
