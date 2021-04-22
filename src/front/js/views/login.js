@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Context } from "../store/appContext";
 import PropTypes from "prop-types";
+import editMeeting from "../../img/editMeeting.gif";
 
 import "../../styles/home.scss";
 // import { Link } from "react-router-dom";
@@ -219,86 +220,7 @@ export class Login extends React.Component {
 						{/* the div below is just for show =P */}
 
 						<div className="container col-8 Absolute" id="shadowHobbyView">
-							<button
-								className="toggleButton mt-1"
-								onDoubleClick={() => {}}
-								onClick={() => this.toggle()}>
-								<i className="far fa-calendar-alt" />
-							</button>
-							<Transition
-								native
-								items={this.state.showWorkNavbar}
-								from={{ marginLeft: -900 }}
-								enter={{ marginLeft: -15 }}
-								leave={{ marginLeft: -900 }}>
-								{show =>
-									show &&
-									(props => (
-										<animated.div style={props}>
-											<WorkNavbar
-												toggle={this.toggle}
-												onChange={date => {
-													this.setState({ currentDate: date });
-													this.setState({ taskDate: date });
-													this.setState({ folder: "tasks" });
-													actions.getAllTasks(date, dayjs(date).add(24, "hour"));
-													this.toggle();
-												}}
-											/>
-										</animated.div>
-									))
-								}
-							</Transition>
-							<div className="container text-left ml-5 mt-1 clock">
-								{this.state.currentDate.format("dddd  M/DD/YYYY")}
-								<Clock />
-							</div>
-							<div className="d-flex mt-5 mx-auto mb-3 col-md-7">
-								<input
-									className="borderBottomRight col-3 col-md-3"
-									list="folders"
-									name="folder"
-									id="folder"
-								/>
-								<datalist id="folders" />
-								<TextareaAutosize
-									className="pl-2 col-md-11 activeTodo onfucus addNew py-3"
-									placeholder="Stop being lazy and JUST DO IT!"
-									type="text"
-									value={this.state.todo}
-									onChange={e => this.handleChange(e)}
-								/>
-							</div>
-							<div className="d-flex justify-content-center col-md-12 text-center">
-								<button>SUBMIT</button>
-								<div className="newTaskDatePicker ml-5">
-									<ReactDatePicker />
-								</div>
-							</div>
-							<div className="d-flex flex-wrap mt-5">
-								<div className="container-fluid col-md-6">
-									<div className="mt-3">
-										<TodoWidget
-											folder={"tasks"}
-											tasks={this.state.task}
-											type={"Tasks"}
-											collapse={false}
-											className="mt-3"
-										/>
-									</div>
-								</div>
-								{/* PUT MAP FUNC HERE -- learn how to generate components like these dynamically so users can add more as they need to */}
-								<div className="col-md-6">
-									<div className="">
-										<TodoWidget
-											folder={"meetings"}
-											tasks={this.state.meeting}
-											type={"meetings"}
-											collapse={false}
-										/>
-									</div>
-								</div>
-							</div>
+							<img src={editMeeting} />
 						</div>
 					</>
 				)}
