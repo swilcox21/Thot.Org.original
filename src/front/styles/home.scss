@@ -178,6 +178,17 @@ button:hover {
 
 }
 
+.cogWheel {
+    background-color: white;
+    color: black;
+    border: none;
+    position: absolute;
+    margin-top: -20px;
+    margin-left: -20px;
+    padding: 5px 25px 5px 25px;
+    z-index: 2;
+}
+
 .datePickerr {
     width: 20px;
 }

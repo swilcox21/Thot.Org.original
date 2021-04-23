@@ -49,7 +49,8 @@ export class SignUp extends React.Component {
 			errors: {
 				time_zone: " ",
 				email: " ",
-				password: " "
+				password: " ",
+				password2: " "
 			},
 			task: [
 				{
@@ -91,8 +92,11 @@ export class SignUp extends React.Component {
 			case "email":
 				errors.email = validEmailRegex.test(value) ? "" : " * Email is not valid! *";
 				break;
-			case "password":
+			case "password": // ask how to add more questions to this to make password more specific
 				errors.password = value.length < 8 ? "* Password must be atleast 8 characters long! *" : "";
+				break;
+			case "password2":
+				errors.password2 = value != this.state.password ? "* Passwords do not match! *" : "";
 				break;
 			default:
 				break;
@@ -207,26 +211,45 @@ export class SignUp extends React.Component {
 															<small className="error">{errors.password}</small>
 														)}
 													</div>
+													<div className="password2 mb-2">
+														<label htmlFor="password2">Confirm Password *</label>
+														<input
+															type="password"
+															name="password2"
+															id="password2"
+															className="form-control"
+															aria-describedby="emailHelp"
+															placeholder="Make it Match!"
+															onChange={this.handleChange}
+															noValidate
+														/>
+														{errors.password2.length > 0 && (
+															<small className="error">{errors.password2}</small>
+														)}
+													</div>
 													<br />
+													{store.errors === "invalid user name or password" && (
+														<div className="text-center text-danger mb-2">
+															<small>invalid email or password</small>
+														</div>
+													)}
 													{validateForm(this.state.errors) && (
 														<div className="col-md-12 text-center mb-3">
-															<Link to={"/login"}>
-																<button
-																	onClick={e => {
-																		let user = {
-																			firstName: this.state.firstName,
-																			lastName: this.state.lastName,
-																			time_zone: this.state.timezone_offset,
-																			email: this.state.email,
-																			password: this.state.password
-																		};
-																		actions.addUser(user);
-																	}}
-																	type="button"
-																	className="px-3 p-2 tx-tfm mt-2 submit">
-																	Sign Up
-																</button>
-															</Link>
+															<button
+																onClick={e => {
+																	let user = {
+																		firstName: this.state.firstName,
+																		lastName: this.state.lastName,
+																		time_zone: this.state.timezone_offset,
+																		email: this.state.email,
+																		password: this.state.password
+																	};
+																	actions.addUser(user);
+																}}
+																type="button"
+																className="px-3 p-2 tx-tfm mt-2 submit">
+																Sign Up
+															</button>
 														</div>
 													)}
 												</form>

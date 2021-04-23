@@ -9,7 +9,7 @@ from sqlalchemy import or_
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
-
+import os
 
 api = Blueprint('api', __name__)
 
@@ -25,7 +25,8 @@ def handle_user():
 @api.route('/time_zones', methods=['GET'])
 # @jwt_required()
 def handle_timezones():
-    with open('src/api/time_zones.json') as f:
+    json_path = os.path.dirname(__file__) + "/time_zones.json"
+    with open(json_path) as f:
         s = f.read()
         return s, 200
 

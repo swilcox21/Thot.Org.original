@@ -171,7 +171,7 @@ export class Login extends React.Component {
 													<br />
 													{store.errors === "invalid user name or password" && (
 														<div className="text-center text-danger mb-2">
-															<small>invalid user name or password</small>
+															<small>invalid email or password</small>
 														</div>
 													)}
 													{validateForm(this.state.errors) && (

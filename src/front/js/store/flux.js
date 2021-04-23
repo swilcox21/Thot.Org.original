@@ -52,12 +52,19 @@ const getState = ({ getStore, getActions, setStore }) => {
 						"Content-Type": "application/json"
 					}
 				})
-					.then(res => res.json())
+					.then(res => {
+						if (res.status >= 200 && res.status < 300) {
+							return res.json();
+						} else {
+							throw Error("invalid user name or password");
+						}
+					})
 					.then(response => {
 						console.log("Success:", response);
 						setStore({
 							user: response
 						});
+						window.location.href = "/login";
 					})
 					// sends error to user and to console log
 					.catch(error => {

@@ -38,7 +38,39 @@ export const TodoWidget = props => {
 			{tasks.length === 0 ? (
 				<div className="mt-3 d-flex justify-content-between">
 					<span>{props.folder}:</span>
-					{props.id && <small onClick={() => actions.deleteFolder(props.id)}>df</small>}
+					{props.id && (
+						<Dropdown className="mt-2 ml-3">
+							<Dropdown.Toggle id="dropdown-custom-components" className="dropdowntoggle">
+								<span className="cogWheel text-center">
+									<div className="text-center py-1" id="dropDownDate">
+										<i className="fas fa-cog"></i>
+									</div>
+								</span>
+							</Dropdown.Toggle>
+							<Dropdown.Menu className="mt-1">
+								<Dropdown.Item eventKey="3">
+									<CopyToClipboard className="" text={props.folder}>
+										<div className="text-center">
+											<i className="far fa-clipboard" />
+										</div>
+									</CopyToClipboard>
+								</Dropdown.Item>
+								<Dropdown.Item eventKey="2">
+									<div className="">[= ! hire me ! =]</div>
+								</Dropdown.Item>
+								<Dropdown.Divider />
+								<Dropdown.Item eventKey="4">
+									<div
+										onClick={() => {
+											actions.deleteFolder(props.id);
+										}}
+										className="text-center mt-3">
+										<i className="fas fa-trash-alt" />
+									</div>
+								</Dropdown.Item>
+							</Dropdown.Menu>
+						</Dropdown>
+					)}
 				</div>
 			) : (
 				<>
@@ -54,7 +86,39 @@ export const TodoWidget = props => {
 								<i className="fas fa-sort-down" />
 							)}
 						</span>
-						{props.id && <small onClick={() => actions.deleteFolder(props.id)}>df</small>}
+						{props.id && (
+							<Dropdown className="mt-2 ml-3">
+								<Dropdown.Toggle id="dropdown-custom-components" className="dropdowntoggle">
+									<div className="cogWheel text-center" id="dropdowntoggle">
+										<span className="text-center py-1" id="dropDownDate">
+											<i className="fas fa-cog"></i>
+										</span>
+									</div>
+								</Dropdown.Toggle>
+								<Dropdown.Menu className="mt-1">
+									<Dropdown.Item eventKey="3">
+										<CopyToClipboard className="" text={props.folder}>
+											<div className="text-center">
+												<i className="far fa-clipboard" />
+											</div>
+										</CopyToClipboard>
+									</Dropdown.Item>
+									<Dropdown.Item eventKey="2">
+										<div className="">[= ! hire me ! =]</div>
+									</Dropdown.Item>
+									<Dropdown.Divider />
+									<Dropdown.Item eventKey="4">
+										<div
+											onClick={() => {
+												actions.deleteFolder(props.id);
+											}}
+											className="text-center mt-3">
+											<i className="fas fa-trash-alt" />
+										</div>
+									</Dropdown.Item>
+								</Dropdown.Menu>
+							</Dropdown>
+						)}
 					</div>
 					{collapse === false ? <Prio tasks={tasks} /> : null}
 				</>

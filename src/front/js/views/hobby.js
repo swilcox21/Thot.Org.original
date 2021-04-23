@@ -147,7 +147,7 @@ export class Hobby extends React.Component {
 				{({ actions, store }) => (
 					<>
 						<div className="row">
-							<div className="col-12 col-md-2 bg-dark text-dark text-center" id="NFNB">
+							<div className="col-12 col-md-2 text-light text-center" id="NFNB">
 								New Folder NavBar
 							</div>
 							<div className="container col-12 col-md-8 ml-3">
