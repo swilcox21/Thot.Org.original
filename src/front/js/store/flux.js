@@ -46,7 +46,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						lastName: user.lastName,
 						time_zone: user.time_zone,
 						email: user.email,
-						password: user.password
+						password: md5(user.password)
 					}), // data can be `string` or {object}!
 					headers: {
 						"Content-Type": "application/json"
@@ -101,11 +101,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 							throw Error("invalid user name or password");
 						}
 					})
-					.then(response => {
-						console.log("Success:", response);
-						localStorage.setItem("thot.org.token", response.access_token);
+					.then(payload => {
+						console.log("Success:", payload);
+						localStorage.setItem("thot.org.token", payload.access_token);
 						localStorage.setItem("thot.org.email", email);
-						localStorage.setItem("thot.org.errorMSG", response.msg);
+						localStorage.setItem("thot.org.errorMSG", payload.msg);
 						window.location.href = "/home";
 						getActions().getUser();
 					})
@@ -287,32 +287,29 @@ const getState = ({ getStore, getActions, setStore }) => {
 					});
 			},
 
-			handleChangeHobby: (todo, hobby) => {
-				fetch(process.env.BACKEND_URL + "/api/task/" + todo, {
-					method: "PUT",
-					body: JSON.stringify({
-						label: hobby.label,
-						date: hobby.date,
-						dashboard: hobby.dashboard,
-						id: todo,
-						folder: hobby.folder
-					}),
-					headers: {
-						"Content-Type": "application/json"
-					}
-				})
-					.then(() => {
-						console.log(hobby);
-						let store = getStore();
-						let newStore = store.hobby.filter(hobby => hobby.id != todo);
-						newStore.push(hobby);
-						setStore({ hobby: newStore });
-					})
-					.catch(error => {
-						setStore({ errors: error });
-						console.error("Error:", error);
-						return true;
+			handleChangeHobby: async (todo, hobby) => {
+				try {
+					const res = await fetch(process.env.BACKEND_URL + "/api/task/" + todo, {
+						method: "PUT",
+						body: JSON.stringify({
+							label: hobby.label,
+							date: hobby.date,
+							dashboard: hobby.dashboard,
+							id: todo,
+							folder: hobby.folder
+						}),
+						headers: {
+							"Content-Type": "application/json"
+						}
 					});
+					const payload = await res.json();
+					console.log("putFlagput", payload);
+					let store = getStore();
+					setStore({ hobby: store.hobby.filter(t => t.id != payload.id).concat(payload) });
+				} catch (error) {
+					setStore({ errors: error });
+					console.error("Error:", error);
+				}
 			},
 
 			handleChangeNotes: notes => {
