@@ -1,6 +1,7 @@
 """
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
+# from flask.cli import with_appcontext
 import os
 from flask import Flask, request, jsonify, url_for, send_from_directory
 from flask_migrate import Migrate
@@ -37,6 +38,18 @@ setup_admin(app)
 
 # Add all endpoints form the API with a "api" prefix
 app.register_blueprint(api, url_prefix='/api')
+
+# A CUSTOM COMMAND
+
+# @app.cli.command('clean')
+# @click.argument('name')
+# def clean():
+#     """ Clean up visitor"""
+#     print("Create user:&*^$%$")
+
+# app.cli.add_command(clean)
+
+# ^^^^ WORKING ON ABOVE RIGHT NOW
 
 # Handle/serialize errors like a JSON object
 @app.errorhandler(APIException)
