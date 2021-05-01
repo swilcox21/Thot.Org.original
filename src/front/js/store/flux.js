@@ -1,4 +1,5 @@
 import axios from "axios";
+// var md5 = require("md5");
 axios.interceptors.request.use(
 	function(config) {
 		// Do something before request is sent
@@ -46,7 +47,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						lastName: user.lastName,
 						time_zone: user.time_zone,
 						email: user.email,
-						password: md5(user.password)
+						password: user.password
 					}), // data can be `string` or {object}!
 					headers: {
 						"Content-Type": "application/json"

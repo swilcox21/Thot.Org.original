@@ -238,6 +238,11 @@ export class Hobby extends React.Component {
 									{this.state.currentDate.format("dddd  M/DD/YYYY")}
 									<Clock />
 								</div>
+								{store.email === "visitor@gmail.com" && (
+									<h3 className="bg-danger p-2 text-light">
+										All thots on this account will be cleaned out daily
+									</h3>
+								)}
 								{dashboardThots.length > 0 && (
 									<div className="mb-5 col-md-10 mt-3 mx-auto">
 										<span className="toggleOpen">DashBoard:</span>

@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Context } from "../store/appContext";
 import PropTypes from "prop-types";
-import editMeeting from "../../img/editMeeting.gif";
+import editMeeting from "../../img/thot.org_editMeeting.gif";
 
 import "../../styles/home.scss";
 // import { Link } from "react-router-dom";

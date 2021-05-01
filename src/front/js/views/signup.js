@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Context } from "../store/appContext";
 import PropTypes from "prop-types";
-import newFolder from "../../img/exampleFolder.gif";
+import newFolder from "../../img/thot.org_exampleFolder.gif";
 
 import "../../styles/home.scss";
 // import { Link } from "react-router-dom";

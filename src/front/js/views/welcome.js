@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import Clock from "../component/clock";
 import { Context } from "../store/appContext";
 import { Hobby } from "./hobby";
-import addMeeting from "../../img/addMeeting.gif";
+import addMeeting from "../../img/thot.org_addMeeting.gif";
 import tripleDownArrows from "../../img/triple-down-arrows.gif";
 
 export class Welcome extends React.Component {

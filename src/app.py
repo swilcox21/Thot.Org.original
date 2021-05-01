@@ -1,8 +1,9 @@
 """
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
-# from flask.cli import with_appcontext
-import os
+from flask.cli import with_appcontext
+from api.models import db, User, Task, Notes, Folder
+import os, click
 from flask import Flask, request, jsonify, url_for, send_from_directory
 from flask_migrate import Migrate
 from flask_swagger import swagger
@@ -41,13 +42,17 @@ app.register_blueprint(api, url_prefix='/api')
 
 # A CUSTOM COMMAND
 
-# @app.cli.command('clean')
+@app.cli.command('clean')
 # @click.argument('name')
-# def clean():
-#     """ Clean up visitor"""
-#     print("Create user:&*^$%$")
+def clean():
+    """ Clean up visitor"""
+    visitor = User.query.filter_by(email="visitor@gmail.com").first()
+    print("sdfdsgdsdgSGSGDSGser:&*^$%$", visitor)
+    db.session.query(Task).filter_by(user_id= visitor.id).delete(synchronize_session=False)
+    db.session.commit()
+    print("Create user:&*^$%$")
 
-# app.cli.add_command(clean)
+app.cli.add_command(clean)
 
 # ^^^^ WORKING ON ABOVE RIGHT NOW
 
