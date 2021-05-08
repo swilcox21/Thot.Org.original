@@ -68,6 +68,10 @@ button:hover {
 //     min-width: 35px;
 // }
 
+#hobbyCont {
+    margin-left: 25%;
+}
+
 #loginBackground {
     background-color: rgba(255, 255, 255, 0.801);
     z-index: 10;
@@ -75,6 +79,13 @@ button:hover {
     // position: absolute;
     // margin-top: 90px;
 }
+
+#caret {
+    width: 30px;
+    float: right;
+    cursor: pointer;
+}
+
 #loginBox {
     box-shadow: 15px 15px 25px 0px #343a40;
     background-color: white;
@@ -83,9 +94,11 @@ button:hover {
 }
 
 #NFNB {
-    color: #49f7ae;
-    // font-weight: bold;
-    font-size: 1.2rem;
+    position: absolute;
+    z-index: 4;
+    background-color: rgba(245, 245, 245, 0.404);
+    height: 100%;
+    border-right: 1px dotted black;
 }
 
 #shadowHobbyView {
@@ -258,6 +271,7 @@ button:hover {
     height: 200px;
     overflow-y: scroll;
     resize: vertical;
+    z-index: 5;
 }
 
 .Opacity {

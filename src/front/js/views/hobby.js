@@ -147,10 +147,26 @@ export class Hobby extends React.Component {
 				{({ actions, store }) => (
 					<>
 						<div className="row">
-							<div className="col-12 col-md-2 text-light text-center" id="NFNB">
-								New Folder NavBar
-							</div>
-							<div className="container col-12 col-md-8 ml-3">
+							{this.state.showSideBar === false ? (
+								<div className="col-1" id="NFNB">
+									<button
+										id="caret"
+										className="mt-2 ml-2"
+										onClick={() => this.setState({ showSideBar: !this.state.showSideBar })}>
+										<i className="fas fa-angle-right"></i>
+									</button>
+								</div>
+							) : (
+								<div className="col-6 col-md-3 text-center" id="NFNB">
+									<button
+										id="caret"
+										className="mt-2 mr-2"
+										onClick={() => this.setState({ showSideBar: !this.state.showSideBar })}>
+										<i className="fas fa-angle-left"></i>
+									</button>
+								</div>
+							)}
+							<div className="container col-10 col-md-6 ml-md-auto ml-5" id="hobbyCont">
 								<div className="toggleButton mt-1 mr-3">
 									<button
 										id="addDayButtons"
@@ -244,7 +260,7 @@ export class Hobby extends React.Component {
 									</h3>
 								)}
 								{dashboardThots.length > 0 && (
-									<div className="mb-5 col-md-10 mt-3 mx-auto">
+									<div className="mb-5 col-12 mt-3 mx-auto">
 										<span className="toggleOpen">DashBoard:</span>
 										<Prio tasks={dashboardThots} autoSize={true} />
 										<br />
@@ -252,8 +268,8 @@ export class Hobby extends React.Component {
 										<br />
 									</div>
 								)}
-								<div className="d-flex flex-wrap justify-content-between mt-5">
-									<div className="col-md-6">
+								<div className="justify-content-between col-lg-10 mx-auto mt-5">
+									<div className="col-md-10">
 										<div className="d-flex mt-3 mx-auto mb-3">
 											<input
 												onBlur={() => this.setState({ folderValue: "" })}
@@ -330,7 +346,7 @@ export class Hobby extends React.Component {
 											</div>
 										</div>
 									</div>
-									<div className="col-md-5 ">
+									<div className="">
 										<div className="">
 											<TodoWidget
 												folder={"meetings"}
@@ -341,7 +357,7 @@ export class Hobby extends React.Component {
 										</div>
 									</div>
 									{/* PUT MAP FUNC HERE -- learn how to generate components like these dynamically so users can add more as they need to */}
-									<div className="col-md-6">
+									<div className="">
 										<div className="mt-3">
 											<TodoWidget
 												folder={"tasks"}
