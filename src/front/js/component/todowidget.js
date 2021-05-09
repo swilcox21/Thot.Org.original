@@ -55,9 +55,19 @@ export const TodoWidget = props => {
 										</div>
 									</CopyToClipboard>
 								</Dropdown.Item>
-								<Dropdown.Item eventKey="2">
-									<div className="">[= ! hire me ! =]</div>
-								</Dropdown.Item>
+								<input
+									type="text"
+									placeHolder="edit folder"
+									// onChange={e => this.setState({ newFolderLabel: e.target.value })}
+									onBlur={e => {
+										let newfolderlabel = {
+											folder: e.target.value,
+											main_view: props.main_view,
+											collapse: props.collapse
+										};
+										actions.changeFolder(props.id, newfolderlabel);
+									}}
+								/>
 								<Dropdown.Divider />
 								<Dropdown.Item eventKey="4">
 									<div
