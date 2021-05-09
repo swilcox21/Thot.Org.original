@@ -120,7 +120,7 @@ def post_folder():
     user_id = get_jwt_identity()
     body = request.get_json()
     print("MY BODY FLAG: ",body['folder'])
-    new_folder = Folder(folder= body['folder'], user_id= user_id)
+    new_folder = Folder(folder= body['folder'], collapse= body['collapse'], main_view= body['main_view'], user_id= user_id)
     db.session.add(new_folder)
     db.session.commit()
     all_folders = Folder.query.filter_by(user_id= user_id)
@@ -135,6 +135,17 @@ def delete_folder(folder_id):
     db.session.delete(current_folder)
     db.session.commit()
     return "folder removed", 201
+
+@api.route('/folder/<int:folder_id>', methods=['PUT'])
+def change_folder(folder_id):
+    body = request.get_json()
+    current_folder = Folder.query.get(folder_id)
+    current_folder.folder = body['folder']
+    current_folder.collapse = body['collapse']
+    current_folder.main_view = body['main_view']
+    current_folder.id = body['id']
+    db.session.commit()
+    return jsonify(current_folder.serialize()), 200
 
 @api.route('/task/<int:task_id>', methods=['PUT', 'GET', 'DELETE'])
 def get_single_task(task_id):

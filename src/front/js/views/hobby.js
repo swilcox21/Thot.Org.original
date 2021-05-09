@@ -51,6 +51,7 @@ export class Hobby extends React.Component {
 				message: ""
 			},
 			forum: false,
+			showSideBar: true,
 			showTodoIndex: false,
 			task: null,
 			taskDate: null,
@@ -151,19 +152,104 @@ export class Hobby extends React.Component {
 								<div className="col-1" id="NFNB">
 									<button
 										id="caret"
-										className="mt-2 ml-2"
+										className="mt-1 ml-2"
 										onClick={() => this.setState({ showSideBar: !this.state.showSideBar })}>
 										<i className="fas fa-angle-right"></i>
 									</button>
 								</div>
 							) : (
-								<div className="col-6 col-md-3 text-center" id="NFNB">
+								<div className="col-6 col-md-3" id="NFNB">
 									<button
 										id="caret"
-										className="mt-2 mr-2"
+										className="mt-1 mr-2"
 										onClick={() => this.setState({ showSideBar: !this.state.showSideBar })}>
 										<i className="fas fa-angle-left"></i>
 									</button>
+									<input className="mt-2 col-11 mx-auto" type="text" placeholder="search folders" />
+									{store.folder
+										.filter(folder => (folder.folder != "tasks") & (folder.folder != "meetings"))
+										.map((folder, index) => (
+											<div className="mt-2" key={folder.id}>
+												<div className="">
+													<span
+														id={
+															folder.collapse === false
+																? "sideBarFolder"
+																: "sideBarFoldercollapsed"
+														}
+														onClick={() => {
+															let newFolder = {
+																folder: folder.folder,
+																collapse: !folder.collapse,
+																main_view: folder.main_view
+															};
+															actions.changeFolder(folder.id, newFolder);
+															this.setState({ collapse: !folder.collapse });
+														}}
+														className="ml-2">
+														{folder.folder} &nbsp;
+														{folder.collapse === true ? (
+															<i className="fas fa-caret-left">&nbsp;</i>
+														) : (
+															<i className="fas fa-sort-down">&nbsp;</i>
+														)}
+													</span>
+													<input
+														type="checkbox"
+														onClick={() => {
+															let folderMainView = {
+																folder: folder.folder,
+																collapse: folder.collapse,
+																main_view: !folder.main_view
+															};
+															actions.changeFolder(folder.id, folderMainView);
+															this.setState({ main_view: !folder.main_view });
+														}}
+													/>
+												</div>
+												{folder.collapse === false &&
+													store.hobby
+														.filter(hobby => hobby.folder === folder.folder)
+														.map((thot, index) => (
+															<div key={thot.id}>
+																<textarea
+																	className="col-8 ml-2"
+																	id="sideBarThot"
+																	type="text"
+																	defaultValue={thot.label}
+																	onChange={e =>
+																		this.setState({
+																			sideBarThotx: e.target.value
+																		})
+																	}
+																	onBlur={e => {
+																		let newThot = {
+																			label: e.target.value,
+																			date: thot.date,
+																			dashboard: thot.dashboard,
+																			folder: thot.folder
+																		};
+																		actions.handleChangeHobby(thot.id, newThot);
+																		this.setState({});
+																	}}
+																/>
+																<input
+																	id="sideBarCheckbox"
+																	type="checkbox"
+																	onClick={() => {
+																		let newThot = {
+																			label: thot.label,
+																			date: thot.date,
+																			dashboard: !thot.dashboard,
+																			folder: thot.folder
+																		};
+																		actions.handleChangeHobby(thot.id, newThot);
+																	}}
+																/>
+															</div>
+														))}
+											</div>
+										))}
 								</div>
 							)}
 							<div className="container col-10 col-md-6 ml-md-auto ml-5" id="hobbyCont">
@@ -349,10 +435,12 @@ export class Hobby extends React.Component {
 									<div className="">
 										<div className="">
 											<TodoWidget
+												sideBar={false}
 												folder={"meetings"}
 												tasks={store.hobby}
 												type={"meetings"}
 												collapse={false}
+												main_view={true}
 											/>
 										</div>
 									</div>
@@ -360,10 +448,12 @@ export class Hobby extends React.Component {
 									<div className="">
 										<div className="mt-3">
 											<TodoWidget
+												sideBar={false}
 												folder={"tasks"}
 												tasks={store.hobby}
 												type={"Tasks"}
 												collapse={false}
+												main_view={true}
 												className="mt-3"
 											/>
 										</div>
@@ -404,7 +494,7 @@ export class Hobby extends React.Component {
 											// if its not inside the collapseable notes widget
 										)}
 									</div>
-									<div className="col-md-6">
+									<div className="">
 										{store.folder
 											.filter(
 												folder => (folder.folder != "tasks") & (folder.folder != "meetings")
@@ -412,10 +502,12 @@ export class Hobby extends React.Component {
 											.map(folder => (
 												<div key={folder.id}>
 													<TodoWidget
+														sideBar={false}
 														folder={folder.folder}
 														id={folder.id}
 														tasks={store.hobby}
-														collapse={true}
+														main_view={folder.main_view}
+														collapse={folder.collapse}
 													/>
 												</div>
 											))}

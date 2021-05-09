@@ -10,7 +10,7 @@ class User(db.Model):
     time_zone = db.Column(db.String(120), unique=False, nullable=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(80), unique=False, nullable=False)
-    is_active = db.Column(db.Boolean(), unique=False, nullable=True)
+    side_bar = db.Column(db.Boolean(), unique=False, nullable=True)
     tasks = db.relationship('Task', backref='user', lazy=True)
     folders = db.relationship('Folder', backref='user', lazy=True)
 
@@ -24,6 +24,7 @@ class User(db.Model):
             "lastName": self.last_name,
             "time_zone": self.time_zone,
             "email": self.email,
+            "side_bar": self.side_bar,
             "folders": list(map(lambda x : x.serialize(), self.folders))
 
             # do not serialize the password, its a security breach
@@ -58,6 +59,8 @@ class Folder(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     folder = db.Column(db.String(1000), unique=False, nullable=True)
+    collapse = db.Column(db.Boolean(), unique=False, nullable=True)
+    main_view = db.Column(db.Boolean(), unique=False, nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'),
     nullable=False)
 
@@ -68,7 +71,9 @@ class Folder(db.Model):
         print("flag:",self.folder)
         return {
             "id": self.id,
-            "folder": self.folder
+            "folder": self.folder,
+            "collapse": self.collapse,
+            "main_view": self.main_view,
             # do not serialize the password, its a security breach
         }
 

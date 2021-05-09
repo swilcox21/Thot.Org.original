@@ -73,55 +73,75 @@ export const TodoWidget = props => {
 					)}
 				</div>
 			) : (
-				<>
-					<div className="mt-3 d-flex justify-content-between">
-						<span
-							className={collapse === true ? "toggleClosed" : "toggleOpen"}
-							onClick={() => setCollapse(!collapse)}>
-							{props.folder}: &nbsp;
-							{tasks.length} &nbsp;
-							{collapse === true ? (
-								<i className="fas fa-caret-left" />
-							) : (
-								<i className="fas fa-sort-down" />
-							)}
-						</span>
-						{props.id && (
-							<Dropdown className="mt-2 ml-3">
-								<Dropdown.Toggle id="dropdown-custom-components" className="dropdowntoggle">
-									<div className="cogWheel text-center" id="dropdowntoggle">
-										<span className="text-center py-1" id="dropDownDate">
-											<i className="fas fa-cog"></i>
-										</span>
-									</div>
-								</Dropdown.Toggle>
-								<Dropdown.Menu className="mt-1">
-									<Dropdown.Item eventKey="3">
-										<CopyToClipboard className="" text={props.folder}>
-											<div className="text-center">
-												<i className="far fa-clipboard" />
-											</div>
-										</CopyToClipboard>
-									</Dropdown.Item>
-									<Dropdown.Item eventKey="2">
-										<div className="">[= ! hire me ! =]</div>
-									</Dropdown.Item>
-									<Dropdown.Divider />
-									<Dropdown.Item eventKey="4">
-										<div
-											onClick={() => {
-												actions.deleteFolder(props.id);
-											}}
-											className="text-center mt-3">
-											<i className="fas fa-trash-alt" />
+				props.main_view === true && (
+					<>
+						<div className="mt-3 d-flex justify-content-between">
+							<span
+								className={collapse === true ? "toggleClosed" : "toggleOpen"}
+								onClick={() => {
+									let folder = {
+										folder: props.folder,
+										collapse: !collapse,
+										main_view: props.main_view
+									};
+									actions.changeFolder(props.id, folder);
+									setCollapse(!collapse);
+								}}>
+								{props.folder}: &nbsp;
+								{tasks.length} &nbsp;
+								{collapse === true ? (
+									<i className="fas fa-caret-left" />
+								) : (
+									<i className="fas fa-sort-down" />
+								)}
+							</span>
+							{props.id && (
+								<Dropdown className="mt-2 ml-3">
+									<Dropdown.Toggle id="dropdown-custom-components" className="dropdowntoggle">
+										<div className="cogWheel text-center" id="dropdowntoggle">
+											<span className="text-center py-1" id="dropDownDate">
+												<i className="fas fa-cog"></i>
+											</span>
 										</div>
-									</Dropdown.Item>
-								</Dropdown.Menu>
-							</Dropdown>
-						)}
-					</div>
-					{collapse === false ? <Prio tasks={tasks} /> : null}
-				</>
+									</Dropdown.Toggle>
+									<Dropdown.Menu className="mt-1">
+										<Dropdown.Item eventKey="3">
+											<CopyToClipboard className="" text={props.folder}>
+												<div className="text-center">
+													<i className="far fa-clipboard" />
+												</div>
+											</CopyToClipboard>
+										</Dropdown.Item>
+										<input
+											type="text"
+											placeHolder="edit folder"
+											// onChange={e => this.setState({ newFolderLabel: e.target.value })}
+											onBlur={e => {
+												let newfolderlabel = {
+													folder: e.target.value,
+													main_view: props.main_view,
+													collapse: props.collapse
+												};
+												actions.changeFolder(props.id, newfolderlabel);
+											}}
+										/>
+										<Dropdown.Divider />
+										<Dropdown.Item eventKey="4">
+											<div
+												onClick={() => {
+													actions.deleteFolder(props.id);
+												}}
+												className="text-center mt-3">
+												<i className="fas fa-trash-alt" />
+											</div>
+										</Dropdown.Item>
+									</Dropdown.Menu>
+								</Dropdown>
+							)}
+						</div>
+						{collapse === false ? <Prio tasks={tasks} /> : null}
+					</>
+				)
 			)}
 		</>
 	);
@@ -130,6 +150,7 @@ export const TodoWidget = props => {
 TodoWidget.propTypes = {
 	folder: PropTypes.string,
 	collapse: PropTypes.bool,
+	main_view: PropTypes.bool,
 	id: PropTypes.number,
 	tasks: PropTypes.array
 };

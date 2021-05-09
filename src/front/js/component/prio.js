@@ -98,6 +98,9 @@ class Prio extends React.Component {
 
 	render() {
 		const time_zone = "America/New_York";
+		const _newFolder = Array.isArray(this.context.store.folder)
+			? this.context.store.folder.filter(folder => folder.folder === this.state.newFolder)
+			: [];
 		// const Tag = this.props.autoSize ? TextareaAutosize : Textarea;
 		return (
 			<Context.Consumer>
@@ -108,28 +111,40 @@ class Prio extends React.Component {
 								<div key={todo.id}>
 									<div className="d-flex justify-content-around mx-auto col-xs-12 col-md-11 activeTodoDiv inputAndTextArea">
 										{this.props.autoSize ? null : (
-											<input
-												className="inputTypeNumber text-center"
-												type="number"
-												min="1"
-												max="7"
-												defaultValue={todo.folder}
-												onChange={e => {
-													this.setState({
-														task: {
-															label: todo.label,
-															date: todo.date,
-															dashboard: todo.dashboard,
-															folder: e.target.value
-														}
-													});
-												}}
-												onBlur={() => {
-													this.state.task &&
-														actions.handleChangeHobby(todo.id, this.state.task);
-													this.resetTask();
-												}}
-											/>
+											<div>
+												<input
+													className="inputTypeNumber"
+													placeholder={todo.folder}
+													onChange={e => {
+														this.setState({
+															task: {
+																label: todo.label,
+																date: todo.date,
+																dashboard: todo.dashboard,
+																folder: e.target.value
+															},
+															newFolder: e.target.value
+														});
+													}}
+													onBlur={() => {
+														this.state.task &&
+															actions.handleChangeHobby(todo.id, this.state.task);
+														this.resetTask();
+														_newFolder.length === 0 &&
+															actions.addNewFolder(this.state.newFolder);
+													}}
+													list="folders"
+													name="folder"
+													id="folder"
+												/>
+												<datalist id="folders">
+													{store.folder.map(folder => (
+														<div key={folder.id}>
+															<option value={folder.folder} />
+														</div>
+													))}
+												</datalist>
+											</div>
 										)}
 										{this.props.autoSize ? (
 											<TextareaAutosize

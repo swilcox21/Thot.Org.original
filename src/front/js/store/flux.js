@@ -240,7 +240,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 				const res = await fetch(process.env.BACKEND_URL + "/api/folder", {
 					method: "POST",
 					body: JSON.stringify({
-						folder: newFolder
+						folder: newFolder,
+						main_view: true,
+						collapse: false
 					}),
 					headers: {
 						"Content-Type": "application/json",
@@ -286,6 +288,30 @@ const getState = ({ getStore, getActions, setStore }) => {
 						console.error("Error:", error);
 						return true;
 					});
+			},
+
+			changeFolder: async (id, folder) => {
+				try {
+					const res = await fetch(process.env.BACKEND_URL + "/api/folder/" + id, {
+						method: "PUT",
+						body: JSON.stringify({
+							folder: folder.folder,
+							collapse: folder.collapse,
+							main_view: folder.main_view,
+							id: id
+						}),
+						headers: {
+							"Content-Type": "application/json"
+						}
+					});
+					const payload = await res.json();
+					console.log("FolderPUT:", payload);
+					let store = getStore();
+					setStore({ folder: store.folder.filter(t => t.id != payload.id).concat(payload) });
+				} catch (error) {
+					setStore({ errors: error });
+					console.error("Error:", error);
+				}
 			},
 
 			handleChangeHobby: async (todo, hobby) => {
