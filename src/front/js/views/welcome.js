@@ -14,37 +14,48 @@ export class Welcome extends React.Component {
 	}
 	render() {
 		return (
-			<>
-				<div className="container-fluid text-center" id="loginBackground">
-					<br />
-					<br />
-					<br />
-					<br />
-					<span className="mx-auto">
-						<span id="welcomespan">Mind racing? Who&apos;s isn&apos;t... </span>
-						<br />
-						<br />
-						<span id="welcomespan">Let&apos;s get those thoughts organized!</span>
-					</span>
-					<div className="text-center mt-5">
-						<img src={tripleDownArrows} />
-						<br />
-						<Link to={"/login"}>
-							<button className="p-2">Get Started</button>
-						</Link>
-						<br />
-						<Link to={"/preview"}>
-							<small>Recruiter? &nbsp; </small>
-						</Link>
-						<Link to={"/preview"}>
-							<small> &nbsp; Just Visiting?</small>
-						</Link>
-					</div>
-				</div>
-				<div className="container col-8 Absolute" id="shadowHobbyView">
-					<img src={addMeeting} />
-				</div>
-			</>
+			<Context.Consumer>
+				{({ actions, store }) => (
+					<>
+						<div className="container-fluid text-center" id="loginBackground">
+							<br />
+							<br />
+							<br />
+							<br />
+							<span className="mx-auto">
+								<span id="welcomespan">Mind racing? Who&apos;s isn&apos;t... </span>
+								<br />
+								<br />
+								<span id="welcomespan">Let&apos;s get those thoughts organized!</span>
+							</span>
+							<div className="text-center mt-5">
+								<img src={tripleDownArrows} />
+								<br />
+								<Link to={"/login"}>
+									<button className="p-2">Get Started</button>
+								</Link>
+								<br />
+								<br />
+								<small
+									id="visiting"
+									className="mt-5 text-primary"
+									onClick={() => actions.logging("visitor@gmail.com", "password")}>
+									Recruiter? &nbsp;{" "}
+								</small>
+								<small
+									id="visiting"
+									className="mt-5 text-primary"
+									onClick={() => actions.logging("visitor@gmail.com", "password")}>
+									&nbsp; Just Visiting?
+								</small>
+							</div>
+						</div>
+						<div className="container col-8 Absolute" id="shadowHobbyView">
+							<img src={addMeeting} />
+						</div>
+					</>
+				)}
+			</Context.Consumer>
 		);
 	}
 }

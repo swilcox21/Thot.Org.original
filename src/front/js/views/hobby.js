@@ -196,6 +196,7 @@ export class Hobby extends React.Component {
 													</span>
 													<input
 														type="checkbox"
+														checked={folder.main_view}
 														onClick={() => {
 															let folderMainView = {
 																folder: folder.folder,
@@ -206,6 +207,26 @@ export class Hobby extends React.Component {
 															this.setState({ main_view: !folder.main_view });
 														}}
 													/>
+													{folder.collapse === false && (
+														<input
+															type="checkbox"
+															// checked={} i think need help to figure out this one but give it a shot anyways
+															id="sideBarCheckbox"
+															onClick={() => {
+																store.hobby
+																	.filter(hobby => hobby.folder === folder.folder)
+																	.map((thot, index) => {
+																		let allThots = {
+																			label: thot.label,
+																			date: thot.date,
+																			dashboard: !thot.dashboard,
+																			folder: thot.folder
+																		};
+																		actions.handleChangeHobby(thot.id, allThots);
+																	});
+															}}
+														/>
+													)}
 												</div>
 												{folder.collapse === false &&
 													store.hobby
@@ -236,6 +257,7 @@ export class Hobby extends React.Component {
 																<input
 																	id="sideBarCheckbox"
 																	type="checkbox"
+																	checked={thot.dashboard}
 																	onClick={() => {
 																		let newThot = {
 																			label: thot.label,
@@ -253,6 +275,15 @@ export class Hobby extends React.Component {
 								</div>
 							)}
 							<div className="container col-10 col-md-6 ml-md-auto ml-5" id="hobbyCont">
+								{store.email === "visitor@gmail.com" && (
+									<small className="text-danger">
+										!! WELCOME !! You have been logged in as a Visitor
+										<br />
+										All activity on this account will be cleaned out daily, but feel free to use it
+										any way you want =] and thanks for visiting my website!
+										<br />
+									</small>
+								)}
 								<div className="toggleButton mt-1 mr-3">
 									<button
 										id="addDayButtons"
@@ -340,11 +371,7 @@ export class Hobby extends React.Component {
 									{this.state.currentDate.format("dddd  M/DD/YYYY")}
 									<Clock />
 								</div>
-								{store.email === "visitor@gmail.com" && (
-									<h3 className="bg-danger p-2 text-light">
-										All thots on this account will be cleaned out daily
-									</h3>
-								)}
+
 								{dashboardThots.length > 0 && (
 									<div className="mb-5 col-12 mt-3 mx-auto">
 										<span className="toggleOpen">DashBoard:</span>

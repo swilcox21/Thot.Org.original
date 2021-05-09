@@ -24,6 +24,7 @@ dayjs.extend(isToday);
 export const TodoWidget = props => {
 	const { store, actions } = useContext(Context);
 	const [collapse, setCollapse] = useState(props.collapse);
+	const [newFolder, setnewFolder] = useState("");
 	const tasks = Array.isArray(props.tasks)
 		? props.tasks.filter(
 				todo => (todo.folder === props.folder) & (todo.dashboard === false)
@@ -32,6 +33,8 @@ export const TodoWidget = props => {
 				// 	: dayjs(todo.date).toDate() === null)
 		  )
 		: [];
+
+	const _newFolder = Array.isArray(store.folder) ? store.folder.filter(folder => folder.folder === newFolder) : [];
 
 	return (
 		<>
@@ -58,14 +61,16 @@ export const TodoWidget = props => {
 								<input
 									type="text"
 									placeHolder="edit folder"
-									// onChange={e => this.setState({ newFolderLabel: e.target.value })}
+									onChange={e => setnewFolder(e.target.value)}
 									onBlur={e => {
 										let newfolderlabel = {
 											folder: e.target.value,
 											main_view: props.main_view,
 											collapse: props.collapse
 										};
-										actions.changeFolder(props.id, newfolderlabel);
+										e.target.value != "" &&
+											_newFolder.length === 0 &&
+											actions.changeFolder(props.id, newfolderlabel);
 									}}
 								/>
 								<Dropdown.Divider />
@@ -132,7 +137,20 @@ export const TodoWidget = props => {
 													main_view: props.main_view,
 													collapse: props.collapse
 												};
-												actions.changeFolder(props.id, newfolderlabel);
+												e.target.value != "" &&
+													_newFolder.length === 0 &&
+													actions.changeFolder(props.id, newfolderlabel);
+												tasks.map((task, index) => {
+													let newTask = {
+														label: task.label,
+														date: task.date,
+														dashboard: task.dashboard,
+														folder: e.target.value
+													};
+													e.target.value != "" &&
+														_newFolder.length === 0 &&
+														actions.handleChangeHobby(task.id, newTask);
+												});
 											}}
 										/>
 										<Dropdown.Divider />

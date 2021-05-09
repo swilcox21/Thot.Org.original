@@ -203,9 +203,12 @@ export class Login extends React.Component {
 												</div>
 											</Link>
 											<div className="col-md-12 text-center mt-1 mb-5">
-												<Link to={"/preview"}>
-													<small>just visiting?</small>
-												</Link>
+												<small
+													id="visiting"
+													className="mt-5 text-primary"
+													onClick={() => actions.logging("visitor@gmail.com", "password")}>
+													just visiting?
+												</small>
 											</div>
 										</div>
 									</div>

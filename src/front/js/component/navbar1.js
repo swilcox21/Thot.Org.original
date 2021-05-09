@@ -17,11 +17,9 @@ export const Navbar1 = props => {
 					<i className="fas fa-home" />
 				</span>
 			</Link>
-			<Link to="/preview">
-				<span className="Link">
-					<i className="fas fa-hotel" />
-				</span>
-			</Link>
+			<span onClick={() => actions.logging("visitor@gmail.com", "password")} className="Link">
+				<i className="fas fa-hotel" />
+			</span>
 			<Link to="/">
 				<span className="Link">@</span>
 			</Link>
