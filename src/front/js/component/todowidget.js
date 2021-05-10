@@ -52,6 +52,20 @@ export const TodoWidget = props => {
 							</Dropdown.Toggle>
 							<Dropdown.Menu className="mt-1">
 								<Dropdown.Item eventKey="3">
+									<div
+										onClick={() => {
+											let thot = {
+												label: "",
+												date: null,
+												dashboard: false,
+												folder: props.folder
+											};
+											actions.addNewTask(thot, dayjs.new(), dayjs.new().add(24, "hour"), true);
+										}}>
+										<i className="fas fa-plus-circle"></i>
+									</div>
+								</Dropdown.Item>
+								<Dropdown.Item eventKey="3">
 									<CopyToClipboard className="" text={props.folder}>
 										<div className="text-center">
 											<i className="far fa-clipboard" />
@@ -120,6 +134,25 @@ export const TodoWidget = props => {
 										</div>
 									</Dropdown.Toggle>
 									<Dropdown.Menu className="mt-1">
+										<Dropdown.Item eventKey="3">
+											<div
+												onClick={() => {
+													let thot = {
+														label: "",
+														date: null,
+														dashboard: false,
+														folder: props.folder
+													};
+													actions.addNewTask(
+														thot,
+														dayjs.new(),
+														dayjs.new().add(24, "hour"),
+														true
+													);
+												}}>
+												<i className="fas fa-plus-circle"></i>
+											</div>
+										</Dropdown.Item>
 										<Dropdown.Item eventKey="3">
 											<CopyToClipboard className="" text={props.folder}>
 												<div className="text-center">

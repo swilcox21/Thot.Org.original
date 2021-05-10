@@ -187,7 +187,12 @@ export class Hobby extends React.Component {
 															this.setState({ collapse: !folder.collapse });
 														}}
 														className="ml-2">
-														{folder.folder} &nbsp;
+														{folder.folder} &nbsp;{" "}
+														{
+															store.hobby.filter(hobby => hobby.folder === folder.folder)
+																.length
+														}{" "}
+														&nbsp;
 														{folder.collapse === true ? (
 															<i className="fas fa-caret-left">&nbsp;</i>
 														) : (

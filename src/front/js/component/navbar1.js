@@ -18,7 +18,7 @@ export const Navbar1 = props => {
 				</span>
 			</Link>
 			<span onClick={() => actions.logging("visitor@gmail.com", "password")} className="Link">
-				<i className="fas fa-hotel" />
+				<i className="fas fa-hotel" id="sideBarFoldercollapsed" />
 			</span>
 			<Link to="/">
 				<span className="Link">@</span>
