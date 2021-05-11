@@ -165,6 +165,8 @@ export class Hobby extends React.Component {
 										onClick={() => this.setState({ showSideBar: !this.state.showSideBar })}>
 										<i className="fas fa-angle-left"></i>
 									</button>
+									<br />
+									<br />
 									{/* <input className="mt-2 col-11 mx-auto" type="text" placeholder="search folders" /> */}
 									{store.folder
 										.filter(folder => (folder.folder != "tasks") & (folder.folder != "meetings"))
