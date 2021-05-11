@@ -1,7 +1,7 @@
 
 
-// body {
-//     background-color: whitesmoke;
+// html, body {
+//     height: 100%;
 // }
 .Link {
     color: #49f7ae
@@ -22,6 +22,19 @@ button:hover {
 }
 
 // id
+
+#howtoLeft {
+    overflow-y: auto;
+    min-height: 100%;
+}
+#howtoMiddle {
+    border: 1px solid black;
+    
+}
+#howtoRight {
+    border: 1px solid black;
+
+}
 
 #addDayButtons {
     border: none;
@@ -102,6 +115,7 @@ button:hover {
     background-color: rgba(43, 43, 43, 0.65);
     height: 100%;
     border-right: 1px dotted black;
+    overflow-y: auto;
 }
 
 #sideBarCheckbox {
@@ -165,6 +179,10 @@ button:hover {
 }
 
 // className
+
+// .howtoCont  {
+//     min-height: 100%;
+// }
 
 .activeTodo {
     border: none;

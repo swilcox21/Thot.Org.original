@@ -20,8 +20,8 @@ export const Navbar1 = props => {
 			<span onClick={() => actions.logging("visitor@gmail.com", "password")} className="Link">
 				<i className="fas fa-hotel" id="sideBarFoldercollapsed" />
 			</span>
-			<Link to="/">
-				<span className="Link">@</span>
+			<Link to="/howto">
+				<i className="fas fa-question Link"></i>
 			</Link>
 
 			{store.errorMSG === "Invalid Email or Password" ? (
