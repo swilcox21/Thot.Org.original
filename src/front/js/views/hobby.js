@@ -19,6 +19,8 @@ import { Dropdown } from "semantic-ui-react";
 import dayjs from "dayjs";
 import isToday from "dayjs/plugin/isToday";
 import timeZone from "dayjs/plugin/timezone";
+import ReactTooltip from "react-tooltip";
+
 // .tz("America/New_York")
 dayjs.extend(utc);
 dayjs.extend(timeZone);
@@ -151,20 +153,24 @@ export class Hobby extends React.Component {
 							{this.state.showSideBar === false ? (
 								<div className="col-1" id="NFNB">
 									<button
+										data-tip="show side bar"
 										id="caret"
 										className="mt-1 ml-2"
 										onClick={() => this.setState({ showSideBar: !this.state.showSideBar })}>
 										<i className="fas fa-angle-right"></i>
 									</button>
+									<ReactTooltip />
 								</div>
 							) : (
 								<div className="col-6 col-md-3" id="NFNB">
 									<button
+										data-tip="hide side bar"
 										id="caret"
 										className="mt-1 mr-2"
 										onClick={() => this.setState({ showSideBar: !this.state.showSideBar })}>
 										<i className="fas fa-angle-left"></i>
 									</button>
+									<ReactTooltip />
 									<br />
 									<br />
 									{/* <input className="mt-2 col-11 mx-auto" type="text" placeholder="search folders" /> */}
@@ -202,6 +208,7 @@ export class Hobby extends React.Component {
 														)}
 													</span>
 													<input
+														data-tip="show on main screen"
 														type="checkbox"
 														checked={folder.main_view}
 														onClick={() => {
@@ -214,8 +221,10 @@ export class Hobby extends React.Component {
 															this.setState({ main_view: !folder.main_view });
 														}}
 													/>
+													<ReactTooltip />
 													{folder.collapse === false && (
 														<input
+															data-tip={`${folder.folder} dashboard toggle (all)`}
 															type="checkbox"
 															// checked={} i think need help to figure out this one but give it a shot anyways
 															id="sideBarCheckbox"
@@ -234,6 +243,7 @@ export class Hobby extends React.Component {
 															}}
 														/>
 													)}
+													<ReactTooltip />
 												</div>
 												{folder.collapse === false &&
 													store.hobby
@@ -262,6 +272,7 @@ export class Hobby extends React.Component {
 																	}}
 																/>
 																<input
+																	data-tip={`${folder.folder} dashboard toggle (single)`}
 																	id="sideBarCheckbox"
 																	type="checkbox"
 																	checked={thot.dashboard}
@@ -275,6 +286,7 @@ export class Hobby extends React.Component {
 																		actions.handleChangeHobby(thot.id, newThot);
 																	}}
 																/>
+																<ReactTooltip />
 															</div>
 														))}
 											</div>
@@ -293,6 +305,7 @@ export class Hobby extends React.Component {
 								)}
 								<div className="toggleButton mt-1 mr-3">
 									<button
+										data-tip={"minus one day"}
 										id="addDayButtons"
 										onClick={() => {
 											this.setState({
@@ -311,7 +324,9 @@ export class Hobby extends React.Component {
 										}}>
 										<i className="fas fa-chevron-left" />
 									</button>
+									<ReactTooltip />
 									<button
+										data-tip={"click for calendar or double click to see today"}
 										className="mx-1"
 										onDoubleClick={() => {
 											console.log("timezoneflag:", time_zone);
@@ -324,7 +339,9 @@ export class Hobby extends React.Component {
 										onClick={() => this.toggle()}>
 										<i className="far fa-calendar-alt" />
 									</button>
+									<ReactTooltip />
 									<button
+										data-tip={"add day"}
 										id="addDayButtons"
 										onClick={() => {
 											this.setState({
@@ -343,6 +360,7 @@ export class Hobby extends React.Component {
 										}}>
 										<i className="fas fa-chevron-right" />
 									</button>
+									<ReactTooltip />
 								</div>
 								<Transition
 									native
@@ -392,6 +410,7 @@ export class Hobby extends React.Component {
 									<div className="col-md-10">
 										<div className="d-flex mt-3 mx-auto mb-3">
 											<input
+												data-tip={"select folder or type to create new"}
 												onBlur={() => this.setState({ folderValue: "" })}
 												className="borderBottomRight col-3 col-md-3"
 												placeholder={this.state.folder}
@@ -409,6 +428,7 @@ export class Hobby extends React.Component {
 												name="folder"
 												id="folder"
 											/>
+											<ReactTooltip />
 											<datalist id="folders">
 												{store.folder.map(folder => (
 													<div key={folder.id}>
@@ -417,18 +437,23 @@ export class Hobby extends React.Component {
 												))}
 											</datalist>
 											<TextareaAutosize
+												data-tip={"add some content to your thought"}
 												className="pl-2 col-md-11 activeTodo onfucus addNew py-3"
 												placeholder="Just type what ya thinking about"
 												type="text"
 												value={this.state.todo}
 												onChange={e => this.handleChange(e)}
 											/>
+											<ReactTooltip />
 										</div>
 										{/* {this.state.status.message !== "" && (
-							<div className={`alert alert-${this.state.status.color}`}>{this.state.status.message}</div>
-						)} */}
+                                            <div className={`alert alert-${this.state.status.color}`}>{this.state.status.message}</div>
+                                        )} */}
 										<div className="d-flex justify-content-center col-md-12 text-center">
 											<button
+												data-tip={
+													"add thought to selected folder / create folder if none exists"
+												}
 												onClick={() => {
 													let todo = {
 														label: this.state.todo,
@@ -457,12 +482,16 @@ export class Hobby extends React.Component {
 												}}>
 												SUBMIT
 											</button>
-											<div className="newTaskDatePicker ml-5">
+											<ReactTooltip />
+											<div
+												data-tip={"select date or leave blank for null"}
+												className="newTaskDatePicker ml-5">
 												<ReactDatePicker
 													selected={this.state.taskDate ? this.state.taskDate.toDate() : null}
 													onChange={date => this.setState({ taskDate: dayjs(date) })}
 													minDate={dayjs.new().toDate()}
 												/>
+												<ReactTooltip />
 											</div>
 										</div>
 									</div>

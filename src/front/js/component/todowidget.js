@@ -16,6 +16,7 @@ import PropTypes from "prop-types";
 import isToday from "dayjs/plugin/isToday";
 import timeZone from "dayjs-ext/plugin/timeZone";
 import utc from "dayjs/plugin/utc";
+import ReactTooltip from "react-tooltip";
 
 dayjs.extend(utc);
 dayjs.extend(timeZone);
@@ -42,63 +43,78 @@ export const TodoWidget = props => {
 				<div className="mt-3 d-flex justify-content-between">
 					<span>{props.folder}:</span>
 					{props.id && (
-						<Dropdown className="mt-2 ml-3">
-							<Dropdown.Toggle id="dropdown-custom-components" className="dropdowntoggle">
-								<span className="cogWheel text-center">
-									<div className="text-center py-1" id="dropDownDate">
-										<i className="fas fa-cog"></i>
-									</div>
-								</span>
-							</Dropdown.Toggle>
-							<Dropdown.Menu className="mt-1">
-								<Dropdown.Item eventKey="3">
-									<div
-										onClick={() => {
-											let thot = {
-												label: "",
-												date: null,
-												dashboard: false,
-												folder: props.folder
-											};
-											actions.addNewTask(thot, dayjs.new(), dayjs.new().add(24, "hour"), true);
-										}}>
-										<i className="fas fa-plus-circle"></i>
-									</div>
-								</Dropdown.Item>
-								<Dropdown.Item eventKey="3">
-									<CopyToClipboard className="" text={props.folder}>
-										<div className="text-center">
-											<i className="far fa-clipboard" />
+						<>
+							<Dropdown className="mt-2 ml-3">
+								<Dropdown.Toggle
+									data-tip={`${props.folder} dropdown menu`}
+									id="dropdown-custom-components"
+									className="dropdowntoggle">
+									<span className="cogWheel text-center">
+										<div className="text-center py-1" id="dropDownDate">
+											<i className="fas fa-cog"></i>
 										</div>
-									</CopyToClipboard>
-								</Dropdown.Item>
-								<input
-									type="text"
-									placeHolder="edit folder"
-									onChange={e => setnewFolder(e.target.value)}
-									onBlur={e => {
-										let newfolderlabel = {
-											folder: e.target.value,
-											main_view: props.main_view,
-											collapse: props.collapse
-										};
-										e.target.value != "" &&
-											_newFolder.length === 0 &&
-											actions.changeFolder(props.id, newfolderlabel);
-									}}
-								/>
-								<Dropdown.Divider />
-								<Dropdown.Item eventKey="4">
-									<div
-										onClick={() => {
-											actions.deleteFolder(props.id);
+									</span>
+								</Dropdown.Toggle>
+								<Dropdown.Menu className="mt-1">
+									<Dropdown.Item data-tip={`add new ${props.folder} thot`} eventKey="3">
+										<div
+											onClick={() => {
+												let thot = {
+													label: "",
+													date: null,
+													dashboard: false,
+													folder: props.folder
+												};
+												actions.addNewTask(
+													thot,
+													dayjs.new(),
+													dayjs.new().add(24, "hour"),
+													true
+												);
+											}}>
+											<i className="fas fa-plus-circle"></i>
+										</div>
+									</Dropdown.Item>
+									<ReactTooltip />
+									<Dropdown.Item data-tip={`copy ${props.folder} to clipboard`} eventKey="3">
+										<CopyToClipboard className="" text={props.folder}>
+											<div className="text-center">
+												<i className="far fa-clipboard" />
+											</div>
+										</CopyToClipboard>
+									</Dropdown.Item>
+									<ReactTooltip />
+									<input
+										type="text"
+										placeHolder="edit folder"
+										onChange={e => setnewFolder(e.target.value)}
+										onBlur={e => {
+											let newfolderlabel = {
+												folder: e.target.value,
+												main_view: props.main_view,
+												collapse: props.collapse
+											};
+											e.target.value != "" &&
+												_newFolder.length === 0 &&
+												actions.changeFolder(props.id, newfolderlabel);
 										}}
-										className="text-center mt-3">
-										<i className="fas fa-trash-alt" />
-									</div>
-								</Dropdown.Item>
-							</Dropdown.Menu>
-						</Dropdown>
+									/>
+									<Dropdown.Divider />
+									<Dropdown.Item eventKey="4">
+										<div
+											data-tip={`delete ${props.folder} folder / ps. all contents in folder will still exist, to recover them simple recreate the ${props.folder} folder`}
+											onClick={() => {
+												actions.deleteFolder(props.id);
+											}}
+											className="text-center mt-3">
+											<i className="fas fa-trash-alt" />
+										</div>
+									</Dropdown.Item>
+									<ReactTooltip />
+								</Dropdown.Menu>
+							</Dropdown>
+							<ReactTooltip />
+						</>
 					)}
 				</div>
 			) : (
@@ -126,7 +142,10 @@ export const TodoWidget = props => {
 							</span>
 							{props.id && (
 								<Dropdown className="mt-2 ml-3">
-									<Dropdown.Toggle id="dropdown-custom-components" className="dropdowntoggle">
+									<Dropdown.Toggle
+										data-tip={`${props.folder} dropdown menu`}
+										id="dropdown-custom-components"
+										className="dropdowntoggle">
 										<div className="cogWheel text-center" id="dropdowntoggle">
 											<span className="text-center py-1" id="dropDownDate">
 												<i className="fas fa-cog"></i>
@@ -134,7 +153,7 @@ export const TodoWidget = props => {
 										</div>
 									</Dropdown.Toggle>
 									<Dropdown.Menu className="mt-1">
-										<Dropdown.Item eventKey="3">
+										<Dropdown.Item data-tip={`add new ${props.folder} thought`} eventKey="3">
 											<div
 												onClick={() => {
 													let thot = {
@@ -153,13 +172,15 @@ export const TodoWidget = props => {
 												<i className="fas fa-plus-circle"></i>
 											</div>
 										</Dropdown.Item>
-										<Dropdown.Item eventKey="3">
+										<ReactTooltip />
+										<Dropdown.Item data-tip={`copy ${props.folder} to clipboard`} eventKey="3">
 											<CopyToClipboard className="" text={props.folder}>
 												<div className="text-center">
 													<i className="far fa-clipboard" />
 												</div>
 											</CopyToClipboard>
 										</Dropdown.Item>
+										<ReactTooltip />
 										<input
 											type="text"
 											placeHolder="edit folder"
@@ -187,7 +208,9 @@ export const TodoWidget = props => {
 											}}
 										/>
 										<Dropdown.Divider />
-										<Dropdown.Item eventKey="4">
+										<Dropdown.Item
+											data-tip={`delete ${props.folder} folder (all contents in folder will still exist, to recover them simple recreate the ${props.folder} folder)`}
+											eventKey="4">
 											<div
 												onClick={() => {
 													actions.deleteFolder(props.id);
@@ -196,9 +219,11 @@ export const TodoWidget = props => {
 												<i className="fas fa-trash-alt" />
 											</div>
 										</Dropdown.Item>
+										<ReactTooltip />
 									</Dropdown.Menu>
 								</Dropdown>
 							)}
+							<ReactTooltip />
 						</div>
 						{collapse === false ? <Prio tasks={tasks} /> : null}
 					</>

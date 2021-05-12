@@ -17,6 +17,8 @@ import TextareaAutosize from "react-textarea-autosize";
 import timeZone from "dayjs-ext/plugin/timeZone";
 import { TodoInfoModal } from "./todoInfoModal";
 import utc from "dayjs/plugin/utc";
+import ReactTooltip from "react-tooltip";
+
 // const Textarea = ({ children, ...props }) => <textarea {...props}>{children}</textarea>;
 dayjs.extend(utc);
 dayjs.extend(timeZone);
@@ -110,42 +112,44 @@ class Prio extends React.Component {
 							{this.props.tasks.map((todo, index) => (
 								<div key={todo.id}>
 									<div className="d-flex justify-content-around mx-auto col-xs-12 col-md-11 activeTodoDiv inputAndTextArea">
-										{this.props.autoSize ? null : (
-											<div>
-												<input
-													className="inputTypeNumber"
-													placeholder={todo.folder}
-													onChange={e => {
-														this.setState({
-															task: {
-																label: todo.label,
-																date: todo.date,
-																dashboard: todo.dashboard,
-																folder: e.target.value
-															},
-															newFolder: e.target.value
-														});
-													}}
-													onBlur={() => {
-														this.state.task &&
-															actions.handleChangeHobby(todo.id, this.state.task);
-														this.resetTask();
-														_newFolder.length === 0 &&
-															actions.addNewFolder(this.state.newFolder);
-													}}
-													list="folders"
-													name="folder"
-													id="folder"
-												/>
-												<datalist id="folders">
-													{store.folder.map(folder => (
-														<div key={folder.id}>
-															<option value={folder.folder} />
-														</div>
-													))}
-												</datalist>
-											</div>
-										)}
+										{/* {this.props.autoSize ? null : ( */}
+										<div>
+											<input
+												data-tip={"change folder or type to create new"}
+												className="inputTypeNumber"
+												placeholder={todo.folder}
+												onChange={e => {
+													this.setState({
+														task: {
+															label: todo.label,
+															date: todo.date,
+															dashboard: todo.dashboard,
+															folder: e.target.value
+														},
+														newFolder: e.target.value
+													});
+												}}
+												onBlur={() => {
+													this.state.task &&
+														actions.handleChangeHobby(todo.id, this.state.task);
+													this.resetTask();
+													_newFolder.length === 0 &&
+														actions.addNewFolder(this.state.newFolder);
+												}}
+												list="folders"
+												name="folder"
+												id="folder"
+											/>
+											<ReactTooltip />
+											<datalist id="folders">
+												{store.folder.map(folder => (
+													<div key={folder.id}>
+														<option value={folder.folder} />
+													</div>
+												))}
+											</datalist>
+										</div>
+										{/* )} */}
 										{this.props.autoSize ? (
 											<TextareaAutosize
 												id="textareaautosize"
@@ -193,7 +197,10 @@ class Prio extends React.Component {
 											/>
 										)}
 										<Dropdown className="mt-2 ml-3">
-											<Dropdown.Toggle id="dropdown-custom-components" className="dropdowntoggle">
+											<Dropdown.Toggle
+												data-tip={"dropdown / double click for dashboard"}
+												id="dropdown-custom-components"
+												className="dropdowntoggle">
 												{todo.date ? (
 													<button
 														onDoubleClick={() => {
@@ -235,7 +242,7 @@ class Prio extends React.Component {
 															{dayjs(todo.date).format("MM/DD/YYYY")}
 														</small>
 													) : (
-														<small className="Absolute ml-4">assign date...</small>
+														<small className="Absolute marginLeft ">assign date...</small>
 													)}
 													{todo.date != null && (
 														<span
@@ -289,14 +296,17 @@ class Prio extends React.Component {
 														/>
 													</span>
 												</div>
-												<Dropdown.Item eventKey="3">
-													<CopyToClipboard className="" text={todo.label}>
+												<Dropdown.Item data-tip="copy contents to clipboard" eventKey="3">
+													<CopyToClipboard className="text-center" text={todo.label}>
 														<div className="text-center">
 															<i className="far fa-clipboard" />
 														</div>
 													</CopyToClipboard>
 												</Dropdown.Item>
+												<ReactTooltip />
 												<Dropdown.Item
+													className="text-center"
+													data-tip="toggle dashboard"
 													eventKey="2"
 													onClick={() => {
 														let task = {
@@ -307,10 +317,13 @@ class Prio extends React.Component {
 														};
 														actions.handleChangeHobby(todo.id, task);
 													}}>
-													<div className="">DASHBOARD</div>
+													<div className="">
+														<i className="fas fa-tachometer-alt"></i>
+													</div>
 												</Dropdown.Item>
+												<ReactTooltip />
 												<Dropdown.Divider />
-												<Dropdown.Item eventKey="4">
+												<Dropdown.Item data-tip="delete thought (irreversable)" eventKey="4">
 													<div
 														onClick={() => {
 															actions.deleteHobby(todo.id);
@@ -319,8 +332,10 @@ class Prio extends React.Component {
 														<i className="fas fa-trash-alt" />
 													</div>
 												</Dropdown.Item>
+												<ReactTooltip />
 											</Dropdown.Menu>
 										</Dropdown>
+										<ReactTooltip />
 									</div>
 								</div>
 							))}
