@@ -20,6 +20,7 @@ import dayjs from "dayjs";
 import isToday from "dayjs/plugin/isToday";
 import timeZone from "dayjs/plugin/timezone";
 import ReactTooltip from "react-tooltip";
+import Joyride from "react-joyride";
 
 // .tz("America/New_York")
 dayjs.extend(utc);
@@ -36,6 +37,16 @@ export class Hobby extends React.Component {
 	constructor() {
 		super();
 		this.state = {
+			steps: [
+				{
+					target: ".my-first-step",
+					content: "This is my awesome feature!"
+				},
+				{
+					target: ".my-other-step",
+					content: "This another awesome feature!"
+				}
+			],
 			archives: false,
 			color: "black",
 			currentDate: dayjs.new(),
@@ -135,6 +146,7 @@ export class Hobby extends React.Component {
 	};
 
 	render() {
+		const { steps } = this.state;
 		const time_zone = "America/New_York";
 		const dashboardThots = Array.isArray(this.context.store.hobby)
 			? this.context.store.hobby.filter(todo => todo.dashboard === true)
@@ -155,11 +167,12 @@ export class Hobby extends React.Component {
 									<button
 										data-tip="show side bar"
 										id="caret"
-										className="mt-1 ml-2"
+										className="mt-1 ml-2 my-first-step"
 										onClick={() => this.setState({ showSideBar: !this.state.showSideBar })}>
 										<i className="fas fa-angle-right"></i>
 									</button>
 									<ReactTooltip />
+									<Joyride steps={steps} />
 								</div>
 							) : (
 								<div className="col-6 col-md-3" id="NFNB">
@@ -170,7 +183,7 @@ export class Hobby extends React.Component {
 										onClick={() => this.setState({ showSideBar: !this.state.showSideBar })}>
 										<i className="fas fa-angle-left"></i>
 									</button>
-									<ReactTooltip />
+									{/* <ReactTooltip /> */}
 									<br />
 									<br />
 									{/* <input className="mt-2 col-11 mx-auto" type="text" placeholder="search folders" /> */}
