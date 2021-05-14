@@ -37,14 +37,37 @@ export class Hobby extends React.Component {
 	constructor() {
 		super();
 		this.state = {
+			run: true,
 			steps: [
 				{
 					target: ".my-first-step",
-					content: "This is my awesome feature!"
+					content:
+						"This section is where new thots are created, just pick the folder (or make a new one), write your thot in space provided (no limit on the size, can also leave it blank if you want), then pick a date (or leave it blank to have it show up everyday), then hit submit!"
 				},
 				{
-					target: ".my-other-step",
-					content: "This another awesome feature!"
+					target: ".my-second-step",
+					content:
+						"Newly created folders (besides tasks and meetings) will show up here in this component to our left, just tap the green < to toggle this window on or off"
+				},
+				{
+					target: ".my-third-step",
+					content:
+						"The Calendar lets you pick which day you want to look at, if the date is set for today it will show you all thots for today and all thots that have no dates specified, double clicking will set todays date"
+				},
+				{
+					target: ".my-fourth-step",
+					content:
+						"this hotel will log you in as a visitor, just be aware that all activity on the visitors page will be cleaned out daily at 1am"
+				},
+				{
+					target: ".my-fifth-step",
+					content:
+						"still confused?? check out our well organized FAQ documentation to answer any questions you still may have"
+				},
+				{
+					target: ".my-sixth-step",
+					content:
+						"oh and dont forget to leave the developer a love note down in the open source notes section by click this toggle, (just be respectful all users of the app can see this section) AND THANKS SO MUCH FOR VISTING THOT.ORG"
 				}
 			],
 			archives: false,
@@ -162,28 +185,30 @@ export class Hobby extends React.Component {
 				{({ actions, store }) => (
 					<>
 						<div className="row">
+							<Joyride continuous={true} run={this.state.run} steps={steps} />
+							<div className="Absolute navFloat my-fifth-step">hi</div>
+							<div className="Absolute navFloat2 my-fourth-step">hi</div>
 							{this.state.showSideBar === false ? (
 								<div className="col-1" id="NFNB">
 									<button
 										data-tip="show side bar"
 										id="caret"
-										className="mt-1 ml-2 my-first-step"
+										className="mt-1 ml-2"
 										onClick={() => this.setState({ showSideBar: !this.state.showSideBar })}>
 										<i className="fas fa-angle-right"></i>
 									</button>
 									<ReactTooltip />
-									<Joyride steps={steps} />
 								</div>
 							) : (
-								<div className="col-6 col-md-3" id="NFNB">
+								<div className="col-6 col-md-3 my-second-step" id="NFNB">
 									<button
 										data-tip="hide side bar"
 										id="caret"
-										className="mt-1 mr-2"
+										className="mt-1 mr-2 my-other-step"
 										onClick={() => this.setState({ showSideBar: !this.state.showSideBar })}>
 										<i className="fas fa-angle-left"></i>
 									</button>
-									{/* <ReactTooltip /> */}
+									{/* <Joyride continuous={true} steps={steps} /> */}
 									<br />
 									<br />
 									{/* <input className="mt-2 col-11 mx-auto" type="text" placeholder="search folders" /> */}
@@ -234,7 +259,7 @@ export class Hobby extends React.Component {
 															this.setState({ main_view: !folder.main_view });
 														}}
 													/>
-													<ReactTooltip />
+
 													{folder.collapse === false && (
 														<input
 															data-tip={`${folder.folder} dashboard toggle (all)`}
@@ -256,7 +281,6 @@ export class Hobby extends React.Component {
 															}}
 														/>
 													)}
-													<ReactTooltip />
 												</div>
 												{folder.collapse === false &&
 													store.hobby
@@ -299,7 +323,6 @@ export class Hobby extends React.Component {
 																		actions.handleChangeHobby(thot.id, newThot);
 																	}}
 																/>
-																<ReactTooltip />
 															</div>
 														))}
 											</div>
@@ -316,7 +339,7 @@ export class Hobby extends React.Component {
 										<br />
 									</small>
 								)}
-								<div className="toggleButton mt-1 mr-3">
+								<div className="toggleButton my-third-step mt-1 mr-3">
 									<button
 										data-tip={"minus one day"}
 										id="addDayButtons"
@@ -337,7 +360,7 @@ export class Hobby extends React.Component {
 										}}>
 										<i className="fas fa-chevron-left" />
 									</button>
-									<ReactTooltip />
+
 									<button
 										data-tip={"click for calendar or double click to see today"}
 										className="mx-1"
@@ -352,7 +375,7 @@ export class Hobby extends React.Component {
 										onClick={() => this.toggle()}>
 										<i className="far fa-calendar-alt" />
 									</button>
-									<ReactTooltip />
+
 									<button
 										data-tip={"add day"}
 										id="addDayButtons"
@@ -373,7 +396,6 @@ export class Hobby extends React.Component {
 										}}>
 										<i className="fas fa-chevron-right" />
 									</button>
-									<ReactTooltip />
 								</div>
 								<Transition
 									native
@@ -405,11 +427,10 @@ export class Hobby extends React.Component {
 										))
 									}
 								</Transition>
-								<div className="container text-left ml-5 mt-1 clock">
+								<div className="container text-left ml-5 mt-1 clock ">
 									{this.state.currentDate.format("dddd  M/DD/YYYY")}
 									<Clock />
 								</div>
-
 								{dashboardThots.length > 0 && (
 									<div className="mb-5 col-12 mt-3 mx-auto">
 										<span className="toggleOpen">DashBoard:</span>
@@ -420,7 +441,7 @@ export class Hobby extends React.Component {
 									</div>
 								)}
 								<div className="justify-content-between col-lg-10 mx-auto mt-5">
-									<div className="col-md-10">
+									<div className="col-md-10 my-first-step">
 										<div className="d-flex mt-3 mx-auto mb-3">
 											<input
 												data-tip={"select folder or type to create new"}
@@ -441,7 +462,7 @@ export class Hobby extends React.Component {
 												name="folder"
 												id="folder"
 											/>
-											<ReactTooltip />
+
 											<datalist id="folders">
 												{store.folder.map(folder => (
 													<div key={folder.id}>
@@ -457,7 +478,6 @@ export class Hobby extends React.Component {
 												value={this.state.todo}
 												onChange={e => this.handleChange(e)}
 											/>
-											<ReactTooltip />
 										</div>
 										{/* {this.state.status.message !== "" && (
                                             <div className={`alert alert-${this.state.status.color}`}>{this.state.status.message}</div>
@@ -495,16 +515,15 @@ export class Hobby extends React.Component {
 												}}>
 												SUBMIT
 											</button>
-											<ReactTooltip />
+
 											<div
 												data-tip={"select date or leave blank for null"}
 												className="newTaskDatePicker ml-5">
 												<ReactDatePicker
 													selected={this.state.taskDate ? this.state.taskDate.toDate() : null}
-													onChange={date => this.setState({ taskDate: dayjs(date) })}
+													onChange={date => this.setState({ taskDate: dayjs.new(date) })}
 													minDate={dayjs.new().toDate()}
 												/>
-												<ReactTooltip />
 											</div>
 										</div>
 									</div>
@@ -536,7 +555,7 @@ export class Hobby extends React.Component {
 
 										<small
 											onClick={() => this.setState({ forum: !this.state.forum })}
-											className="toggleOpen mt-5">
+											className="toggleOpen mt-5 my-sixth-step">
 											open line of communication between all users
 											{this.state.forum === true ? (
 												<i className="fas fa-sort-down" />
