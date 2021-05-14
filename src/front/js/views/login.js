@@ -222,8 +222,8 @@ export class Login extends React.Component {
 						{/* the div below is just for show =P */}
 						{/* the div below is just for show =P */}
 
-						<div className="container col-8 Absolute" id="shadowHobbyView">
-							<img src={editMeeting} />
+						<div className="Absolute mt-5 mt-md-0" id="shadowHobbyView">
+							<img style={{ maxWidth: "100%" }} src={editMeeting} />
 						</div>
 					</>
 				)}

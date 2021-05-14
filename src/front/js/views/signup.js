@@ -272,8 +272,8 @@ export class SignUp extends React.Component {
 						{/* below is a background just for show */}
 						{/* below is a background just for show */}
 
-						<div className="container col-8 Absolute" id="shadowHobbyView">
-							<img src={newFolder} />
+						<div className="mt-5 mt-md-0 Absolute" id="shadowHobbyView">
+							<img style={{ maxWidth: "100%" }} src={newFolder} />
 						</div>
 					</>
 				)}

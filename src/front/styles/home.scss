@@ -85,10 +85,10 @@ button:hover {
 
 #loginBackground {
     background-color: rgba(255, 255, 255, 0.801);
+    background-size: cover;
     z-index: 10;
-    padding-bottom: 500px;
-    // position: absolute;
-    // margin-top: 90px;
+    padding-bottom: 200px;
+    // max-width: 100%;
 }
 
 #caret {
@@ -142,9 +142,8 @@ button:hover {
 }
 
 #shadowHobbyView {
-    margin-top: -3px;
     z-index: -1;
-    margin-left: 10%;
+    width: 100%;
 }
 
 #textareaautosize {
@@ -167,15 +166,22 @@ button:hover {
     cursor: pointer;
 }
 
-#welcomespan {
-    margin-top: 600px;
-    font-size: 2.6rem;
-    color: #343a40;
-    padding: 12px;
+#welcomespan2 {
     font-weight: bold;
-    background-color: #49f7af57;
-    border-radius: 10px;
-    box-shadow: 0px 0px 10px 5px #49f7af56;
+    font-size: 2.4rem;
+    color: #343a40;
+    margin-top: -30px;
+}
+
+#welcomespan {
+    font-weight: bold;
+    font-size: 2.4rem;
+    color: #343a40;
+    // margin-top: 600px;
+    // padding: 12px;
+    // background-color: #49f7af57;
+    // border-radius: 10px;
+    // box-shadow: 0px 0px 10px 5px #49f7af56;
 }
 
 // className
@@ -305,6 +311,10 @@ button:hover {
     margin-left: 55px;
 }
 
+.marginTop6 {
+    margin-top: 150px;
+}
+
 .notes {
     height: 300px;
     margin: auto;
@@ -354,6 +364,10 @@ button:hover {
 
 .submitButton {
     margin: auto;
+}
+
+.textOpacity {
+    color: rgba(255, 255, 255, 0.801);
 }
 
 .toggleButton {

@@ -5,7 +5,8 @@ import Clock from "../component/clock";
 import { Context } from "../store/appContext";
 import { Hobby } from "./hobby";
 import addMeeting from "../../img/thot.org_addMeeting.gif";
-import tripleDownArrows from "../../img/triple-down-arrows.gif";
+import redHead from "../../img/studious_redhead_nobg.png";
+import tripleDownArrows from "../../img/looping-down-arrows.gif";
 
 export class Welcome extends React.Component {
 	constructor() {
@@ -17,41 +18,54 @@ export class Welcome extends React.Component {
 			<Context.Consumer>
 				{({ actions, store }) => (
 					<>
-						<div className="container-fluid text-center" id="loginBackground">
-							<br />
-							<br />
-							<br />
-							<br />
-							<span className="mx-auto">
-								<span id="welcomespan">Mind racing? Who&apos;s isn&apos;t... </span>
+						{/* <div className="row">
+							<div className="col-2 col-s-4 col-md-12 textOpacity" id="loginBackground">
+								hi
+							</div>
+							<div className="col-2 col-s-4 col-md-12 textOpacity" id="loginBackground">
+								hi
+							</div>
+							<div className="col-2 col-s-4 col-md-12 textOpacity" id="loginBackground">
+								hi
+							</div>
+							<div className="col-2 col-s-4 col-md-12 textOpacity" id="loginBackground">
+								hi
+							</div>
+							<div className="col-2 col-s-4 col-md-12 textOpacity" id="loginBackground">
+								hi
+							</div>
+							<div className="col-2 col-s-4 col-md-12 textOpacity" id="loginBackground">
+								hi
+							</div>
+						</div> */}
+						<div className="row justify-content-center pt-md-5" id="loginBackground">
+							<div className="text-center  mt-md-5 col-md-6 ">
+								<div className="col-10 mx-auto" id="welcomespan">
+									Mind racing? Who&apos;s isn&apos;t...
+								</div>
 								<br />
-								<br />
-								<span id="welcomespan">Let&apos;s get those thoughts organized!</span>
-							</span>
-							<div className="text-center mt-5">
+								<div className="" id="welcomespan2">
+									Let&apos;s get those thoughts organized!
+								</div>
 								<img src={tripleDownArrows} />
 								<br />
 								<Link to={"/login"}>
-									<button className="p-2">Get Started</button>
+									<button className="p-2 mb-md-3">Get Started</button>
 								</Link>
 								<br />
-								<br />
 								<small
 									id="visiting"
-									className="mt-5 text-primary"
+									className="text-primary"
 									onClick={() => actions.logging("visitor@gmail.com", "password")}>
-									Recruiter? &nbsp;{" "}
-								</small>
-								<small
-									id="visiting"
-									className="mt-5 text-primary"
-									onClick={() => actions.logging("visitor@gmail.com", "password")}>
-									&nbsp; Just Visiting?
+									Recruiter? Just Visiting?
 								</small>
 							</div>
+							<div className="col-md-4 col-12">
+								<img style={{ maxHeight: 400 }} src={redHead} />
+							</div>
 						</div>
-						<div className="container col-8 Absolute" id="shadowHobbyView">
-							<img src={addMeeting} />
+						<div className="Absolute " id="shadowHobbyView">
+							<img style={{ maxWidth: "100%" }} src={addMeeting} />
 						</div>
 					</>
 				)}
