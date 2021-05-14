@@ -319,9 +319,11 @@ button:hover {
     margin-left: 58%;
     margin-top: -40px;
     color: rgba(255, 255, 255, 0);
+    z-index: -3;
 }
 
 .navFloat2 {
+    z-index: -3;
     margin-top: -40px;
     color: rgba(255, 255, 255, 0);
     margin-left: 39%;
