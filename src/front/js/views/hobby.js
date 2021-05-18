@@ -188,8 +188,9 @@ export class Hobby extends React.Component {
 							<Joyride continuous={true} run={this.state.run} steps={steps} />
 							<div className="Absolute navFloat my-fifth-step">hi</div>
 							<div className="Absolute navFloat2 my-fourth-step">hi</div>
+							<ReactTooltip />
 							{this.state.showSideBar === false ? (
-								<div className="col-1" id="NFNB">
+								<div className="col-1" id="NFNB2">
 									<button
 										data-tip="show side bar"
 										id="caret"
@@ -197,7 +198,6 @@ export class Hobby extends React.Component {
 										onClick={() => this.setState({ showSideBar: !this.state.showSideBar })}>
 										<i className="fas fa-angle-right"></i>
 									</button>
-									<ReactTooltip />
 								</div>
 							) : (
 								<div className="col-6 col-md-3 my-second-step" id="NFNB">

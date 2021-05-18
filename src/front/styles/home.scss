@@ -118,6 +118,16 @@ button:hover {
     overflow-y: auto;
 }
 
+#NFNB2 {
+    color: #00ff95;
+    position: absolute;
+    z-index: 4;
+    background-color: #343a40;
+    height: 100%;
+    border-right: 1px dotted black;
+    overflow-y: auto;
+}
+
 #sideBarCheckbox {
     float: right;
     margin-top: 10px;
