@@ -375,7 +375,6 @@ export class Hobby extends React.Component {
 										onClick={() => this.toggle()}>
 										<i className="far fa-calendar-alt" />
 									</button>
-
 									<button
 										data-tip={"add day"}
 										id="addDayButtons"
