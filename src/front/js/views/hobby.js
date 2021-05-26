@@ -185,7 +185,7 @@ export class Hobby extends React.Component {
 				{({ actions, store }) => (
 					<>
 						<div className="row">
-							<Joyride continuous={true} run={this.state.run} steps={steps} />
+							{/* <Joyride continuous={true} run={this.state.run} steps={steps} /> */}
 							<div className="Absolute navFloat my-fifth-step">hi</div>
 							<div className="Absolute navFloat2 my-fourth-step">hi</div>
 							<ReactTooltip />
