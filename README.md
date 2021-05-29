@@ -9,10 +9,10 @@
 	https://thotorg.herokuapp.com/home
 	</a>
 </h3>
-<h1 align="center">	
+<h1>	
 	<img src="https://github.com/swilcox21/Thot.Org/blob/main/src/front/img/thotOrg_welcomePage.gif" width="500">
 </h1>
-<h4 align="center">A Personal Online Thought Organizer</h4>
+<h4>A Personal Online Thought Organizer</h4>
 
 ##### Languages:
 &nbsp; &nbsp; &nbsp; React.js, javascript, Python, HTML, css, bootstrap, Github, SQLAlchemy, Flux
