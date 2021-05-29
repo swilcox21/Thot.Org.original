@@ -3,9 +3,9 @@
 <h1 align="center">	
 	<img src="https://github.com/swilcox21/Thot.Org/blob/main/src/front/img/thotOrg_welcomePage.gif" width="500">
 </h1>
-<h4 align="center">Personal Online Thought Organizer</h4>
+<h4 align="center">A Personal Online Thought Organizer</h4>
 
-&nbsp; &nbsp; &nbsp; Thot.Org idk what to write here, writers block
+
 <br>
 ##### Languages:
 &nbsp; &nbsp; &nbsp; React.js, javascript, Python, HTML, css, bootstrap, Github, SQLAlchemy, Flux
