@@ -119,7 +119,6 @@ def handle_hello():
 def post_folder():
     user_id = get_jwt_identity()
     body = request.get_json()
-    print("MY BODY FLAG: ",body['folder'])
     new_folder = Folder(folder= body['folder'], collapse= body['collapse'], main_view= body['main_view'], user_id= user_id)
     db.session.add(new_folder)
     db.session.commit()

@@ -329,7 +329,7 @@ export class Hobby extends React.Component {
 										))}
 								</div>
 							)}
-							<div className="container col-10 col-md-6 ml-md-auto ml-5" id="hobbyCont">
+							<div className="container col-10 col-xl-6 ml-auto" id="hobbyCont">
 								{store.email === "visitor@gmail.com" && (
 									<small className="text-danger">
 										!! WELCOME !! You have been logged in as a Visitor
