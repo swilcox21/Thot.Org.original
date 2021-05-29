@@ -25,13 +25,17 @@ button:hover {
     overflow-y: auto;
     min-height: 100%;
 }
-#howtoMiddle {
-    border: 1px solid black;
+// #howtoMiddle {
     
-}
+// }
 #howtoRight {
     border: 1px solid black;
 
+}
+
+#activeGif {
+    font-weight: bold;
+    border-bottom: 1px solid #49f7ae;
 }
 
 #addDayButtons {
@@ -355,6 +359,10 @@ button:hover {
 
 .Opacity {
     opacity: 0;
+}
+
+.pointer {
+    cursor: pointer;
 }
 
 .react-calendar__tile {
