@@ -5,8 +5,6 @@
 </h1>
 <h4 align="center">A Personal Online Thought Organizer</h4>
 
-
-<br>
 ##### Languages:
 &nbsp; &nbsp; &nbsp; React.js, javascript, Python, HTML, css, bootstrap, Github, SQLAlchemy, Flux
 
