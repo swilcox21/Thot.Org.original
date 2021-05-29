@@ -1,9 +1,48 @@
-# WebApp boilerplate with React JS
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io#https://github.com/4GeeksAcademy/react-flask-hello.git)
+# Thot.Org
 
-<p align="center">
-<a href="https://www.loom.com/share/f37c6838b3f1496c95111e515e83dd9b"><img src="https://github.com/4GeeksAcademy/react-flask-hello/blob/master/src/img/how-to.png?raw=true" /></a>
-</p>
+<h1 align="center">	
+	<img src="https://github.com/swilcox21/Thot.Org/blob/main/src/front/img/thotOrg_welcomePage.gif" width="500">
+</h1>
+<h4 align="center">Personal Online Thought Organizer</h4>
+
+&nbsp; &nbsp; &nbsp; Thot.Org idk what to write here, writers block
+<br>
+##### Languages:
+&nbsp; &nbsp; &nbsp; React.js, javascript, Python, HTML, css, bootstrap, Github, SQLAlchemy, Flux
+
+<h3>
+	Check it out!
+	<a href="https://thotorg.herokuapp.com/home" target="_blank">
+	<br>
+	&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <img src="https://github.com/swilcox21/GIFs/blob/main/triple-down-arrows.gif?raw=true" height="50">
+	<br>
+	https://thotorg.herokuapp.com/home
+	</a>
+</h3>
+
+# Demo
+### Login 
+<h1>
+	<a href="https://thotorg.herokuapp.com/login" target="_blank">
+		<img src="https://github.com/swilcox21/Thot.Org/blob/main/src/front/img/thotOrg_login.gif" width="500"> 
+	</a>
+</h1>
+
+## Sign Up
+##### (takes user directly to the chosen charities donation page)
+<h1>
+	<a href="https://thotorg.herokuapp.com/signup" target="_blank">
+		<img src="https://github.com/swilcox21/Thot.Org/blob/main/src/front/img/thotOrg_signUp.gif" width="500"> 
+	</a>
+</h1>
+
+## Create Task
+<h1>  
+	<a href="https://thotorg.herokuapp.com/" target="_blank">
+		<img src="https://github.com/swilcox21/Thot.Org/blob/main/src/front/img/thotOrg_createTask.gif" width="500"> 
+	</a>
+</h1>
+
 
 
 ### Requirements:
