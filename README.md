@@ -1,13 +1,5 @@
 # Thot.Org
 
-<h1 align="center">	
-	<img src="https://github.com/swilcox21/Thot.Org/blob/main/src/front/img/thotOrg_welcomePage.gif" width="500">
-</h1>
-<h4 align="center">A Personal Online Thought Organizer</h4>
-
-##### Languages:
-&nbsp; &nbsp; &nbsp; React.js, javascript, Python, HTML, css, bootstrap, Github, SQLAlchemy, Flux
-
 <h3>
 	Check it out!
 	<a href="https://thotorg.herokuapp.com/home" target="_blank">
@@ -17,6 +9,14 @@
 	https://thotorg.herokuapp.com/home
 	</a>
 </h3>
+<h1 align="center">	
+	<img src="https://github.com/swilcox21/Thot.Org/blob/main/src/front/img/thotOrg_welcomePage.gif" width="500">
+</h1>
+<h4 align="center">A Personal Online Thought Organizer</h4>
+
+##### Languages:
+&nbsp; &nbsp; &nbsp; React.js, javascript, Python, HTML, css, bootstrap, Github, SQLAlchemy, Flux
+
 
 # Demo
 ### Login 
