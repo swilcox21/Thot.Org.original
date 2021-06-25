@@ -2,6 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 
+
 from flask.cli import with_appcontext
 from api.models import db, User, Task, Notes, Folder
 import os, click
