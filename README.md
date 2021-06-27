@@ -1,5 +1,4 @@
 # Thot.Org
-
 <h3>
 	Check it out!
 	<a href="https://thotorg.herokuapp.com/home" target="_blank">
