@@ -3,7 +3,7 @@ import axios from "axios";
 axios.interceptors.request.use(
 	function(config) {
 		// Do something before request is sent
-		const token = localStorage.getItem("thot.org.token");
+		const token = localStorage.getItem("thought.org.token");
 		config.headers.Authorization = "Bearer " + token;
 		return config;
 	},
@@ -35,7 +35,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			token: null,
 			notes: null,
 			time_zones: [],
-			thots: [],
+			thoughts: [],
 			addDate: ""
 		},
 		actions: {
@@ -77,9 +77,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			initialize: () => {
 				setStore({
-					token: localStorage.getItem("thot.org.token"),
-					errorMSG: localStorage.getItem("thot.org.errorMSG"),
-					email: localStorage.getItem("thot.org.email")
+					token: localStorage.getItem("thought.org.token"),
+					errorMSG: localStorage.getItem("thought.org.errorMSG"),
+					email: localStorage.getItem("thought.org.email")
 				});
 			},
 
@@ -104,9 +104,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 					})
 					.then(payload => {
 						console.log("Success:", payload);
-						localStorage.setItem("thot.org.token", payload.access_token);
-						localStorage.setItem("thot.org.email", email);
-						localStorage.setItem("thot.org.errorMSG", payload.msg);
+						localStorage.setItem("thought.org.token", payload.access_token);
+						localStorage.setItem("thought.org.email", email);
+						localStorage.setItem("thought.org.errorMSG", payload.msg);
 						window.location.href = "/home";
 						getActions().getUser();
 					})
@@ -120,8 +120,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			logOut: () => {
-				localStorage.setItem("thot.org.token", "something");
-				localStorage.setItem("thot.org.email", "");
+				localStorage.setItem("thought.org.token", "something");
+				localStorage.setItem("thought.org.email", "");
 				window.location.href = "/welcome";
 			},
 
@@ -175,7 +175,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					method: "GET",
 					headers: {
 						"Content-Type": "application/json",
-						Authorization: `Bearer ${localStorage.getItem("thot.org.token")}`
+						Authorization: `Bearer ${localStorage.getItem("thought.org.token")}`
 					}
 				});
 				const response = await res.json();
@@ -190,7 +190,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 							time_zone: response.time_zone
 					  })
 					: (window.location = "/welcome");
-				localStorage.setItem("thot.org.time_zone", response.time_zone);
+				localStorage.setItem("thought.org.time_zone", response.time_zone);
 
 				// sends error to user and to console log
 			},
@@ -217,17 +217,17 @@ const getState = ({ getStore, getActions, setStore }) => {
 				return notes;
 			},
 
-			addNewThot: t => {
+			addNewThought: t => {
 				let store = getStore();
-				store.thots.push(t);
+				store.thoughts.push(t);
 				setStore(store);
 			},
 
-			handleChangeThot: (id, task) => {
+			handleChangeThought: (id, task) => {
 				let store = getStore();
-				let newStore = store.thots.filter(todo => todo.id != id);
+				let newStore = store.thoughts.filter(todo => todo.id != id);
 				newStore.push(task);
-				setStore({ thot: newStore });
+				setStore({ thought: newStore });
 			},
 
 			// addNewFolder: newFolder => {

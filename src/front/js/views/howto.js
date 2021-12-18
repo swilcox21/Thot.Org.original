@@ -2,19 +2,19 @@ import "../../styles/home.scss";
 import React, { useState, setStore, useEffect, useContext, getState, actions } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import PropTypes from "prop-types";
-import createTask from "../../img/thotOrg_createTask.gif";
-import editTask from "../../img/thotOrg_editTask.gif";
-import dashboardTask from "../../img/thotOrg_dashboardTask.gif";
-import editDate from "../../img/thotOrg_editDate.gif";
-import deleteTask from "../../img/thotOrg_deleteTask.gif";
-import datedTask from "../../img/thotOrg_datedTask.gif";
-import createMeeting from "../../img/thotOrg_createMeeting.gif";
-import nullDateMeeting from "../../img/thotOrg_nullDateMeeting.gif";
-import exampleFolder from "../../img/thotOrg_exampleFolder.gif";
-import newExampleThot from "../../img/thotOrg_newExampleThot.gif";
-import changeFolderName from "../../img/thotOrg_changeFolderName.gif";
-import changeFolderThot from "../../img/thotOrg_changeFolderThot.gif";
-import sideBar from "../../img/thotOrg_sideBar.gif";
+import createTask from "../../img/thoughtOrg_createTask.gif";
+import editTask from "../../img/thoughtOrg_editTask.gif";
+import dashboardTask from "../../img/thoughtOrg_dashboardTask.gif";
+import editDate from "../../img/thoughtOrg_editDate.gif";
+import deleteTask from "../../img/thoughtOrg_deleteTask.gif";
+import datedTask from "../../img/thoughtOrg_datedTask.gif";
+import createMeeting from "../../img/thoughtOrg_createMeeting.gif";
+import nullDateMeeting from "../../img/thoughtOrg_nullDateMeeting.gif";
+import exampleFolder from "../../img/thoughtOrg_exampleFolder.gif";
+import newExampleThought from "../../img/thoughtOrg_newExampleThought.gif";
+import changeFolderName from "../../img/thoughtOrg_changeFolderName.gif";
+import changeFolderThought from "../../img/thoughtOrg_changeFolderThought.gif";
+import sideBar from "../../img/thoughtOrg_sideBar.gif";
 
 const gifs = [
 	{ gif: createTask, label: "createTask" },
@@ -26,9 +26,9 @@ const gifs = [
 	{ gif: createMeeting, label: "createMeeting" },
 	{ gif: nullDateMeeting, label: "nullDateMeeting" },
 	{ gif: exampleFolder, label: "exampleFolder" },
-	{ gif: newExampleThot, label: "newExampleThot" },
+	{ gif: newExampleThought, label: "newExampleThought" },
 	{ gif: changeFolderName, label: "changeFolderName" },
-	{ gif: changeFolderThot, label: "changeFolderThot" },
+	{ gif: changeFolderThought, label: "changeFolderThought" },
 	{ gif: sideBar, label: "sideBar" }
 ];
 

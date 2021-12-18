@@ -56,17 +56,17 @@ export const TodoWidget = props => {
 									</span>
 								</Dropdown.Toggle>
 								<Dropdown.Menu className="mt-1">
-									<Dropdown.Item data-tip={`add new ${props.folder} thot`} eventKey="3">
+									<Dropdown.Item data-tip={`add new ${props.folder} thought`} eventKey="3">
 										<div
 											onClick={() => {
-												let thot = {
+												let thought = {
 													label: "",
 													date: null,
 													dashboard: false,
 													folder: props.folder
 												};
 												actions.addNewTask(
-													thot,
+													thought,
 													dayjs.new(),
 													dayjs.new().add(24, "hour"),
 													true
@@ -156,14 +156,14 @@ export const TodoWidget = props => {
 										<Dropdown.Item data-tip={`add new ${props.folder} thought`} eventKey="3">
 											<div
 												onClick={() => {
-													let thot = {
+													let thought = {
 														label: "",
 														date: null,
 														dashboard: false,
 														folder: props.folder
 													};
 													actions.addNewTask(
-														thot,
+														thought,
 														dayjs.new(),
 														dayjs.new().add(24, "hour"),
 														true

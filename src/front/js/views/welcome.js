@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import Clock from "../component/clock";
 import { Context } from "../store/appContext";
 import { Hobby } from "./hobby";
-import addMeeting from "../../img/thot.org_addMeeting.gif";
+import addMeeting from "../../img/thought.org_addMeeting.gif";
 import redHead from "../../img/studious_redhead_nobg.png";
 import tripleDownArrows from "../../img/looping-down-arrows.gif";
 

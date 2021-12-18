@@ -30,8 +30,8 @@ console.log(dayjs);
 // dayjs.tz.setDefault("America/New_York");
 // dayjs.defaultTimezone
 dayjs.new = _date => {
-	console.log("NEWDATEFLAGGG:", localStorage.getItem("thot.org.time_zone"));
-	return dayjs(_date).tz(localStorage.getItem("thot.org.time_zone") || "America/New_York");
+	console.log("NEWDATEFLAGGG:", localStorage.getItem("thought.org.time_zone"));
+	return dayjs(_date).tz(localStorage.getItem("thought.org.time_zone") || "America/New_York");
 };
 export class Hobby extends React.Component {
 	constructor() {
@@ -42,7 +42,7 @@ export class Hobby extends React.Component {
 				{
 					target: ".my-first-step",
 					content:
-						"This section is where new thots are created, just pick the folder (or make a new one), write your thot in space provided (no limit on the size, can also leave it blank if you want), then pick a date (or leave it blank to have it show up everyday), then hit submit!"
+						"This section is where new thoughts are created, just pick the folder (or make a new one), write your thought in space provided (no limit on the size, can also leave it blank if you want), then pick a date (or leave it blank to have it show up everyday), then hit submit!"
 				},
 				{
 					target: ".my-second-step",
@@ -52,7 +52,7 @@ export class Hobby extends React.Component {
 				{
 					target: ".my-third-step",
 					content:
-						"The Calendar lets you pick which day you want to look at, if the date is set for today it will show you all thots for today and all thots that have no dates specified, double clicking will set todays date"
+						"The Calendar lets you pick which day you want to look at, if the date is set for today it will show you all thoughts for today and all thoughts that have no dates specified, double clicking will set todays date"
 				},
 				{
 					target: ".my-fourth-step",
@@ -67,14 +67,14 @@ export class Hobby extends React.Component {
 				{
 					target: ".my-sixth-step",
 					content:
-						"oh and dont forget to leave the developer a love note down in the open source notes section by click this toggle, (just be respectful all users of the app can see this section) AND THANKS SO MUCH FOR VISTING THOT.ORG"
+						"oh and dont forget to leave the developer a love note down in the open source notes section by click this toggle, (just be respectful all users of the app can see this section) AND THANKS SO MUCH FOR VISTING THOUGHT.ORG"
 				}
 			],
 			archives: false,
 			color: "black",
 			currentDate: dayjs.new(),
 			delta: 0,
-			gThots: false,
+			gThoughts: false,
 			hobby: [],
 			ideas: false,
 			issues: false,
@@ -151,7 +151,7 @@ export class Hobby extends React.Component {
 		}
 	};
 
-	// toggle noneDate thots from view
+	// toggle noneDate thoughts from view
 	toggleIdeas = ideas => {
 		this.setState({ ideas: !ideas });
 	};
@@ -161,8 +161,8 @@ export class Hobby extends React.Component {
 	toggleWow = wow => {
 		this.setState({ wow: !wow });
 	};
-	togglegThots = gThots => {
-		this.setState({ gThots: !gThots });
+	togglegThoughts = gThoughts => {
+		this.setState({ gThoughts: !gThoughts });
 	};
 	toggleArchives = archives => {
 		this.setState({ archives: !archives });
@@ -171,7 +171,7 @@ export class Hobby extends React.Component {
 	render() {
 		const { steps } = this.state;
 		const time_zone = "America/New_York";
-		const dashboardThots = Array.isArray(this.context.store.hobby)
+		const dashboardThoughts = Array.isArray(this.context.store.hobby)
 			? this.context.store.hobby.filter(todo => todo.dashboard === true)
 			: [];
 		const _newFolder = Array.isArray(this.context.store.folder)
@@ -269,14 +269,14 @@ export class Hobby extends React.Component {
 															onClick={() => {
 																store.hobby
 																	.filter(hobby => hobby.folder === folder.folder)
-																	.map((thot, index) => {
-																		let allThots = {
-																			label: thot.label,
-																			date: thot.date,
-																			dashboard: !thot.dashboard,
-																			folder: thot.folder
+																	.map((thought, index) => {
+																		let allThoughts = {
+																			label: thought.label,
+																			date: thought.date,
+																			dashboard: !thought.dashboard,
+																			folder: thought.folder
 																		};
-																		actions.handleChangeHobby(thot.id, allThots);
+																		actions.handleChangeHobby(thought.id, allThoughts);
 																	});
 															}}
 														/>
@@ -285,26 +285,26 @@ export class Hobby extends React.Component {
 												{folder.collapse === false &&
 													store.hobby
 														.filter(hobby => hobby.folder === folder.folder)
-														.map((thot, index) => (
-															<div key={thot.id}>
+														.map((thought, index) => (
+															<div key={thought.id}>
 																<textarea
 																	className="col-8 ml-2"
-																	id="sideBarThot"
+																	id="sideBarThought"
 																	type="text"
-																	defaultValue={thot.label}
+																	defaultValue={thought.label}
 																	onChange={e =>
 																		this.setState({
-																			sideBarThotx: e.target.value
+																			sideBarThoughtx: e.target.value
 																		})
 																	}
 																	onBlur={e => {
-																		let newThot = {
+																		let newThought = {
 																			label: e.target.value,
-																			date: thot.date,
-																			dashboard: thot.dashboard,
-																			folder: thot.folder
+																			date: thought.date,
+																			dashboard: thought.dashboard,
+																			folder: thought.folder
 																		};
-																		actions.handleChangeHobby(thot.id, newThot);
+																		actions.handleChangeHobby(thought.id, newThought);
 																		this.setState({});
 																	}}
 																/>
@@ -312,15 +312,15 @@ export class Hobby extends React.Component {
 																	data-tip={`${folder.folder} dashboard toggle (single)`}
 																	id="sideBarCheckbox"
 																	type="checkbox"
-																	checked={thot.dashboard}
+																	checked={thought.dashboard}
 																	onClick={() => {
-																		let newThot = {
-																			label: thot.label,
-																			date: thot.date,
-																			dashboard: !thot.dashboard,
-																			folder: thot.folder
+																		let newThought = {
+																			label: thought.label,
+																			date: thought.date,
+																			dashboard: !thought.dashboard,
+																			folder: thought.folder
 																		};
-																		actions.handleChangeHobby(thot.id, newThot);
+																		actions.handleChangeHobby(thought.id, newThought);
 																	}}
 																/>
 															</div>
@@ -430,10 +430,10 @@ export class Hobby extends React.Component {
 									{this.state.currentDate.format("dddd  M/DD/YYYY")}
 									<Clock />
 								</div>
-								{dashboardThots.length > 0 && (
+								{dashboardThoughts.length > 0 && (
 									<div className="mb-5 col-12 mt-3 mx-auto">
 										<span className="toggleOpen">DashBoard:</span>
-										<Prio tasks={dashboardThots} autoSize={true} />
+										<Prio tasks={dashboardThoughts} autoSize={true} />
 										<br />
 										<br />
 										<br />

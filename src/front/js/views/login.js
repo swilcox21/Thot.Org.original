@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Context } from "../store/appContext";
 import PropTypes from "prop-types";
-import editMeeting from "../../img/thot.org_editMeeting.gif";
+import editMeeting from "../../img/thought.org_editMeeting.gif";
 
 import "../../styles/home.scss";
 // import { Link } from "react-router-dom";
@@ -44,7 +44,7 @@ export class Login extends React.Component {
 			color: "black",
 			currentDate: dayjs.new(),
 			delta: 0,
-			gThots: false,
+			gThoughts: false,
 			hobby: [],
 			ideas: false,
 			issues: false,

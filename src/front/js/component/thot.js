@@ -11,7 +11,7 @@
 // import dayjs from "dayjs";
 // import PropTypes from "prop-types";
 
-// export const Thot = props => {
+// export const Thought = props => {
 // const { store, actions } = useContext(Context);
 // 	const [selectedDate, setSelectedDate] = useState(dayjs.new());
 // 	const [task, setTask] = useState();
@@ -58,8 +58,8 @@
 
 // 	return (
 // 		<div className="container text-center">
-// 			{Array.isArray(store.thots) &&
-// 				store.thots.filter(todo => todo.type === props.type).map((todo, index) => (
+// 			{Array.isArray(store.thoughts) &&
+// 				store.thoughts.filter(todo => todo.type === props.type).map((todo, index) => (
 // 					<div key={todo.id}>
 // 						<div className="d-flex justify-content-between">
 // 							<input
@@ -79,7 +79,7 @@
 // 									});
 // 								}}
 // 								onBlur={() => {
-// 									task && actions.handleChangeThot(todo.id, task);
+// 									task && actions.handleChangeThought(todo.id, task);
 // 									resetTask();
 // 								}}
 // 							/>
@@ -97,7 +97,7 @@
 // 											dashboard: todo.dashboard,
 // 											type: todo.type
 // 										};
-// 										actions.handleChangeThot(todo.id, t);
+// 										actions.handleChangeThought(todo.id, t);
 // 									}
 // 									resetTask();
 // 								}}
@@ -136,7 +136,7 @@
 // 											<button
 // 												className=""
 // 												onClick={() => {
-// 													actions.handleChangeThot(todo.id, task);
+// 													actions.handleChangeThought(todo.id, task);
 // 													resetTask();
 // 												}}>
 // 												CONFIRM DATE
@@ -155,7 +155,7 @@
 // 												dashboard: !todo.dashboard,
 // 												type: todo.type
 // 											};
-// 											actions.handleChangeThot(todo.id, task);
+// 											actions.handleChangeThought(todo.id, task);
 // 										}}>
 // 										DASHBOARD
 // 									</Dropdown.Item>
@@ -165,7 +165,7 @@
 // 									<Dropdown.Divider />
 // 									<Dropdown.Item eventKey="4">
 // 										<span
-// 											onClick={() => actions.deleteThot(todo.id)}
+// 											onClick={() => actions.deleteThought(todo.id)}
 // 											className="deleteX text-center mt-3">
 // 											&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
 // 											<i className="fab fa-xing" />
@@ -180,9 +180,9 @@
 // 	);
 // };
 
-// Thot.contextType = Context;
+// Thought.contextType = Context;
 
-// Thot.propTypes = {
-// 	thots: PropTypes.array,
+// Thought.propTypes = {
+// 	thoughts: PropTypes.array,
 // 	type: PropTypes.number
 // };
