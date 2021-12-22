@@ -2,6 +2,8 @@ from flask_sqlalchemy import SQLAlchemy
 import datetime
 db = SQLAlchemy()
 
+# hello world (again)
+
 class User(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
